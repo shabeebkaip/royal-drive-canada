@@ -8,6 +8,7 @@ export const inventories = [
         price: 6990,
         discountPrice: null, // No discount mentioned in the post
         isOffer: false,
+        featured:true,
         mileage: 240000,
         fuelType: "Hybrid",
         transmission: "Automatic",
@@ -50,6 +51,7 @@ export const inventories = [
         price: 22990,
         discountPrice: null,
         isOffer: false,
+        featured: true,
         mileage: 112000,
         fuelType: "Hybrid",
         transmission: "Automatic",
@@ -60,7 +62,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/toyota_rav4_2017_1.jpg", "/inventories/toyota_rav4_2017_2.jpg", "/inventories/toyota_rav4_2017_3.jpg", "/inventories/toyota_rav4_2017_4.jpg", "/inventories/toyota_rav4_2017_5.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -98,7 +100,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/chevy_cruze_lt_2015_1.jpg", "/inventories/chevy_cruze_lt_2015_2.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -135,7 +137,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/honda_civic_2013_1.jpg", "/inventories/honda_civic_2013_2.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -172,7 +174,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/higlander.jpg", "/inventories/higlander_1.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -210,7 +212,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/mazda_1.jpg", "/inventories/mazda_2.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -237,6 +239,7 @@ export const inventories = [
         price: 39900,
         discountPrice: null,
         isOffer: false,
+        featured: true,
         mileage: 41000,
         fuelType: "Gasoline",
         transmission: "Automatic",
@@ -247,7 +250,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto",
         phone: "647-622-2202",
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/acura_1.jpg", "/inventories/acura_2.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -274,6 +277,7 @@ export const inventories = [
         price: 22900,
         discountPrice: null,
         isOffer: false,
+        featured: true,
         mileage: 99400,
         fuelType: "Gasoline",
         transmission: "Automatic",
@@ -284,7 +288,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/jeep_1.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -322,7 +326,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // 📞
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/mazda_3.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -360,7 +364,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto", // 📍
         phone: "647-622-2202", // ☎️
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/prius.jpg"], // Placeholder for now
         description: `
 <div>
   <p>Fuel-efficient and reliable hybrid!</p>
@@ -394,7 +398,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto",
         phone: "647-622-2202",
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/prius_2010.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -428,7 +432,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto",
         phone: "647-622-2202",
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/dodge.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
@@ -463,7 +467,7 @@ export const inventories = [
         location: "751 Danforth Rd, Toronto",
         phone: "647-622-2202",
         carfax: "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=1234567890",
-        images: ["/inventories/placeholder-car.jpg"], // Placeholder for now
+        images: ["/inventories/vw_golf.jpg"], // Placeholder for now
         description: `
 <div>
   <ul>
