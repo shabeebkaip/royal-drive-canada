@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 const Header = () => {
   return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="absolute top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200/20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-3xl font-bold text-blue-600 tracking-tight">
+            <Link href="/" className="text-2xl font-bold text-gray-900">
               Royal Drive
             </Link>
           </div>
@@ -17,41 +17,51 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <Link 
               href="/new-cars" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               New cars
             </Link>
             <Link 
               href="/used-cars" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Used cars
             </Link>
             <Link 
               href="/car-service" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Car service
             </Link>
             <Link 
               href="/car-financing" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Car financing
             </Link>
             <Link 
               href="/car-deal" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Car deal
             </Link>
             <Link 
               href="/electric-cars" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-semibold transition-colors tracking-wide"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Electric cars
             </Link>
           </nav>
+
+          {/* Right side buttons */}
+          <div className="flex items-center space-x-4">
+            <button className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
+              Sign In
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+              Sell Your Car
+            </button>
+          </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
