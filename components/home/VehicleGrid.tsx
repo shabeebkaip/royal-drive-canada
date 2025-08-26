@@ -62,9 +62,9 @@ const VehicleGrid = () => {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
-                    View Details
-                  </button>
+                  {/*<button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">*/}
+                  {/*  View Details*/}
+                  {/*</button>*/}
                 </div>
               </div>
             </div>

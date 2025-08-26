@@ -168,32 +168,38 @@ const Footer = () => {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-6">
               <div className="text-sm text-gray-300">
                 <span className="font-medium">Certified by:</span>
               </div>
-              <div className="flex items-center space-x-4">
-                <Image
-                  src="/certifications/mvic.png"
-                  alt="OMVIC Registered"
-                  width={60}
-                  height={30}
-                  className="opacity-75 hover:opacity-100 transition-opacity"
-                />
-                <Image
-                  src="/certifications/ucda.png"
-                  alt="UCDA Member"
-                  width={60}
-                  height={30}
-                  className="opacity-75 hover:opacity-100 transition-opacity"
-                />
-                <Image
-                  src="/certifications/carfax.png"
-                  alt="Carfax Verified"
-                  width={60}
-                  height={30}
-                  className="opacity-75 hover:opacity-100 transition-opacity"
-                />
+              <div className="flex items-center justify-center space-x-8">
+                <div className="flex items-center justify-center w-20 h-12 bg-white rounded px-2">
+                  <Image
+                    src="/certifications/mvic.png"
+                    alt="OMVIC Registered"
+                    width={70}
+                    height={35}
+                    className="object-contain max-w-full max-h-full"
+                  />
+                </div>
+                <div className="flex items-center justify-center w-20 h-12 bg-white rounded px-2">
+                  <Image
+                    src="/certifications/ucda.png"
+                    alt="UCDA Member"
+                    width={70}
+                    height={35}
+                    className="object-contain max-w-full max-h-full"
+                  />
+                </div>
+                <div className="flex items-center justify-center w-20 h-12 bg-white rounded px-2">
+                  <Image
+                    src="/certifications/carfax.png"
+                    alt="Carfax Verified"
+                    width={70}
+                    height={35}
+                    className="object-contain max-w-full max-h-full"
+                  />
+                </div>
               </div>
             </div>
 

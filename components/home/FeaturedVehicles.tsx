@@ -76,9 +76,9 @@ const FeaturedVehicles = () => {
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xl font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
                   </div>
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium transition-colors">
-                    View Details
-                  </button>
+                  {/*<button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium transition-colors">*/}
+                  {/*  View Details*/}
+                  {/*</button>*/}
                 </div>
               </div>
             </div>
@@ -92,9 +92,6 @@ const FeaturedVehicles = () => {
         )}
 
         <div className="text-center mt-8">
-          <button className="bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-medium transition-colors">
-            View All Vehicles
-          </button>
         </div>
       </div>
     </section>
