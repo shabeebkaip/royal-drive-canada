@@ -1,89 +1,21 @@
 import React from 'react'
+import { inventories } from "@/constants";
+import ImageSlider from "../shared/ImageSlider";
 
-const vehicles = [
-  {
-    id: 1,
-    name: 'BMW X5',
-    year: 2023,
-    price: '$72,000',
-    image: '/placeholder-car.jpg',
-    location: 'Toronto',
-    mileage: '15,000 km',
-    fuel: 'Gasoline'
-  },
-  {
-    id: 2,
-    name: 'Audi Q7',
-    year: 2022,
-    price: '$68,500',
-    image: '/placeholder-car.jpg',
-    location: 'Vancouver',
-    mileage: '22,000 km',
-    fuel: 'Gasoline'
-  },
-  {
-    id: 3,
-    name: 'Tesla Model Y',
-    year: 2024,
-    price: '$82,000',
-    image: '/placeholder-car.jpg',
-    location: 'Calgary',
-    mileage: '8,000 km',
-    fuel: 'Electric'
-  },
-  {
-    id: 4,
-    name: 'Mercedes GLE',
-    year: 2023,
-    price: '$78,900',
-    image: '/placeholder-car.jpg',
-    location: 'Montreal',
-    mileage: '12,000 km',
-    fuel: 'Gasoline'
-  },
-  {
-    id: 5,
-    name: 'Lexus RX',
-    year: 2022,
-    price: '$65,000',
-    image: '/placeholder-car.jpg',
-    location: 'Ottawa',
-    mileage: '18,000 km',
-    fuel: 'Hybrid'
-  },
-  {
-    id: 6,
-    name: 'Porsche Macan',
-    year: 2024,
-    price: '$89,500',
-    image: '/placeholder-car.jpg',
-    location: 'Edmonton',
-    mileage: '5,000 km',
-    fuel: 'Gasoline'
-  },
-  {
-    id: 7,
-    name: 'Range Rover Sport',
-    year: 2023,
-    price: '$95,000',
-    image: '/placeholder-car.jpg',
-    location: 'Winnipeg',
-    mileage: '10,000 km',
-    fuel: 'Gasoline'
-  },
-  {
-    id: 8,
-    name: 'Volvo XC90',
-    year: 2022,
-    price: '$72,500',
-    image: '/placeholder-car.jpg',
-    location: 'Halifax',
-    mileage: '25,000 km',
-    fuel: 'Hybrid'
-  }
-]
 
 const VehicleGrid = () => {
+  // Format price for display
+  const formatPrice = (price: number | null) => {
+    if (price === null) return "Contact for Price";
+    return `$${price.toLocaleString()}`;
+  };
+
+  // Format mileage for display
+  const formatMileage = (mileage: number | null) => {
+    if (mileage === null) return "Contact for Details";
+    return `${mileage.toLocaleString()} km`;
+  };
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -93,37 +25,44 @@ const VehicleGrid = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {vehicles.map((vehicle) => (
+          {inventories.map((vehicle) => (
             <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              {/* Image placeholder */}
-              <div className="h-48 bg-gray-200 flex items-center justify-center">
-                <div className="text-gray-400">Vehicle Image</div>
-              </div>
-              
+              {/* Image Slider */}
+              <ImageSlider
+                images={vehicle.images}
+                alt={vehicle.name}
+                className="h-48"
+              />
+
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
-                  <span className="text-sm text-gray-500">{vehicle.year}</span>
+                  <h3 className="font-semibold text-gray-900 text-sm">{vehicle.name}</h3>
+                  <span className="text-xs text-gray-500">{vehicle.year}</span>
                 </div>
                 
-                <div className="space-y-2 text-sm text-gray-600 mb-4">
+                <div className="space-y-1 text-xs text-gray-600 mb-3">
                   <div className="flex items-center justify-between">
-                    <span>Location:</span>
-                    <span>{vehicle.location}</span>
+                    <span>Brand:</span>
+                    <span className="font-medium">{vehicle.brand}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Mileage:</span>
-                    <span>{vehicle.mileage}</span>
+                    <span>{formatMileage(vehicle.mileage)}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Fuel:</span>
-                    <span>{vehicle.fuel}</span>
+                    <span className="capitalize">{vehicle.fuelType}</span>
                   </div>
+                  {vehicle.safetyCertified && (
+                    <div className="text-green-600 text-xs font-medium">
+                      ✅ Safety Certified
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-bold text-gray-900">{vehicle.price}</span>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                  <span className="text-lg font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
                     View Details
                   </button>
                 </div>

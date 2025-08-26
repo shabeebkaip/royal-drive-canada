@@ -1,32 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-// Array of car brands with their logo paths
-const brands = [
-  { name: 'Audi', logo: '/audi.webp' },
-  { name: 'BMW', logo: '/bmw.webp' },
-  { name: 'Chevrolet', logo: '/chevrolet.webp' },
-  { name: 'Ford', logo: '/ford.webp' },
-  { name: 'GMC', logo: '/gmc.webp' },
-  { name: 'Honda', logo: '/honda.webp' },
-  { name: 'Hyundai', logo: '/hyundai.webp' },
-  { name: 'Infiniti', logo: '/infiniti.webp' },
-  { name: 'Jeep', logo: '/jeep.webp' },
-  { name: 'Lexus', logo: '/lexus.webp' },
-  { name: 'Mazda', logo: '/mazda.webp' },
-  { name: 'Mercedes', logo: '/mercedes.webp' },
-  { name: 'MG', logo: '/mg.webp' },
-  { name: 'Mitsubishi', logo: '/mitsubishi.webp' },
-  { name: 'Nissan', logo: '/nissan.webp' },
-  { name: 'Porsche', logo: '/porsche.webp' },
-  { name: 'Range Rover', logo: '/range-rover.webp' },
-  { name: 'Renault', logo: '/renault.webp' },
-  { name: 'Suzuki', logo: '/suzuki.webp' },
-  { name: 'Tesla', logo: '/tesla.webp' },
-  { name: 'Toyota', logo: '/toyota.webp' },
-  { name: 'Volkswagen', logo: '/volkswagen.webp' },
-]
+import { brands } from '@/constants'
 
 const BrandLogos = () => {
   return (
@@ -34,13 +9,11 @@ const BrandLogos = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-3xl font-bold text-gray-900">Popular Brands</h2>
-          <Link href="/brands" className="text-blue-600 hover:text-blue-700 font-medium">
-            View All
-          </Link>
+          
         </div>
         
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-11 gap-6">
-          {brands.slice(0, 11).map((brand, index) => (
+          {brands.map((brand, index) => (
             <Link 
               href={`/brands/${brand.name.toLowerCase()}`} 
               key={index}

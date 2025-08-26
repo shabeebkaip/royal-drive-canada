@@ -1,15 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
+import { carTypes } from '@/constants'
 
-const vehicleTypes = [
-  { name: 'Sedan', image: '/sedan.webp', count: '5,234' },
-  { name: 'SUV', image: '/suv.webp', count: '3,456' },
-  { name: 'Truck', image: '/pickup.webp', count: '2,123' },
-  { name: 'Coupe', image: '/coupe.webp', count: '1,890' },
-  { name: 'Hatchback', image: '/hatchback.webp', count: '2,567' },
-  { name: 'Convertible', image: '/convertible.webp', count: '892' },
-  { name: 'Wagon', image: '/wagon.webp', count: '1,234' },
-]
+
+
 
 const BrowseByType = () => {
   return (
@@ -21,7 +15,7 @@ const BrowseByType = () => {
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-10">
-          {vehicleTypes.map((type, index) => (
+          {carTypes.map((type, index) => (
             <div key={index} className="text-center group cursor-pointer">
               <div className="h-16 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                 <Image 
