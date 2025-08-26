@@ -25,7 +25,7 @@ const Hero = () => {
               Search Less.<br />Live More.
             </h1>
             <p className="text-white/90 text-base lg:text-xl max-w-2xl">
-              Find your perfect car from Canada's most trusted new-car dealership.
+              {"Find your perfect car from Canada's most trusted new-car dealership."}
             </p>
           </div>
           {/* Search card matches Figma design */}
