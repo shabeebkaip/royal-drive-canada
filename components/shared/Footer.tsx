@@ -244,7 +244,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-400 space-y-2 md:space-y-0">
             <div className="flex items-center space-x-4">
-              <p>&copy; {currentYear} AutoPro Dealership. All rights reserved.</p>
+              <p>&copy; {currentYear} Royal Drive. All rights reserved.</p>
               <span className="hidden md:block">|</span>
               <p className="text-xs">OMVIC & UCDA Registered Dealer</p>
             </div>

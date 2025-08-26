@@ -67,14 +67,14 @@ const BuyingSelling = () => {
                 </p>
               </div>
               
-              <div className="mt-auto">
-                <Link 
-                  href="/sell" 
-                  className="inline-block bg-[#0042c9] hover:bg-blue-800 text-white font-medium px-10 py-4 rounded-full transition-colors"
-                >
-                  Sell my car
-                </Link>
-              </div>
+              {/*<div className="mt-auto">*/}
+              {/*  <Link */}
+              {/*    href="/sell" */}
+              {/*    className="inline-block bg-[#0042c9] hover:bg-blue-800 text-white font-medium px-10 py-4 rounded-full transition-colors"*/}
+              {/*  >*/}
+              {/*    Sell my car*/}
+              {/*  </Link>*/}
+              {/*</div>*/}
             </div>
           </div>
         </div>

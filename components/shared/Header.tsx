@@ -15,24 +15,19 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link 
-              href="/new-cars" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-            >
-              New cars
-            </Link>
+            {/*<Link */}
+            {/*  href="/new-cars" */}
+            {/*  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"*/}
+            {/*>*/}
+            {/*  New cars*/}
+            {/*</Link>*/}
             <Link 
               href="/used-cars" 
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
             >
               Used cars
             </Link>
-            <Link 
-              href="/car-service" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-            >
-              Car service
-            </Link>
+
             <Link 
               href="/car-financing" 
               className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
@@ -45,19 +40,14 @@ const Header = () => {
             >
               Car deal
             </Link>
-            <Link 
-              href="/electric-cars" 
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-            >
-              Electric cars
-            </Link>
+
           </nav>
 
           {/* Right side buttons */}
           <div className="flex items-center space-x-4">
-            <button className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
-              Sign In
-            </button>
+            {/*<button className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">*/}
+            {/*  Sign In*/}
+            {/*</button>*/}
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
               Sell Your Car
             </button>
