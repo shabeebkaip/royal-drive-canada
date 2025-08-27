@@ -19,24 +19,27 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
     );
   }
 
-  const goToPrevious = () => {
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
 
-  const goToNext = () => {
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
   };
 
-  const goToSlide = (index: number) => {
+  const goToSlide = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex(index);
   };
 
   return (
-    <div className={`relative overflow-hidden group ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
       {/* Main Image */}
       <div className="relative w-full h-full">
         <Image
@@ -56,7 +59,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-all duration-200 z-10 hover:scale-110"
             aria-label="Previous image"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +69,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
 
           <button
             onClick={goToNext}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-all duration-200 z-10 hover:scale-110"
             aria-label="Next image"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,15 +78,15 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
           </button>
 
           {/* Dot Indicators */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                onClick={(e) => goToSlide(index, e)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
                   index === currentIndex 
-                    ? 'bg-white' 
-                    : 'bg-white/50 hover:bg-white/70'
+                    ? 'bg-white shadow-lg' 
+                    : 'bg-white/60 hover:bg-white/80'
                 }`}
                 aria-label={`Go to image ${index + 1}`}
               />
@@ -91,7 +94,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
           </div>
 
           {/* Image Counter */}
-          <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+          <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-md font-medium">
             {currentIndex + 1} / {images.length}
           </div>
         </>

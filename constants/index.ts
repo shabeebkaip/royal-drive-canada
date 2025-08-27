@@ -529,7 +529,7 @@ export const brands = [
     {id: 2, name: "Audi", logo: "/brand-images/audi.webp"},
     {id: 3, name: "BMW", logo: "/brand-images/bmw.webp"},
     {id: 4, name: "Chevrolet", logo: "/brand-images/chevrolet.webp"},
-    {id: 5, name: "Dodge", logo: "/brand-images/dodge.webp"},
+    {id: 5, name: "Dodge", logo: "/brand-images/dodge.svg"},
     {id: 6, name: "Ford", logo: "/brand-images/ford.webp"},
     {id: 7, name: "GMC", logo: "/brand-images/gmc.webp"},
     {id: 8, name: "Honda", logo: "/brand-images/honda.webp"},
