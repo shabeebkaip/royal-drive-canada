@@ -1,6 +1,5 @@
 import Hero from "../components/home/Hero";
-import BrowseByType from "@/components/home/BrowseByType";
-import BrandLogos from "@/components/home/BrandLogos";
+import BrowseSection from "@/components/home/BrowseSection";
 import BuyingSelling from "@/components/home/BuyingSelling";
 import FeaturedVehicles from "@/components/home/FeaturedVehicles";
 import VehicleGrid from "@/components/home/VehicleGrid";
@@ -10,8 +9,7 @@ export default function Home() {
   return (
     <div className="relative">
       <Hero />
-      <BrowseByType />
-      <BrandLogos />
+      <BrowseSection />
       <BuyingSelling />
       <FeaturedVehicles />
       <VehicleGrid />
