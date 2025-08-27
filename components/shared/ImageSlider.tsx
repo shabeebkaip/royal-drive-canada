@@ -39,14 +39,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
   };
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative overflow-hidden rounded-lg ${className}`}>
       {/* Main Image */}
       <div className="relative w-full h-full">
         <Image
           src={images[currentIndex]}
           alt={`${alt} - Image ${currentIndex + 1}`}
           fill
-          className="object-cover"
+          className="object-cover object-center"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           onError={(e) => {
             e.currentTarget.src = '/inventories/placeholder-car.jpg';

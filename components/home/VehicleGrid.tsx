@@ -2,11 +2,11 @@
 import React, { useState } from 'react'
 import { inventories } from "@/constants";
 import VehicleCard from "../shared/VehicleCard";
-import { ArrowRight, Grid3X3, LayoutGrid, Sparkles, TrendingUp, Eye } from 'lucide-react';
+import { ArrowRight, Grid3X3, Rows3, Sparkles, TrendingUp, Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const VehicleGrid = () => {
-  const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
+  const [viewMode, setViewMode] = useState<'vertical' | 'horizontal'>('horizontal');
   const router = useRouter();
 
   const handleViewDetails = (vehicleId: number) => {
@@ -87,19 +87,19 @@ const VehicleGrid = () => {
           <div className="flex items-center gap-3">
             <div className="bg-white/70 backdrop-blur-sm rounded-xl p-1 border border-gray-200/50 shadow-lg">
               <button
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode('horizontal')}
                 className={`p-3 rounded-lg transition-all duration-200 ${
-                  viewMode === 'grid'
+                  viewMode === 'horizontal'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
-                <LayoutGrid className="w-5 h-5" />
+                <Rows3 className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setViewMode('compact')}
+                onClick={() => setViewMode('vertical')}
                 className={`p-3 rounded-lg transition-all duration-200 ${
-                  viewMode === 'compact'
+                  viewMode === 'vertical'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
@@ -129,10 +129,10 @@ const VehicleGrid = () => {
         </div>
         
         {/* Vehicle Grid */}
-        <div className={`grid gap-8 transition-all duration-500 ${
-          viewMode === 'grid' 
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'
+        <div className={`transition-all duration-500 ${
+          viewMode === 'horizontal' 
+            ? 'space-y-6' 
+            : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'
         }`}>
           {displayedVehicles.map((vehicle, index) => (
             <div
@@ -144,7 +144,7 @@ const VehicleGrid = () => {
                 vehicle={vehicle}
                 showFeaturedBadge={true}
                 onViewDetails={handleViewDetails}
-                className={viewMode === 'compact' ? 'scale-95' : ''}
+                isHorizontal={viewMode === 'horizontal'}
               />
             </div>
           ))}
