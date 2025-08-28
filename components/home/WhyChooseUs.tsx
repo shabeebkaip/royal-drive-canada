@@ -35,9 +35,9 @@ const WhyChooseUs = () => {
   ]
 
   const stats = [
-    { number: '5,000+', label: 'Happy Customers', icon: Users, color: 'text-green-600' },
-    { number: '98%', label: 'Satisfaction Rate', icon: Star, color: 'text-yellow-500' },
-    { number: '15+', label: 'Years Experience', icon: TrendingUp, color: 'text-blue-600' }
+    { number: '100+', label: 'Quality Vehicles', icon: Users, color: 'text-green-600' },
+    { number: '100%', label: 'Safety Certified', icon: Star, color: 'text-yellow-500' },
+    { number: '24/7', label: 'Support Available', icon: TrendingUp, color: 'text-blue-600' }
   ]
 
   return (

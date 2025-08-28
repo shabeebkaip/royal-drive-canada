@@ -49,16 +49,16 @@ const Hero = () => {
               {/* Compact Stats */}
               <div className="grid grid-cols-3 gap-6">
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">5,000+</div>
-                  <div className="text-gray-400 text-xs font-medium uppercase tracking-wide">Happy Customers</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">100+</div>
+                  <div className="text-gray-400 text-xs font-medium uppercase tracking-wide">Quality Vehicles</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">500+</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">10+</div>
                   <div className="text-gray-400 text-xs font-medium uppercase tracking-wide">Vehicles Available</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">15+</div>
-                  <div className="text-gray-400 text-xs font-medium uppercase tracking-wide">Years Experience</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">100%</div>
+                  <div className="text-gray-400 text-xs font-medium uppercase tracking-wide">Safety Certified</div>
                 </div>
               </div>
 

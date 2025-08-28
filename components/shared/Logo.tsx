@@ -7,35 +7,38 @@ interface LogoProps {
 }
 
 const Logo = ({ className = '', variant = 'dark', size = 'md' }: LogoProps) => {
-  
-
   const textSizeClasses = {
-    sm: 'text-sm',
-    md: 'text-base',
-    lg: 'text-xl'
+    sm: 'text-lg',
+    md: 'text-2xl',
+    lg: 'text-4xl'
   }
 
-  const monogramSizeClasses = {
-    sm: 'text-3xl',
-    md: 'text-4xl',
-    lg: 'text-5xl'
+  const letterSpacing = {
+    sm: 'tracking-[0.15em]',
+    md: 'tracking-[0.2em]',
+    lg: 'tracking-[0.25em]'
   }
 
-  const textColor = variant === 'light' ? 'text-white' : 'text-gray-900'
+  // Modern blue color scheme
+  const textColor = variant === 'light' ? 'text-white' : 'text-blue-600'
+  const accentColor = variant === 'light' ? 'text-blue-300' : 'text-blue-700'
 
   return (
-    <div className={`flex flex-col items-center ${className}`}>
-      {/* RD Monogram - Exact match to reference */}
-      <div className={`${monogramSizeClasses[size]} ${textColor} font-bold leading-none mb-2`}>
-        <span className="relative inline-block">
-          <span className="font-black">R</span>
-          <span className="font-normal ml-1">D</span>
+    <div className={`flex items-center ${className}`}>
+      {/* Modern Typography Logo */}
+      <div className="flex items-center space-x-1">
+        {/* ROYAL */}
+        <span className={`${textSizeClasses[size]} ${textColor} font-black ${letterSpacing[size]} uppercase`}>
+          ROYAL
         </span>
-      </div>
 
-      {/* ROYAL DRIVE Text */}
-      <div className={`${textSizeClasses[size]} ${textColor} font-bold tracking-[0.25em] uppercase text-center leading-none`}>
-        ROYAL DRIVE
+        {/* Separator Line */}
+        <div className={`w-8 h-0.5 ${variant === 'light' ? 'bg-blue-300' : 'bg-blue-600'} mx-2`}></div>
+
+        {/* DRIVE */}
+        <span className={`${textSizeClasses[size]} ${accentColor} font-light ${letterSpacing[size]} uppercase`}>
+          DRIVE
+        </span>
       </div>
     </div>
   )
