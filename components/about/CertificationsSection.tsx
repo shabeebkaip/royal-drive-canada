@@ -1,52 +1,27 @@
-import React from 'react'
-import Image from 'next/image'
-import { Shield, Award, CheckCircle, Users, TrendingUp, Calendar } from 'lucide-react'
+import React from "react";
+import Image from "next/image";
+import { Shield, CheckCircle } from "lucide-react";
 
 const CertificationsSection = () => {
   const certifications = [
     {
-      logo: '/certifications/carfax.png',
-      title: 'CARFAX Verified',
-      description: 'Every vehicle comes with a complete CARFAX vehicle history report'
+      logo: "/certifications/carfax.png",
+      title: "CARFAX Verified",
+      description:
+        "Every vehicle comes with a complete CARFAX vehicle history report",
     },
     {
-      logo: '/certifications/mvic.png',
-      title: 'OMVIC Registered',
-      description: 'Licensed and regulated by the Ontario Motor Vehicle Industry Council'
+      logo: "/certifications/mvic.png",
+      title: "OMVIC Registered",
+      description:
+        "Licensed and regulated by the Ontario Motor Vehicle Industry Council",
     },
     {
-      logo: '/certifications/ucda.png',
-      title: 'UCDA Certified',
-      description: 'Proud member of the Used Car Dealers Association'
-    }
-  ]
-
-  const achievements = [
-    {
-      icon: Award,
-      title: 'Excellence Award 2023',
-      description: 'Recognized for outstanding customer service and business practices',
-      year: '2023'
+      logo: "/certifications/ucda.png",
+      title: "UCDA Certified",
+      description: "Proud member of the Used Car Dealers Association",
     },
-    {
-      icon: Users,
-      title: 'Customer Choice Award',
-      description: 'Voted #1 Used Car Dealer in Toronto by customer reviews',
-      year: '2022'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Growth Excellence',
-      description: 'Fastest growing automotive dealership in the GTA region',
-      year: '2021'
-    },
-    {
-      icon: Shield,
-      title: 'Quality Assurance',
-      description: 'Certified for maintaining highest quality standards',
-      year: '2020'
-    }
-  ]
+  ];
 
   return (
     <section className="py-20 bg-gray-50">
@@ -55,7 +30,9 @@ const CertificationsSection = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-50 border border-green-200 mb-6">
             <Shield className="w-4 h-4 text-green-600 mr-2" />
-            <span className="text-green-700 text-sm font-semibold">Trust & Excellence</span>
+            <span className="text-green-700 text-sm font-semibold">
+              Trust & Excellence
+            </span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -64,14 +41,17 @@ const CertificationsSection = () => {
           </h2>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Our commitment to quality and customer satisfaction has earned us industry
-            certifications and recognition from leading automotive organizations.
+            Our commitment to quality and customer satisfaction has earned us
+            industry certifications and recognition from leading automotive
+            organizations.
           </p>
         </div>
 
         {/* Certifications */}
         <div className="mb-20">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Industry Certifications</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            Industry Certifications
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {certifications.map((cert, index) => (
               <div
@@ -87,8 +67,12 @@ const CertificationsSection = () => {
                     className="object-contain max-w-[80px] max-h-[50px]"
                   />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">{cert.title}</h4>
-                <p className="text-gray-600 leading-relaxed">{cert.description}</p>
+                <h4 className="text-xl font-bold text-gray-900 mb-3">
+                  {cert.title}
+                </h4>
+                <p className="text-gray-600 leading-relaxed">
+                  {cert.description}
+                </p>
               </div>
             ))}
           </div>
@@ -124,8 +108,9 @@ const CertificationsSection = () => {
               Experience the Royal Drive Difference
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join thousands of satisfied customers who have chosen Royal Drive for their automotive needs.
-              Experience our certified quality and award-winning service today.
+              Join thousands of satisfied customers who have chosen Royal Drive
+              for their automotive needs. Experience our certified quality and
+              award-winning service today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
@@ -139,7 +124,7 @@ const CertificationsSection = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default CertificationsSection
+export default CertificationsSection;

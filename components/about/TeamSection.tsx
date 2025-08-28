@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { MapPin, Phone, Mail, Clock, Star } from 'lucide-react'
+import { MapPin, Phone, Clock, Star } from 'lucide-react'
 
 const TeamSection = () => {
   const teamMembers = [

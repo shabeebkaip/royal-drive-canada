@@ -75,13 +75,13 @@ const BrowseSection = () => {
                   }}
                 >
                   <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-xl  group-hover:from-blue-100 group-hover:to-indigo-200 transition-all duration-300">
-                    <img
-                      src={type.image}
-                      alt={`${type.name} cars`}
-                      width={64}
-                      height={64}
-                      className="object-contain w-full h-full "
-                    />
+                      <Image
+                        src={type.image}
+                        alt={`${type.name} cars`}
+                        width={64}
+                        height={64}
+                        className="object-contain w-full h-full "
+                      />
                   </div>
                   <h3 className="font-semibold text-gray-800 text-base text-center mb-2 tracking-wide group-hover:text-blue-600 transition-colors duration-300">
                     {type.name}

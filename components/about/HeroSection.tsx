@@ -1,14 +1,14 @@
-import React from 'react'
-import Image from 'next/image'
-import { Star, Award, Users, Calendar } from 'lucide-react'
+import React from "react";
+import Image from "next/image";
+import { Star, Award, Users, Calendar } from "lucide-react";
 
 const HeroSection = () => {
   const stats = [
-    { icon: Users, number: '100+', label: 'Quality Vehicles' },
-    { icon: Star, number: '100%', label: 'Safety Certified' },
-    { icon: Calendar, number: '24/7', label: 'Support Available' },
-    { icon: Award, number: '10+', label: 'Current Inventory' }
-  ]
+    { icon: Users, number: "100+", label: "Quality Vehicles" },
+    { icon: Star, number: "100%", label: "Safety Certified" },
+    { icon: Calendar, number: "24/7", label: "Support Available" },
+    { icon: Award, number: "10+", label: "Current Inventory" },
+  ];
 
   return (
     <section className="relative min-h-[70vh] overflow-hidden bg-gradient-to-br from-blue-900 via-gray-800 to-gray-900">
@@ -40,13 +40,15 @@ const HeroSection = () => {
               <div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                   <span className="block">Your Trusted</span>
-                  <span className="block text-blue-400">Automotive Partner</span>
+                  <span className="block text-blue-400">
+                    Automotive Partner
+                  </span>
                 </h1>
 
                 <p className="text-xl text-gray-300 leading-relaxed">
-                  Royal Drive is Toronto's destination for quality pre-owned vehicles.
+                  {`Royal Drive is Toronto's destination for quality pre-owned vehicles.
                   We're committed to providing exceptional service, transparent pricing, and
-                  helping you find the perfect vehicle for your needs and budget.
+                  helping you find the perfect vehicle for your needs and budget.`}
                 </p>
               </div>
 
@@ -70,8 +72,12 @@ const HeroSection = () => {
                   <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                     <stat.icon className="w-6 h-6 text-white" />
                   </div>
-                  <div className="text-2xl font-bold text-white mb-2">{stat.number}</div>
-                  <div className="text-gray-300 text-sm font-medium">{stat.label}</div>
+                  <div className="text-2xl font-bold text-white mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-300 text-sm font-medium">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -79,7 +85,7 @@ const HeroSection = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;

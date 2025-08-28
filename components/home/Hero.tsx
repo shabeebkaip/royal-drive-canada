@@ -42,7 +42,7 @@ const Hero = () => {
                 </h1>
 
                 <p className="text-lg lg:text-xl text-gray-300 max-w-lg leading-relaxed">
-                  Discover quality pre-owned vehicles with transparent pricing and safety certifications at Toronto's trusted dealership.
+                 {`Discover quality pre-owned vehicles with transparent pricing and safety certifications at Toronto's trusted dealership.`}
                 </p>
               </div>
 

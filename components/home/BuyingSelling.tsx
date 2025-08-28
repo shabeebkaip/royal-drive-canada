@@ -17,10 +17,10 @@ const BuyingSelling = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-            Your Journey Starts Here
+            {`Your Journey Starts Here`}
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Whether you're buying your dream car or selling your current one, we make the process seamless and stress-free.
+            {`Whether you're buying your dream car or selling your current one, we make the process seamless and stress-free.`}
           </p>
         </div>
 
@@ -60,7 +60,7 @@ const BuyingSelling = () => {
                 </h3>
 
                 <p className="text-gray-600 text-lg mb-8 max-w-md leading-relaxed">
-                  Leave the headache to us and focus on what matters most – finding your perfect ride with confidence.
+                  {`Leave the headache to us and focus on what matters most – finding your perfect ride with confidence.`}
                 </p>
 
                 {/* Features */}
@@ -164,7 +164,7 @@ const BuyingSelling = () => {
         <div className="mt-16 text-center">
           <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-md rounded-full px-6 py-3 border border-white/30 shadow-lg">
             <Sparkles className="w-5 h-5 text-blue-500" />
-            <span className="text-gray-700 font-medium">Trade-ins welcome • OMVIC & UCDA Registered</span>
+            <span className="text-gray-700 font-medium">{`Trade-ins welcome • OMVIC & UCDA Registered`}</span>
           </div>
         </div>
       </div>

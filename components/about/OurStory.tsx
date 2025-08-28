@@ -64,19 +64,19 @@ const OurStory = () => {
 
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
                 <p>
-                  Royal Drive was founded with a clear vision: to revolutionize the pre-owned car
-                  buying experience in Toronto. We believe that purchasing a vehicle should be
-                  transparent, stress-free, and built on trust from day one.
+                    {`Royal Drive was founded with a clear vision: to revolutionize the pre-owned car
+                    buying experience in Toronto. We believe that purchasing a vehicle should be
+                    transparent, stress-free, and built on trust from day one.`}
                 </p>
                 <p>
-                  Our dealership brings fresh energy and modern approaches to car sales. Our team
+                  {`Our dealership brings fresh energy and modern approaches to car sales. Our team
                   consists of experienced automotive professionals who are passionate about helping
-                  customers find their perfect vehicle.
+                  customers find their perfect vehicle.`}
                 </p>
                 <p>
-                  Every vehicle in our inventory is carefully selected, thoroughly inspected, and
+                  {`Every vehicle in our inventory is carefully selected, thoroughly inspected, and
                   comes with a complete history report. We're not just selling cars – we're building
-                  lasting relationships with our community, one satisfied customer at a time.
+                  lasting relationships with our community, one satisfied customer at a time.`}
                 </p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
 import ImageSlider from "./ImageSlider";
-import { Star, CheckCircle, Fuel, Gauge, Settings, MapPin, FileText, RefreshCw, ArrowRight } from 'lucide-react';
+import { Star, CheckCircle, Fuel, Gauge, Settings, MapPin, FileText, RefreshCw } from 'lucide-react';
 
 interface Vehicle {
   id: number;

@@ -25,8 +25,8 @@ const FeaturedVehicles = () => {
             Premium Vehicles
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Handpicked selection of exceptional vehicles, each inspected for quality,
-            reliability, and outstanding value. Your perfect drive awaits.
+            {`Handpicked selection of exceptional vehicles, each inspected for quality,
+            reliability, and outstanding value. Your perfect drive awaits.`}
           </p>
         </div>
 
@@ -55,11 +55,11 @@ const FeaturedVehicles = () => {
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
             <h3 className="text-2xl font-bold text-gray-900 mb-3">
-              Can't Find What You're Looking For?
+              {`Can't Find What You're Looking For?`}
             </h3>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Browse our complete inventory or let us help you find the perfect vehicle.
-              We have access to hundreds of quality pre-owned vehicles.
+              {`Browse our complete inventory or let us help you find the perfect vehicle.
+              We have access to hundreds of quality pre-owned vehicles.`}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors">
