@@ -19,6 +19,7 @@ export const metadata: Metadata = {
       {
         url: '/favicon.svg',
         type: 'image/svg+xml',
+        sizes: '32x32',
       },
       {
         url: '/icon.svg',
@@ -28,19 +29,12 @@ export const metadata: Metadata = {
     ],
     apple: [
       {
-        url: '/icon-192.png',
-        sizes: '192x192',
-        type: 'image/png',
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+        sizes: '180x180',
       }
     ],
-    other: [
-      {
-        rel: 'icon',
-        url: '/icon-512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      }
-    ],
+    shortcut: '/favicon.svg',
   },
 };
 

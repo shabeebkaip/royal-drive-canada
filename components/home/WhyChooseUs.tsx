@@ -1,44 +1,69 @@
-"use client"
-import React from 'react'
-import Image from 'next/image'
-import { Shield, Award, CheckCircle, Star, TrendingUp, Users } from 'lucide-react'
+"use client";
+import React from "react";
+import Image from "next/image";
+import {
+  Shield,
+  Award,
+  CheckCircle,
+  Star,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 const WhyChooseUs = () => {
   const features = [
     {
-      logo: '/certifications/carfax.png',
-      title: 'CARFAX Verified',
-      description: 'Every vehicle comes with a complete CARFAX vehicle history report for your peace of mind',
+      logo: "/certifications/carfax.png",
+      title: "CARFAX Verified",
+      description:
+        "Every vehicle comes with a complete CARFAX vehicle history report for your peace of mind",
       icon: Shield,
-      color: 'from-green-500 to-emerald-600',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200'
+      color: "from-green-500 to-emerald-600",
+      bgColor: "bg-green-50",
+      borderColor: "border-green-200",
     },
     {
-      logo: '/certifications/mvic.png',
-      title: 'MVIC Regulated',
-      description: 'We are fully regulated by the Motor Vehicle Industry Council of Ontario ensuring ethical sales practices',
+      logo: "/certifications/mvic.png",
+      title: "OMVIC Regulated",
+      description:
+        "We are fully regulated by the Motor Vehicle Industry Council of Ontario ensuring ethical sales practices",
       icon: Award,
-      color: 'from-blue-500 to-blue-600',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200'
+      color: "from-blue-500 to-blue-600",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-200",
     },
     {
-      logo: '/certifications/ucda.png',
-      title: 'UCDA Certified',
-      description: 'Proud member of the Used Car Dealers Association with commitment to industry best practices',
+      logo: "/certifications/ucda.png",
+      title: "UCDA Certified",
+      description:
+        "Proud member of the Used Car Dealers Association with commitment to industry best practices",
       icon: CheckCircle,
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200'
+      color: "from-purple-500 to-purple-600",
+      bgColor: "bg-purple-50",
+      borderColor: "border-purple-200",
     },
-  ]
+  ];
 
   const stats = [
-    { number: '100+', label: 'Quality Vehicles', icon: Users, color: 'text-green-600' },
-    { number: '100%', label: 'Safety Certified', icon: Star, color: 'text-yellow-500' },
-    { number: '24/7', label: 'Support Available', icon: TrendingUp, color: 'text-blue-600' }
-  ]
+    {
+      number: "100+",
+      label: "Quality Vehicles",
+      icon: Users,
+      color: "text-green-600",
+    },
+    {
+      number: "100%",
+      label: "Safety Certified",
+      icon: Star,
+      color: "text-yellow-500",
+    },
+    {
+      number: "24/7",
+      label: "Support Available",
+      icon: TrendingUp,
+      color: "text-blue-600",
+    },
+  ];
 
   return (
     <section className="py-20 bg-white">
@@ -60,16 +85,22 @@ const WhyChooseUs = () => {
           </h2>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12">
-            Our dealership is certified by industry-leading authorities, ensuring you get a reliable
-            vehicle with complete transparency and unmatched quality assurance.
+            Our dealership is certified by industry-leading authorities,
+            ensuring you get a reliable vehicle with complete transparency and
+            unmatched quality assurance.
           </p>
 
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="group text-center p-6 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-lg border border-gray-100 transition-all duration-300">
+              <div
+                key={index}
+                className="group text-center p-6 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-lg border border-gray-100 transition-all duration-300"
+              >
                 <div className="flex items-center justify-center gap-3 mb-3">
-                  <div className={`p-3 rounded-xl bg-white shadow-md ${stat.color}`}>
+                  <div
+                    className={`p-3 rounded-xl bg-white shadow-md ${stat.color}`}
+                  >
                     <stat.icon className="w-6 h-6" />
                   </div>
                   <span className="text-3xl lg:text-4xl font-bold text-gray-900">
@@ -81,7 +112,7 @@ const WhyChooseUs = () => {
             ))}
           </div>
         </div>
-        
+
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {features.map((feature, index) => (
@@ -91,7 +122,9 @@ const WhyChooseUs = () => {
             >
               {/* Logo Container */}
               <div className="relative mb-8">
-                <div className={`w-24 h-24 mx-auto rounded-2xl ${feature.bgColor} flex items-center justify-center relative border-2 ${feature.borderColor}`}>
+                <div
+                  className={`w-24 h-24 mx-auto rounded-2xl ${feature.bgColor} flex items-center justify-center relative border-2 ${feature.borderColor}`}
+                >
                   <Image
                     src={feature.logo}
                     alt={feature.title}
@@ -102,7 +135,9 @@ const WhyChooseUs = () => {
                 </div>
 
                 {/* Floating icon badge */}
-                <div className={`absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center shadow-lg`}>
+                <div
+                  className={`absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center shadow-lg`}
+                >
                   <feature.icon className="w-5 h-5 text-white" />
                 </div>
               </div>
@@ -118,7 +153,9 @@ const WhyChooseUs = () => {
               </div>
 
               {/* Hover effect indicator */}
-              <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r ${feature.color} rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+              <div
+                className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r ${feature.color} rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+              ></div>
             </div>
           ))}
         </div>
@@ -136,8 +173,9 @@ const WhyChooseUs = () => {
             </div>
 
             <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Every vehicle undergoes rigorous inspection and comes with industry-standard certifications.
-              Your satisfaction and safety are our top priorities.
+              Every vehicle undergoes rigorous inspection and comes with
+              industry-standard certifications. Your satisfaction and safety are
+              our top priorities.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -152,7 +190,7 @@ const WhyChooseUs = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default WhyChooseUs
+export default WhyChooseUs;
