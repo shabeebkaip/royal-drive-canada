@@ -1,0 +1,67 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with Royal Drive theme -->
+  <rect width="64" height="64" rx="8" fill="url(#bgGradient)"/>
+  
+  <!-- Speed lines background effect -->
+  <g opacity="0.3">
+    <rect x="8" y="24" width="12" height="2" fill="#60a5fa" transform="skewY(20)"/>
+    <rect x="6" y="28" width="16" height="2" fill="#60a5fa" transform="skewY(20)"/>
+    <rect x="10" y="32" width="8" height="2" fill="#60a5fa" transform="skewY(20)"/>
+  </g>
+  
+  <!-- Main "RD" Monogram -->
+  <g transform="translate(16, 12)">
+    <!-- Letter "R" - Bold and stylized -->
+    <g fill="#1e40af" transform="skewX(-10)">
+      <rect x="0" y="0" width="4" height="32"/>
+      <rect x="0" y="0" width="12" height="4"/>
+      <rect x="0" y="12" width="10" height="4"/>
+      <rect x="8" y="0" width="4" height="16"/>
+      <polygon points="6,16 14,24 10,28 2,20"/>
+    </g>
+    
+    <!-- Letter "D" - Bold and stylized -->
+    <g fill="#2563eb" transform="translate(16, 0) skewX(-10)">
+      <rect x="0" y="0" width="4" height="32"/>
+      <rect x="0" y="0" width="10" height="4"/>
+      <rect x="0" y="28" width="10" height="4"/>
+      <rect x="8" y="4" width="4" height="24" rx="2"/>
+    </g>
+  </g>
+  
+  <!-- Speed lines forward effect -->
+  <g opacity="0.2">
+    <rect x="44" y="24" width="16" height="2" fill="#60a5fa" transform="skewY(-20)"/>
+    <rect x="42" y="28" width="20" height="2" fill="#60a5fa" transform="skewY(-20)"/>
+    <rect x="46" y="32" width="12" height="2" fill="#60a5fa" transform="skewY(-20)"/>
+  </g>
+  
+  <!-- Racing chevron accent -->
+  <g fill="#2563eb" opacity="0.6">
+    <polygon points="28,26 32,22 34,24 30,28"/>
+    <polygon points="32,30 36,26 38,28 34,32"/>
+  </g>
+  
+  <!-- Gradients and effects -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="50%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    
+    <!-- Subtle glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Apply glow to main monogram -->
+  <style>
+    .logo-text { filter: url(#glow); }
+  </style>
+</svg>

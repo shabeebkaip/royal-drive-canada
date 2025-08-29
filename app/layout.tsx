@@ -14,6 +14,34 @@ const kanit = Kanit({
 export const metadata: Metadata = {
   title: "Royal Drive - Car Dealership",
   description: "Find the right car guaranteed at Royal Drive",
+  icons: {
+    icon: [
+      {
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+      },
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+        sizes: '64x64',
+      }
+    ],
+    apple: [
+      {
+        url: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      }
+    ],
+    other: [
+      {
+        rel: 'icon',
+        url: '/icon-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      }
+    ],
+  },
 };
 
 export default function RootLayout({
