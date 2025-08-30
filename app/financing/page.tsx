@@ -48,7 +48,7 @@ export default function FinancingPage() {
         <PageHero
           title="Car Financing Made Easy"
           subtitle="Get approved for auto financing with competitive rates and flexible terms. All credit types welcome at Royal Drive Canada."
-          backgroundImage="/bg.jpg"
+          backgroundImage="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
           compact={true}
           badges={[
             {

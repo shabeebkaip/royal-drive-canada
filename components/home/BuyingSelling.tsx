@@ -82,7 +82,7 @@ const BuyingSelling = () => {
               
               <div className="mt-auto">
                 <Link 
-                  href="/inventories"
+                  href="/vehicles"
                   className="group/btn inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   Explore Used Cars

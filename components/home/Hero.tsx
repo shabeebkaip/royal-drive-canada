@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import SearchCard from '@/components/home/SearchCard'
 
 const Hero = () => {
@@ -9,7 +10,7 @@ const Hero = () => {
       <div className="absolute inset-0">
         <div className="absolute inset-0">
           <Image
-            src="/bg.jpg"
+            src="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
             alt="Car dealership showroom"
             fill
             priority
@@ -64,12 +65,16 @@ const Hero = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg">
-                  Browse All Vehicles
-                </button>
-                <button className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg transition-colors duration-200">
-                  Get Pre-Approved
-                </button>
+                <Link href="/vehicles">
+                  <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg">
+                    Browse All Vehicles
+                  </button>
+                </Link>
+                <Link href="/financing">
+                  <button className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg transition-colors duration-200">
+                    Get Pre-Approved
+                  </button>
+                </Link>
               </div>
 
               {/* Trust Indicators - Moved to left column */}

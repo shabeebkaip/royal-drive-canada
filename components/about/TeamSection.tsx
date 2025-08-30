@@ -7,7 +7,7 @@ const TeamSection = () => {
     {
       name: 'David Chen',
       role: 'General Manager',
-      image: '/bg.jpg', // Using placeholder for now
+      image: '', // Using placeholder for now
       experience: '12+ Years',
       speciality: 'Customer Relations',
       description: 'David leads our team with passion and ensures every customer receives exceptional service.'

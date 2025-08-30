@@ -71,7 +71,7 @@ export default function ContactPage() {
         <PageHero
           title="Contact Royal Drive Canada"
           subtitle="Visit Toronto's trusted used car dealership. We're here to help you find your perfect vehicle with transparent pricing and exceptional service."
-          backgroundImage="/bg-car.jpg"
+          backgroundImage="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
           compact={true}
           badges={[
             {

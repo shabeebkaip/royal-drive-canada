@@ -132,7 +132,7 @@ const VehiclesPage = () => {
             <PageHero
                 title="Our Vehicle Collection"
                 subtitle="Discover quality pre-owned vehicles with transparent pricing, safety certifications, and exceptional value. Every vehicle is carefully inspected and ready for the road."
-                backgroundImage="/bg-car.jpg"
+                backgroundImage="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
                 compact={true}
                 badges={[
                     {
