@@ -146,7 +146,7 @@ export default function ContactPage() {
                           info@royaldrivecanada.com
                         </a>
                       </p>
-                      <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                      <p className="text-sm text-gray-500">{`We'll respond within 24 hours`}</p>
                     </div>
                   </div>
 

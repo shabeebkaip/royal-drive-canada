@@ -149,7 +149,7 @@ const PageHero: React.FC<PageHeroProps> = ({
               <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
                 {cta.primary && (
                   <button
-                    onClick={() => handleAction(cta.primary.action, cta.primary.value)}
+                    onClick={() => handleAction(cta.primary!.action, cta.primary!.value)}
                     className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     {cta.primary.text}
@@ -157,7 +157,7 @@ const PageHero: React.FC<PageHeroProps> = ({
                 )}
                 {cta.secondary && (
                   <button
-                    onClick={() => handleAction(cta.secondary.action, cta.secondary.value)}
+                    onClick={() => handleAction(cta.secondary!.action, cta.secondary!.value)}
                     className="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg transition-all duration-200 hover:border-white/50"
                   >
                     {cta.secondary.text}

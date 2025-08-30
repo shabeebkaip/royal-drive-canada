@@ -154,7 +154,7 @@ export default function FinancingPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-gray-900">Challenged Credit</h3>
                 <p className="text-gray-600 mb-6">
-                  Past credit challenges don't have to stop you from getting a quality vehicle.
+                  {`Past credit challenges don't have to stop you from getting a quality vehicle.`}
                 </p>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-center">
@@ -238,7 +238,7 @@ export default function FinancingPage() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Apply for Financing</h2>
                 <p className="text-xl text-gray-600">
-                  Get pre-approved in minutes - it won't affect your credit score
+                  {`Get pre-approved in minutes - it won't affect your credit score`}
                 </p>
               </div>
 
