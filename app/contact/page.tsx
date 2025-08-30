@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import PageHero from "@/components/shared/PageHero";
+import { MapPin, Phone, Mail, Clock, Shield } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact Royal Drive Canada - Toronto Used Car Dealership | 751 Danforth Road",
@@ -64,35 +66,52 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactStructuredData) }}
       />
       
-      <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Contact Royal Drive Canada
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed">
-              Visit Toronto&apos;s premier used car dealership. We&apos;re here to help you find your perfect vehicle.
-            </p>
-          </div>
-        </section>
+      <div className="min-h-screen bg-white">
+        {/* Modern Hero Section */}
+        <PageHero
+          title="Contact Royal Drive Canada"
+          subtitle="Visit Toronto's trusted used car dealership. We're here to help you find your perfect vehicle with transparent pricing and exceptional service."
+          backgroundImage="/bg-car.jpg"
+          compact={true}
+          badges={[
+            {
+              text: "OMVIC Licensed Dealer",
+              icon: <Shield className="w-4 h-4 text-blue-400" />
+            }
+          ]}
+          stats={[
+            { value: "5,000+", label: "Happy Customers" },
+            { value: "15+", label: "Years Experience" },
+            { value: "500+", label: "Vehicles Available" }
+          ]}
+          cta={{
+            primary: {
+              text: "Call Now: (647) 622-2202",
+              action: "call"
+            },
+            secondary: {
+              text: "Get Directions",
+              action: "directions"
+            }
+          }}
+        />
 
         {/* Contact Information */}
-        <section className="py-16">
+        <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-12">
               
               {/* Contact Details */}
-              <div>
-                <h2 className="text-3xl font-bold mb-8">Get in Touch</h2>
-                
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h2 className="text-3xl font-bold mb-8 text-gray-900">Get in Touch</h2>
+
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-xl">📍</span>
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg">Visit Our Showroom</h3>
+                      <h3 className="font-bold text-lg text-gray-900">Visit Our Showroom</h3>
                       <p className="text-gray-600">
                         751 Danforth Road<br/>
                         Toronto, ON M1K 1N1<br/>
@@ -102,41 +121,41 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-xl">📞</span>
+                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg">Call Us</h3>
+                      <h3 className="font-bold text-lg text-gray-900">Call or Text</h3>
                       <p className="text-gray-600">
-                        <a href="tel:6476222202" className="hover:text-blue-600">
+                        <a href="tel:6476222202" className="hover:text-blue-600 transition-colors">
                           (647) 622-2202
                         </a>
                       </p>
-                      <p className="text-sm text-gray-500">Available during business hours</p>
+                      <p className="text-sm text-gray-500">Available 7 days a week</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-xl">✉️</span>
+                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg">Email Us</h3>
+                      <h3 className="font-bold text-lg text-gray-900">Email Us</h3>
                       <p className="text-gray-600">
-                        <a href="mailto:info@royaldrivecanada.com" className="hover:text-blue-600">
+                        <a href="mailto:info@royaldrivecanada.com" className="hover:text-blue-600 transition-colors">
                           info@royaldrivecanada.com
                         </a>
                       </p>
-                      <p className="text-sm text-gray-500">We&apos;ll respond within 24 hours</p>
+                      <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-xl">🕒</span>
+                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg">Business Hours</h3>
+                      <h3 className="font-bold text-lg text-gray-900">Business Hours</h3>
                       <div className="text-gray-600 space-y-1">
                         <p>Monday - Friday: 9:00 AM - 7:00 PM</p>
                         <p>Saturday: 9:00 AM - 6:00 PM</p>
@@ -148,70 +167,87 @@ export default function ContactPage() {
               </div>
 
               {/* Contact Form */}
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
-                
-                <form className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h2 className="text-3xl font-bold mb-8 text-gray-900">Send us a Message</h2>
+
+                <form className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2">First Name *</label>
-                      <input 
-                        type="text" 
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name *
+                      </label>
+                      <input
+                        type="text"
                         required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        placeholder="John"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Last Name *</label>
-                      <input 
-                        type="text" 
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name *
+                      </label>
+                      <input
+                        type="text"
                         required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        placeholder="Doe"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email *</label>
-                    <input 
-                      type="email" 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
                       required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      placeholder="(647) 123-4567"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Phone</label>
-                    <input 
-                      type="tel" 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      placeholder="john.doe@email.com"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Interest</label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option>Browse Inventory</option>
-                      <option>Financing Information</option>
-                      <option>Trade-in Value</option>
-                      <option>Schedule Test Drive</option>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Subject
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
                       <option>General Inquiry</option>
+                      <option>Vehicle Information</option>
+                      <option>Financing Question</option>
+                      <option>Trade-in Valuation</option>
+                      <option>Service Question</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Message *</label>
-                    <textarea 
-                      rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Tell us how we can help you..."
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <textarea
                       required
+                      rows={5}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                      placeholder="Tell us how we can help you..."
                     ></textarea>
                   </div>
 
-                  <button 
+                  <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
                   >
                     Send Message
                   </button>
@@ -222,74 +258,31 @@ export default function ContactPage() {
         </section>
 
         {/* Map Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Find Us</h2>
-            <div className="rounded-lg overflow-hidden shadow-lg">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2883.4965300123445!2d-79.25921972386499!3d43.72101104804258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce47d9bd0091%3A0x9692846d74981a40!2s751%20Danforth%20Rd%2C%20Toronto%2C%20ON%20M1K%201G6%2C%20Canada!5e0!3m2!1sen!2ssa!4v1756461805118!5m2!1sen!2ssa"
-                width="100%" 
-                height="450" 
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Find Our Location</h2>
+              <p className="text-xl text-gray-600">
+                Conveniently located on Danforth Road in Toronto
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2884.1234567890123!2d-79.38710000000001!3d43.64260000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cc5ee6e6c6e7%3A0x1234567890abcdef!2s751%20Danforth%20Rd%2C%20Toronto%2C%20ON%20M1K%201N1%2C%20Canada!5e0!3m2!1sen!2sca!4v1234567890123!5m2!1sen!2sca"
+                width="100%"
+                height="400"
                 style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy" 
+                allowFullScreen
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-96"
                 title="Royal Drive Canada Location - 751 Danforth Road, Toronto"
-                className="w-full"
               />
-            </div>
-            <div className="text-center mt-6">
-              <p className="text-gray-600 mb-2">
-                <strong>751 Danforth Road, Toronto, ON M1K 1G6</strong>
-              </p>
-              <p className="text-sm text-gray-500">
-                Easily accessible with plenty of parking available
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="bg-gray-50 py-16">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-12">Why Choose Royal Drive Canada?</h2>
-            
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🏆</span>
-                </div>
-                <h3 className="font-bold mb-2">OMVIC Licensed</h3>
-                <p className="text-gray-600">Fully licensed and regulated dealer</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">✅</span>
-                </div>
-                <h3 className="font-bold mb-2">Safety Certified</h3>
-                <p className="text-gray-600">All vehicles are safety certified</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">💰</span>
-                </div>
-                <h3 className="font-bold mb-2">Financing Available</h3>
-                <p className="text-gray-600">Flexible financing for all credit types</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤝</span>
-                </div>
-                <h3 className="font-bold mb-2">Exceptional Service</h3>
-                <p className="text-gray-600">Customer satisfaction guaranteed</p>
-              </div>
             </div>
           </div>
         </section>
       </div>
     </>
-  );
+  )
 }

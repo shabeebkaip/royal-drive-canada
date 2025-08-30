@@ -33,29 +33,21 @@ const Header = () => {
 
             {/* Clean Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-              {/* <Link
-                href="/used-cars"
+              <Link
+                href="/vehicles"
                 className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
               >
-                All Vehicles
+                Our Vehicles
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
               </Link>
 
               <Link
-                href="/car-financing"
+                href="/financing"
                 className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
               >
                 Financing
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
               </Link>
-
-              <Link
-                href="/car-deal"
-                className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200 relative group"
-              >
-                Special Deals
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-              </Link> */}
 
               <Link
                 href="/about"
@@ -132,9 +124,8 @@ const Header = () => {
 
             <nav className="p-2">
               {[
-                { href: '/used-cars', label: 'All Vehicles', desc: 'Browse our complete inventory' },
-                { href: '/car-financing', label: 'Car Financing', desc: 'Get pre-approved today' },
-                { href: '/car-deal', label: 'Special Deals', desc: 'Current promotions & offers' },
+                { href: '/vehicles', label: 'Our Vehicles', desc: 'Browse our complete inventory' },
+                { href: '/financing', label: 'Car Financing', desc: 'Get pre-approved today' },
                 { href: '/about', label: 'About', desc: 'Learn about our company' },
                 { href: '/contact', label: 'Contact Us', desc: 'Get in touch with us' }
               ].map((item) => (
@@ -158,19 +149,19 @@ const Header = () => {
 
               {/* Contact Section */}
               <div className="p-4 bg-gray-50 rounded-lg mt-2">
-                <button
+                <a
+                  href="tel:6476222202"
                   className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  Sell Your Car
-                </button>
+                  Call (647) 622-2202
+                </a>
 
                 <div className="text-center mt-3 text-gray-600">
-                  <div className="font-semibold">📞 647-622-2202</div>
-                  <div className="text-xs mt-1">All budgets welcome • Trade-ins accepted</div>
+                  <div className="text-xs">All budgets welcome • Trade-ins accepted</div>
                 </div>
               </div>
             </nav>

@@ -58,12 +58,10 @@ const Footer = () => {
               </h3>
               <div className="space-y-2">
                 {[
-                  { href: '/inventories', label: 'Browse Inventory' },
                   { href: '/financing', label: 'Car Financing' },
-                  { href: '/trade-in', label: 'Trade-In Value' },
                   { href: '/about', label: 'About Us' },
                   { href: '/contact', label: 'Contact Us' },
-                  { href: '/services', label: 'Our Services' }
+                  { href: '/vehicles', label: 'Our Vehicles' }
                 ].map((link) => (
                   <Link
                     key={link.href}
@@ -81,39 +79,8 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Vehicle Categories */}
-            <div className="lg:col-span-2 space-y-6">
-              <h3 className="text-2xl font-bold text-white flex items-center">
-                <span className="w-1 h-8 bg-blue-400 rounded-full mr-3"></span>
-                Vehicle Types
-              </h3>
-              <div className="space-y-2">
-                {[
-                  { type: 'sedan', label: 'Sedans' },
-                  { type: 'suv', label: 'SUVs' },
-                  { type: 'truck', label: 'Trucks' },
-                  { type: 'hybrid', label: 'Hybrids' },
-                  { type: 'luxury', label: 'Luxury Cars' },
-                  { type: 'compact', label: 'Compact Cars' }
-                ].map((category) => (
-                  <Link
-                    key={category.type}
-                    href={`/inventories?type=${category.type}`}
-                    className="block text-gray-300 hover:text-blue-400 transition-colors py-2 group"
-                  >
-                    <span className="flex items-center">
-                      {category.label}
-                      <svg className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
             {/* Newsletter & Trust Badges */}
-            <div className="lg:col-span-3 space-y-8">
+            <div className="lg:col-span-5 space-y-8">
               <div>
                 <h3 className="text-2xl font-bold text-white flex items-center mb-6">
                   <span className="w-1 h-8 bg-blue-400 rounded-full mr-3"></span>
