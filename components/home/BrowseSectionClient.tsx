@@ -3,15 +3,9 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { VehicleType } from '@/types/api'
+import { VehicleType, Brand } from '@/types/api'
 
 type TabType = 'types' | 'brands'
-
-interface Brand {
-  id: number;
-  name: string;
-  logo: string;
-}
 
 interface BrowseSectionClientProps {
   vehicleTypes: VehicleType[];

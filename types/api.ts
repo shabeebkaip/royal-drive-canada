@@ -13,6 +13,16 @@ export interface VehicleType {
   updatedAt?: string;
 }
 
+export interface Brand {
+  id: string;
+  name: string;
+  logo: string;
+  slug?: string;
+  active?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ApiResponse<T> {
   data: T;
   success: boolean;

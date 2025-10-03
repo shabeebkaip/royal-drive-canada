@@ -4,3 +4,4 @@
  */
 
 export * from './services/vehicle-types';
+export * from './services/brands';
