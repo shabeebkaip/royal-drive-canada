@@ -6,24 +6,18 @@
 import { apiClient } from '../client';
 import { Brand } from '@/types/api';
 
-interface BrandApiResponse {
+interface BrandDropdownResponse {
   success: boolean;
   message: string;
   timestamp: string;
-  data: {
-    makes: BrandRaw[];
-  };
+  data: BrandRaw[];
 }
 
 interface BrandRaw {
   _id: string;
-  id: string;
   name: string;
   logo: string;
   slug: string;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 /**
@@ -34,7 +28,7 @@ interface BrandRaw {
  */
 export async function getBrands(): Promise<Brand[]> {
   try {
-    const response = await apiClient.get<BrandApiResponse>('/makes', {
+    const response = await apiClient.get<BrandDropdownResponse>('/makes/dropdown', {
       // Next.js 15 fetch caching with revalidation
       // This will revalidate the cache every 60 seconds
       // ensuring new brands appear within 1 minute
@@ -45,18 +39,15 @@ export async function getBrands(): Promise<Brand[]> {
     });
 
     // Transform API response to match our Brand interface
-    if (response.success && response.data?.makes) {
-      return response.data.makes
-        .filter(brand => brand.active) // Only return active brands
-        .map((brand) => ({
-          id: brand._id,
-          name: brand.name,
-          logo: brand.logo,
-          slug: brand.slug,
-          active: brand.active,
-          createdAt: brand.createdAt,
-          updatedAt: brand.updatedAt,
-        }));
+    // /makes/dropdown already returns only active brands
+    if (response.success && response.data) {
+      return response.data.map((brand) => ({
+        id: brand._id,
+        name: brand.name,
+        logo: brand.logo,
+        slug: brand.slug,
+        active: true, // dropdown endpoint only returns active brands
+      }));
     }
 
     return [];
@@ -72,23 +63,21 @@ export async function getBrands(): Promise<Brand[]> {
  */
 export async function getBrandBySlug(slug: string): Promise<Brand | null> {
   try {
-    const response = await apiClient.get<BrandApiResponse>(`/makes/slug/${slug}`, {
+    const response = await apiClient.get<BrandDropdownResponse>(`/makes/slug/${slug}`, {
       next: { 
         revalidate: 60,
         tags: ['brands', `brand-${slug}`]
       },
     });
 
-    if (response.success && response.data?.makes?.[0]) {
-      const brand = response.data.makes[0];
+    if (response.success && response.data?.[0]) {
+      const brand = response.data[0];
       return {
         id: brand._id,
         name: brand.name,
         logo: brand.logo,
         slug: brand.slug,
-        active: brand.active,
-        createdAt: brand.createdAt,
-        updatedAt: brand.updatedAt,
+        active: true,
       };
     }
 
