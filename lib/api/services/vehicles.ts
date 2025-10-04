@@ -168,6 +168,65 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
 }
 
 /**
+ * Fetch latest vehicles from the API with limit
+ * @param limit - Number of vehicles to fetch (default: 8)
+ */
+export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
+  try {
+    const response = await apiClient.get<VehicleApiResponse>(
+      `/vehicles?limit=${limit}&sort=-createdAt`,
+      {
+        next: {
+          revalidate: 60,
+          tags: ['vehicles', 'latest-vehicles'],
+        },
+      }
+    );
+
+    if (response.success && response.data?.vehicles) {
+      return response.data.vehicles.map((vehicle) => {
+        // Extract data from nested API structure
+        const makeName = vehicle.make.name;
+        const modelName = vehicle.model.name;
+        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+        
+        return {
+          id: vehicle._id,
+          name: vehicleName,
+          brand: makeName,
+          model: modelName,
+          year: vehicle.year,
+          price: vehicle.pricing.listPrice,
+          discountPrice: undefined,
+          isOffer: false,
+          featured: vehicle.marketing.featured,
+          mileage: vehicle.odometer.value,
+          fuelType: vehicle.engine.fuelType.name,
+          transmission: vehicle.transmission.type.name,
+          images: vehicle.media.images || [],
+          slug: vehicle.marketing.slug,
+          description: vehicle.marketing.description,
+          hstRequired: vehicle.pricing.taxes.hst > 0,
+          licensing: vehicle.pricing.taxes.licensing > 0,
+          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+          tradeInsWelcome: false,
+          location: undefined,
+          phone: undefined,
+          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          createdAt: vehicle.createdAt,
+          updatedAt: vehicle.updatedAt,
+        };
+      });
+    }
+
+    return [];
+  } catch (error) {
+    console.error('Failed to fetch latest vehicles:', error);
+    return [];
+  }
+}
+
+/**
  * Fetch all vehicles from the API
  */
 export async function getVehicles(): Promise<Vehicle[]> {

@@ -2,7 +2,7 @@ import Hero from "../components/home/Hero";
 import BrowseSection from "@/components/home/BrowseSection";
 import BuyingSelling from "@/components/home/BuyingSelling";
 import FeaturedVehicles from "@/components/home/FeaturedVehicles";
-import VehicleGrid from "@/components/home/VehicleGrid";
+import LatestVehicles from "@/components/home/LatestVehicles";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import { Metadata } from "next";
 
@@ -114,7 +114,7 @@ export default function Home() {
         <BrowseSection />
         <BuyingSelling />
         <FeaturedVehicles />
-        <VehicleGrid />
+        <LatestVehicles />
         <WhyChooseUs />
       </div>
     </>
