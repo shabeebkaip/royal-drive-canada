@@ -2,29 +2,12 @@
 import React from 'react'
 import ImageSlider from "./ImageSlider";
 import { Star, CheckCircle, Fuel, Gauge, Settings, MapPin, FileText, RefreshCw } from 'lucide-react';
-
-interface Vehicle {
-  id: number;
-  name: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number | null;
-  mileage: number | null;
-  fuelType: string;
-  transmission?: string;
-  safetyCertified?: boolean;
-  featured?: boolean;
-  tradeInsWelcome?: boolean;
-  location?: string;
-  carfax?: string;
-  images: string[];
-}
+import { Vehicle } from '@/types/api';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
   showFeaturedBadge?: boolean;
-  onViewDetails?: (vehicleId: number) => void;
+  onViewDetails?: (vehicleId: string) => void;
   className?: string;
   isHorizontal?: boolean;
 }
@@ -37,14 +20,14 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   isHorizontal = false
 }) => {
   // Format price for display
-  const formatPrice = (price: number | null) => {
-    if (price === null) return "Contact for Price";
+  const formatPrice = (price: number | null | undefined) => {
+    if (price === null || price === undefined || isNaN(price)) return "Contact for Price";
     return `$${price.toLocaleString()}`;
   };
 
   // Format mileage for display
-  const formatMileage = (mileage: number | null) => {
-    if (mileage === null) return "Contact for Details";
+  const formatMileage = (mileage: number | null | undefined) => {
+    if (mileage === null || mileage === undefined || isNaN(mileage)) return "Contact for Details";
     return `${mileage.toLocaleString()} km`;
   };
 

@@ -23,6 +23,33 @@ export interface Brand {
   updatedAt?: string;
 }
 
+export interface Vehicle {
+  id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: number;
+  price: number;
+  discountPrice?: number | null;
+  isOffer?: boolean;
+  featured?: boolean;
+  mileage: number;
+  fuelType: string;
+  transmission: string;
+  images: string[];
+  slug?: string;
+  description?: string;
+  hstRequired?: boolean;
+  licensing?: boolean;
+  safetyCertified?: boolean;
+  tradeInsWelcome?: boolean;
+  location?: string;
+  phone?: string;
+  carfax?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ApiResponse<T> {
   data: T;
   success: boolean;

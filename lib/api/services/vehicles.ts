@@ -1,0 +1,277 @@
+/**
+ * Vehicles API Service
+ * Server-side service for fetching vehicles with caching and revalidation
+ */
+
+import { apiClient } from '../client';
+import { Vehicle } from '@/types/api';
+
+interface VehicleApiResponse {
+  success: boolean;
+  message: string;
+  timestamp: string;
+  data: {
+    vehicles: VehicleRaw[];
+  };
+}
+
+interface MakeReference {
+  _id: string;
+  name: string;
+  logo?: string;
+  slug?: string;
+}
+
+interface ModelReference {
+  _id: string;
+  name: string;
+  make?: string;
+  slug?: string;
+}
+
+interface FuelTypeReference {
+  _id: string;
+  name: string;
+  active: boolean;
+  slug: string;
+}
+
+interface TransmissionReference {
+  type: {
+    _id: string;
+    name: string;
+    active: boolean;
+    slug: string;
+  };
+}
+
+interface VehicleRaw {
+  _id: string;
+  make: MakeReference;
+  model: ModelReference;
+  year: number;
+  engine: {
+    size: number;
+    cylinders: number;
+    fuelType: FuelTypeReference;
+    horsepower: number;
+  };
+  transmission: TransmissionReference;
+  odometer: {
+    value: number;
+    unit: string;
+    isAccurate: boolean;
+  };
+  pricing: {
+    listPrice: number;
+    currency: string;
+    taxes: {
+      hst: number;
+      licensing: number;
+    };
+    financing: {
+      available: boolean;
+    };
+  };
+  media: {
+    images: string[];
+    videos: string[];
+    documents: string[];
+  };
+  marketing: {
+    featured: boolean;
+    description: string;
+    keywords: string[];
+    slug: string;
+  };
+  ontario?: {
+    safetyStandard: {
+      passed: boolean;
+    };
+  };
+  carfax?: {
+    hasCleanHistory: boolean;
+    serviceRecords: number;
+  };
+  internal: {
+    stockNumber: string;
+    daysInInventory: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Fetch featured vehicles from the API
+ * Uses Next.js 15 cache with revalidation for optimal performance
+ * Data is cached and revalidated every 60 seconds (ISR)
+ * This ensures fresh data when admin adds new featured vehicles
+ */
+export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]> {
+  try {
+    const response = await apiClient.get<VehicleApiResponse>(
+      `/vehicles?featured=true&limit=${limit}`,
+      {
+        // Next.js 15 fetch caching with revalidation
+        // This will revalidate the cache every 60 seconds
+        // ensuring new featured vehicles appear within 1 minute
+        next: {
+          revalidate: 60, // Revalidate every 60 seconds
+          tags: ['vehicles', 'featured-vehicles'], // Tags for on-demand revalidation
+        },
+      }
+    );
+
+    // Transform API response to match our Vehicle interface
+    if (response.success && response.data?.vehicles) {
+      return response.data.vehicles.map((vehicle) => {
+        // Extract data from nested API structure
+        const makeName = vehicle.make.name;
+        const modelName = vehicle.model.name;
+        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+        
+        return {
+          id: vehicle._id,
+          name: vehicleName,
+          brand: makeName,
+          model: modelName,
+          year: vehicle.year,
+          price: vehicle.pricing.listPrice,
+          discountPrice: undefined,
+          isOffer: false,
+          featured: vehicle.marketing.featured,
+          mileage: vehicle.odometer.value,
+          fuelType: vehicle.engine.fuelType.name,
+          transmission: vehicle.transmission.type.name,
+          images: vehicle.media.images || [],
+          slug: vehicle.marketing.slug,
+          description: vehicle.marketing.description,
+          hstRequired: vehicle.pricing.taxes.hst > 0,
+          licensing: vehicle.pricing.taxes.licensing > 0,
+          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+          tradeInsWelcome: false,
+          location: undefined,
+          phone: undefined,
+          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          createdAt: vehicle.createdAt,
+          updatedAt: vehicle.updatedAt,
+        };
+      });
+    }
+
+    return [];
+  } catch (error) {
+    console.error('Failed to fetch featured vehicles:', error);
+    // Return empty array as fallback
+    return [];
+  }
+}
+
+/**
+ * Fetch all vehicles from the API
+ */
+export async function getVehicles(): Promise<Vehicle[]> {
+  try {
+    const response = await apiClient.get<VehicleApiResponse>('/vehicles', {
+      next: {
+        revalidate: 60,
+        tags: ['vehicles'],
+      },
+    });
+
+    if (response.success && response.data?.vehicles) {
+      return response.data.vehicles.map((vehicle) => {
+        // Extract data from nested API structure
+        const makeName = vehicle.make.name;
+        const modelName = vehicle.model.name;
+        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+        
+        return {
+          id: vehicle._id,
+          name: vehicleName,
+          brand: makeName,
+          model: modelName,
+          year: vehicle.year,
+          price: vehicle.pricing.listPrice,
+          discountPrice: undefined,
+          isOffer: false,
+          featured: vehicle.marketing.featured,
+          mileage: vehicle.odometer.value,
+          fuelType: vehicle.engine.fuelType.name,
+          transmission: vehicle.transmission.type.name,
+          images: vehicle.media.images || [],
+          slug: vehicle.marketing.slug,
+          description: vehicle.marketing.description,
+          hstRequired: vehicle.pricing.taxes.hst > 0,
+          licensing: vehicle.pricing.taxes.licensing > 0,
+          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+          tradeInsWelcome: false,
+          location: undefined,
+          phone: undefined,
+          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          createdAt: vehicle.createdAt,
+          updatedAt: vehicle.updatedAt,
+        };
+      });
+    }
+
+    return [];
+  } catch (error) {
+    console.error('Failed to fetch vehicles:', error);
+    return [];
+  }
+}
+
+/**
+ * Fetch a single vehicle by slug
+ */
+export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
+  try {
+    const response = await apiClient.get<VehicleApiResponse>(`/vehicles/slug/${slug}`, {
+      next: {
+        revalidate: 60,
+        tags: ['vehicles', `vehicle-${slug}`],
+      },
+    });
+
+    if (response.success && response.data?.vehicles?.[0]) {
+      const vehicle = response.data.vehicles[0];
+      // Extract data from nested API structure
+      const makeName = vehicle.make.name;
+      const modelName = vehicle.model.name;
+      const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+      
+      return {
+        id: vehicle._id,
+        name: vehicleName,
+        brand: makeName,
+        model: modelName,
+        year: vehicle.year,
+        price: vehicle.pricing.listPrice,
+        discountPrice: undefined,
+        isOffer: false,
+        featured: vehicle.marketing.featured,
+        mileage: vehicle.odometer.value,
+        fuelType: vehicle.engine.fuelType.name,
+        transmission: vehicle.transmission.type.name,
+        images: vehicle.media.images || [],
+        slug: vehicle.marketing.slug,
+        description: vehicle.marketing.description,
+        hstRequired: vehicle.pricing.taxes.hst > 0,
+        licensing: vehicle.pricing.taxes.licensing > 0,
+        safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+        tradeInsWelcome: false,
+        location: undefined,
+        phone: undefined,
+        carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+        createdAt: vehicle.createdAt,
+        updatedAt: vehicle.updatedAt,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error(`Failed to fetch vehicle ${slug}:`, error);
+    return null;
+  }
+}
