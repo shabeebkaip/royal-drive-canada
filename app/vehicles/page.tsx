@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import VehicleCard from '@/components/shared/VehicleCard'
 import PageHero from '@/components/shared/PageHero'
-import Dropdown from '@/components/shared/Dropdown'
-import { Search, LayoutGrid, List, SlidersHorizontal, Car, DollarSign, X } from 'lucide-react'
+import VehicleFilters from '@/components/vehicles/VehicleFilters'
+import { LayoutGrid, List, SlidersHorizontal, Car, X, DollarSign } from 'lucide-react'
 import { Vehicle, Brand, VehicleType } from '@/types/api'
 
 interface FuelType {
@@ -35,18 +35,27 @@ const VehiclesPage = () => {
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '')
   const [selectedBrand, setSelectedBrand] = useState(searchParams.get('make') || '')
   const [selectedModel, setSelectedModel] = useState(searchParams.get('model') || '')
-  const [selectedFuelType, setSelectedFuelType] = useState(searchParams.get('fuelType') || '')
-  const [selectedTransmission, setSelectedTransmission] = useState(searchParams.get('transmission') || '')
-  const [selectedBodyType, setSelectedBodyType] = useState(searchParams.get('vehicleType') || '')
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>(
+    searchParams.get('fuelType') ? searchParams.get('fuelType')!.split(',') : []
+  )
+  const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>(
+    searchParams.get('transmission') ? searchParams.get('transmission')!.split(',') : []
+  )
+  const [selectedBodyTypes, setSelectedBodyTypes] = useState<string[]>(
+    searchParams.get('vehicleType') ? searchParams.get('vehicleType')!.split(',') : []
+  )
   const [selectedDrivetrain, setSelectedDrivetrain] = useState(searchParams.get('drivetrain') || '')
   const [selectedCondition, setSelectedCondition] = useState(searchParams.get('condition') || '')
   const [selectedStatus, setSelectedStatus] = useState(searchParams.get('status') || '')
-  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '')
-  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '')
-  const [minYear, setMinYear] = useState(searchParams.get('minYear') || '')
-  const [maxYear, setMaxYear] = useState(searchParams.get('maxYear') || '')
-  const [minMileage, setMinMileage] = useState(searchParams.get('minMileage') || '')
-  const [maxMileage, setMaxMileage] = useState(searchParams.get('maxMileage') || '')
+  const [selectedColors, setSelectedColors] = useState<string[]>(
+    searchParams.get('exteriorColor') ? searchParams.get('exteriorColor')!.split(',') : []
+  )
+  const [minPrice, setMinPrice] = useState(Number(searchParams.get('minPrice')) || 0)
+  const [maxPrice, setMaxPrice] = useState(Number(searchParams.get('maxPrice')) || 100000)
+  const [minYear, setMinYear] = useState(Number(searchParams.get('minYear')) || 2000)
+  const [maxYear, setMaxYear] = useState(Number(searchParams.get('maxYear')) || new Date().getFullYear())
+  const [minMileage, setMinMileage] = useState(Number(searchParams.get('minMileage')) || 0)
+  const [maxMileage, setMaxMileage] = useState(Number(searchParams.get('maxMileage')) || 200000)
   const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || 'created_desc')
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1)
   
@@ -77,9 +86,7 @@ const VehiclesPage = () => {
         const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown')
         const brandsData = await brandsRes.json()
         if (brandsData.success && brandsData.data) {
-          // API returns array directly in data, not data.makes
-          const brandsList = Array.isArray(brandsData.data) ? brandsData.data : brandsData.data.makes || []
-          setBrands(brandsList.map((b: any) => ({
+          setBrands(brandsData.data.map((b: any) => ({
             id: b._id,
             name: b.name,
             logo: b.logo,
@@ -129,10 +136,14 @@ const VehiclesPage = () => {
       }
 
       try {
-        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}`)
+        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models/dropdown`)
         const modelsData = await modelsRes.json()
-        if (modelsData.success && modelsData.data?.models) {
-          setModels(modelsData.data.models.filter((m: any) => m.active))
+        if (modelsData.success && modelsData.data) {
+          // Filter models by the selected brand's _id
+          const filteredModels = modelsData.data.filter((m: any) => 
+            m.make && m.make._id === selectedBrand
+          )
+          setModels(filteredModels)
         }
       } catch (error) {
         console.error('Failed to fetch models:', error)
@@ -152,18 +163,18 @@ const VehiclesPage = () => {
         if (searchTerm) params.append('q', searchTerm)
         if (selectedBrand) params.append('make', selectedBrand)
         if (selectedModel) params.append('model', selectedModel)
-        if (selectedFuelType) params.append('fuelType', selectedFuelType)
-        if (selectedTransmission) params.append('transmission', selectedTransmission)
-        if (selectedBodyType) params.append('vehicleType', selectedBodyType)
+        if (selectedFuelTypes.length) params.append('fuelType', selectedFuelTypes.join(','))
+        if (selectedTransmissions.length) params.append('transmission', selectedTransmissions.join(','))
+        if (selectedBodyTypes.length) params.append('vehicleType', selectedBodyTypes.join(','))
         if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
         if (selectedCondition) params.append('condition', selectedCondition)
         if (selectedStatus) params.append('status', selectedStatus)
-        if (minPrice) params.append('minPrice', minPrice)
-        if (maxPrice) params.append('maxPrice', maxPrice)
-        if (minYear) params.append('minYear', minYear)
-        if (maxYear) params.append('maxYear', maxYear)
-        if (minMileage) params.append('minMileage', minMileage)
-        if (maxMileage) params.append('maxMileage', maxMileage)
+        if (minPrice) params.append('minPrice', minPrice.toString())
+        if (maxPrice) params.append('maxPrice', maxPrice.toString())
+        if (minYear) params.append('minYear', minYear.toString())
+        if (maxYear) params.append('maxYear', maxYear.toString())
+        if (minMileage) params.append('minMileage', minMileage.toString())
+        if (maxMileage) params.append('maxMileage', maxMileage.toString())
         if (sortBy) params.append('sortBy', sortBy)
         params.append('page', page.toString())
         params.append('limit', '12')
@@ -208,8 +219,8 @@ const VehiclesPage = () => {
     }
 
     fetchVehicles()
-  }, [searchTerm, selectedBrand, selectedModel, selectedFuelType, selectedTransmission, 
-      selectedBodyType, selectedDrivetrain, selectedCondition, selectedStatus,
+  }, [searchTerm, selectedBrand, selectedModel, selectedFuelTypes, selectedTransmissions, 
+      selectedBodyTypes, selectedDrivetrain, selectedCondition, selectedStatus,
       minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, sortBy, page])
 
   // Update URL when filters change
@@ -219,18 +230,18 @@ const VehiclesPage = () => {
     if (searchTerm) params.append('q', searchTerm)
     if (selectedBrand) params.append('make', selectedBrand)
     if (selectedModel) params.append('model', selectedModel)
-    if (selectedFuelType) params.append('fuelType', selectedFuelType)
-    if (selectedTransmission) params.append('transmission', selectedTransmission)
-    if (selectedBodyType) params.append('vehicleType', selectedBodyType)
+    if (selectedFuelTypes.length) params.append('fuelType', selectedFuelTypes.join(','))
+    if (selectedTransmissions.length) params.append('transmission', selectedTransmissions.join(','))
+    if (selectedBodyTypes.length) params.append('vehicleType', selectedBodyTypes.join(','))
     if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
     if (selectedCondition) params.append('condition', selectedCondition)
     if (selectedStatus) params.append('status', selectedStatus)
-    if (minPrice) params.append('minPrice', minPrice)
-    if (maxPrice) params.append('maxPrice', maxPrice)
-    if (minYear) params.append('minYear', minYear)
-    if (maxYear) params.append('maxYear', maxYear)
-    if (minMileage) params.append('minMileage', minMileage)
-    if (maxMileage) params.append('maxMileage', maxMileage)
+    if (minPrice) params.append('minPrice', minPrice.toString())
+    if (maxPrice) params.append('maxPrice', maxPrice.toString())
+    if (minYear) params.append('minYear', minYear.toString())
+    if (maxYear) params.append('maxYear', maxYear.toString())
+    if (minMileage) params.append('minMileage', minMileage.toString())
+    if (maxMileage) params.append('maxMileage', maxMileage.toString())
     if (sortBy) params.append('sortBy', sortBy)
     if (page > 1) params.append('page', page.toString())
 
@@ -242,18 +253,19 @@ const VehiclesPage = () => {
     setSearchTerm('')
     setSelectedBrand('')
     setSelectedModel('')
-    setSelectedFuelType('')
-    setSelectedTransmission('')
-    setSelectedBodyType('')
+    setSelectedFuelTypes([])
+    setSelectedTransmissions([])
+    setSelectedBodyTypes([])
+    setSelectedColors([])
     setSelectedDrivetrain('')
     setSelectedCondition('')
     setSelectedStatus('')
-    setMinPrice('')
-    setMaxPrice('')
-    setMinYear('')
-    setMaxYear('')
-    setMinMileage('')
-    setMaxMileage('')
+    setMinPrice(0)
+    setMaxPrice(100000)
+    setMinYear(2000)
+    setMaxYear(new Date().getFullYear())
+    setMinMileage(0)
+    setMaxMileage(200000)
     setSortBy('created_desc')
     setPage(1)
     router.push('/vehicles')
@@ -364,18 +376,19 @@ const VehiclesPage = () => {
     if (searchTerm) count++
     if (selectedBrand) count++
     if (selectedModel) count++
-    if (selectedFuelType) count++
-    if (selectedTransmission) count++
-    if (selectedBodyType) count++
+    count += selectedFuelTypes.length
+    count += selectedTransmissions.length
+    count += selectedBodyTypes.length
+    count += selectedColors.length
     if (selectedDrivetrain) count++
     if (selectedCondition) count++
     if (selectedStatus) count++
-    if (minPrice || maxPrice) count++
-    if (minYear || maxYear) count++
-    if (minMileage || maxMileage) count++
+    if (minPrice > 0 || maxPrice < 100000) count++
+    if (minYear > 2000 || maxYear < new Date().getFullYear()) count++
+    if (minMileage > 0 || maxMileage < 200000) count++
     return count
-  }, [searchTerm, selectedBrand, selectedModel, selectedFuelType, selectedTransmission, 
-      selectedBodyType, selectedDrivetrain, selectedCondition, selectedStatus,
+  }, [searchTerm, selectedBrand, selectedModel, selectedFuelTypes, selectedTransmissions, 
+      selectedBodyTypes, selectedColors, selectedDrivetrain, selectedCondition, selectedStatus,
       minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage])
 
   return (
@@ -425,255 +438,60 @@ const VehiclesPage = () => {
           {/* Left Sidebar - Filters */}
           <aside className={`${
             showFilters ? 'block' : 'hidden'
-          } lg:block w-full lg:w-80 flex-shrink-0`}>
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 sticky top-6 border border-gray-200">
-              {/* Sidebar Header */}
-              <div className="flex items-center justify-between mb-6 pb-4 border-b">
-                <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-bold text-gray-900">Filters</h3>
-                  {activeFiltersCount > 0 && (
-                    <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                      {activeFiltersCount}
-                    </span>
-                  )}
-                </div>
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="lg:hidden text-gray-500 hover:text-gray-700"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Search Bar */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  🔍 Search Keywords
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Make, model, year..."
-                    className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 hover:bg-white transition-colors"
-                  />
-                </div>
-              </div>
-
-              {/* Filters - Scrollable Area */}
-              <div className="space-y-6 max-h-[calc(100vh-300px)] overflow-y-auto pr-2 custom-scrollbar">
-              
-              {/* Vehicle Selection */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Car className="w-4 h-4 text-blue-600" />
-                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Vehicle</h4>
-                </div>
-                
-                <Dropdown
-                  label="Brand"
-                  value={selectedBrand}
-                  onChange={(value) => {
-                    setSelectedBrand(value)
-                    setSelectedModel('')
-                    setPage(1)
-                  }}
-                  options={brandOptions}
-                  placeholder="All Brands"
-                />
-
-                <Dropdown
-                label="Model"
-                value={selectedModel}
-                onChange={(value) => {
-                  setSelectedModel(value)
-                  setPage(1)
-                }}
-                options={modelOptions}
-                placeholder="All Models"
-                disabled={!selectedBrand}
-              />
-
-                <Dropdown
-                  label="Body Type"
-                  value={selectedBodyType}
-                  onChange={(value) => {
-                    setSelectedBodyType(value)
-                    setPage(1)
-                  }}
-                  options={bodyTypeOptions}
-                  placeholder="All Types"
-                />
-              </div>
-
-              {/* Specifications */}
-              <div className="space-y-4 pt-4 border-t border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <SlidersHorizontal className="w-4 h-4 text-green-600" />
-                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Specifications</h4>
-                </div>
-
-                <Dropdown
-                  label="Fuel Type"
-                  value={selectedFuelType}
-                  onChange={(value) => {
-                    setSelectedFuelType(value)
-                    setPage(1)
-                  }}
-                  options={fuelTypeOptions}
-                  placeholder="All Fuel Types"
-                />
-
-                <Dropdown
-                  label="Transmission"
-                  value={selectedTransmission}
-                  onChange={(value) => {
-                    setSelectedTransmission(value)
-                    setPage(1)
-                  }}
-                  options={transmissionOptions}
-                  placeholder="All Transmissions"
-                />
-
-                <Dropdown
-                  label="Drivetrain"
-                  value={selectedDrivetrain}
-                  onChange={(value) => {
-                    setSelectedDrivetrain(value)
-                    setPage(1)
-                  }}
-                  options={drivetrainOptions}
-                placeholder="All Drivetrains"
-              />
-
-                <Dropdown
-                  label="Condition"
-                  value={selectedCondition}
-                  onChange={(value) => {
-                    setSelectedCondition(value)
-                    setPage(1)
-                  }}
-                  options={conditionOptions}
-                  placeholder="All Conditions"
-                />
-
-                <Dropdown
-                  label="Status"
-                  value={selectedStatus}
-                  onChange={(value) => {
-                    setSelectedStatus(value)
-                    setPage(1)
-                  }}
-                  options={statusOptions}
-                  placeholder="All Status"
-                />
-              </div>
-
-              {/* Price & Year Range */}
-              <div className="space-y-4 pt-4 border-t border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <DollarSign className="w-4 h-4 text-purple-600" />
-                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Price & Year</h4>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Dropdown
-                    label="Min Price"
-                    value={minPrice}
-                    onChange={(value) => {
-                      setMinPrice(value)
-                      setPage(1)
-                    }}
-                    options={priceOptions}
-                    placeholder="No Min"
-                  />
-
-                  <Dropdown
-                    label="Max Price"
-                    value={maxPrice}
-                    onChange={(value) => {
-                      setMaxPrice(value)
-                      setPage(1)
-                    }}
-                    options={priceOptions}
-                    placeholder="No Max"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Dropdown
-                    label="Min Year"
-                    value={minYear}
-                    onChange={(value) => {
-                      setMinYear(value)
-                      setPage(1)
-                    }}
-                    options={yearOptions}
-                    placeholder="No Min"
-                  />
-
-                  <Dropdown
-                    label="Max Year"
-                    value={maxYear}
-                    onChange={(value) => {
-                      setMaxYear(value)
-                      setPage(1)
-                    }}
-                    options={yearOptions}
-                    placeholder="No Max"
-                  />
-                </div>
-              </div>
-
-              {/* Mileage Range */}
-              <div className="space-y-4 pt-4 border-t border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <LayoutGrid className="w-4 h-4 text-orange-600" />
-                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Mileage</h4>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Dropdown
-                    label="Min Mileage"
-                    value={minMileage}
-                    onChange={(value) => {
-                      setMinMileage(value)
-                      setPage(1)
-                    }}
-                    options={mileageOptions}
-                    placeholder="No Min"
-                  />
-
-                  <Dropdown
-                    label="Max Mileage"
-                    value={maxMileage}
-                    onChange={(value) => {
-                      setMaxMileage(value)
-                      setPage(1)
-                    }}
-                    options={mileageOptions}
-                    placeholder="No Max"
-                  />
-                </div>
-              </div>
-
-              {/* Clear Filters Button */}
-              {activeFiltersCount > 0 && (
-                <div className="pt-4 border-t border-gray-200">
-                  <button
-                    onClick={handleClearFilters}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-700 rounded-lg transition-all font-semibold border border-red-200 shadow-sm hover:shadow-md"
-                  >
-                    <X className="w-4 h-4" />
-                    Clear All {activeFiltersCount} Filter{activeFiltersCount !== 1 ? 's' : ''}
-                  </button>
-                </div>
-              )}
-              </div>
-            </div>
+          } lg:block w-full lg:w-80 flex-shrink-0 sticky top-6`}>
+            <VehicleFilters
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              brands={brands}
+              models={models}
+              selectedBrand={selectedBrand}
+              selectedModel={selectedModel}
+              onBrandChange={(value) => {
+                setSelectedBrand(value)
+                setSelectedModel('')
+                setPage(1)
+              }}
+              onModelChange={(value) => {
+                setSelectedModel(value)
+                setPage(1)
+              }}
+              bodyTypes={bodyTypes}
+              selectedBodyTypes={selectedBodyTypes}
+              onBodyTypesChange={setSelectedBodyTypes}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              onPriceChange={(min, max) => {
+                setMinPrice(min)
+                setMaxPrice(max)
+                setPage(1)
+              }}
+              minYear={minYear}
+              maxYear={maxYear}
+              onYearChange={(min, max) => {
+                setMinYear(min)
+                setMaxYear(max)
+                setPage(1)
+              }}
+              minMileage={minMileage}
+              maxMileage={maxMileage}
+              onMileageChange={(min, max) => {
+                setMinMileage(min)
+                setMaxMileage(max)
+                setPage(1)
+              }}
+              transmissions={transmissions}
+              selectedTransmissions={selectedTransmissions}
+              onTransmissionsChange={setSelectedTransmissions}
+              fuelTypes={fuelTypes}
+              selectedFuelTypes={selectedFuelTypes}
+              onFuelTypesChange={setSelectedFuelTypes}
+              selectedColors={selectedColors}
+              onColorsChange={setSelectedColors}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              onClearAll={handleClearFilters}
+              activeFiltersCount={activeFiltersCount}
+            />
           </aside>
 
           {/* Main Content Area */}
@@ -730,13 +548,17 @@ const VehiclesPage = () => {
 
                   {/* Sort Dropdown */}
                   <div className="w-48">
-                    <Dropdown
-                      label=""
+                    <select
                       value={sortBy}
-                      onChange={setSortBy}
-                      options={sortOptions}
-                      placeholder="Sort By"
-                    />
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    >
+                      {sortOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
