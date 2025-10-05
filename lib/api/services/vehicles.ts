@@ -12,6 +12,12 @@ interface VehicleApiResponse {
   timestamp: string;
   data: {
     vehicles: VehicleRaw[];
+    pagination?: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
   };
 }
 
@@ -278,6 +284,141 @@ export async function getVehicles(): Promise<Vehicle[]> {
   } catch (error) {
     console.error('Failed to fetch vehicles:', error);
     return [];
+  }
+}
+
+/**
+ * Vehicle Search Parameters Interface
+ */
+export interface VehicleSearchParams {
+  q?: string; // Full-text search
+  page?: number;
+  limit?: number;
+  make?: string; // Brand/Make ObjectId
+  model?: string; // Model ObjectId
+  year?: number;
+  minYear?: number;
+  maxYear?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  minMileage?: number;
+  maxMileage?: number;
+  fuelType?: string; // Fuel Type ObjectId
+  transmission?: string; // Transmission ObjectId
+  drivetrain?: string;
+  vehicleType?: string; // Body Type ObjectId
+  condition?: 'new' | 'used' | 'certified-pre-owned';
+  status?: string;
+  featured?: boolean;
+  inStock?: boolean;
+  accidentHistory?: boolean;
+  exteriorColor?: string;
+  interiorColor?: string;
+  minDoors?: number;
+  maxDoors?: number;
+  minSeating?: number;
+  maxSeating?: number;
+  sortBy?: 'price_asc' | 'price_desc' | 'year_desc' | 'year_asc' | 'mileage_asc' | 'mileage_desc' | 'created_desc' | 'created_asc' | 'featured';
+}
+
+/**
+ * Search vehicles with filters
+ * @param params - Search and filter parameters
+ */
+export async function searchVehicles(params: VehicleSearchParams): Promise<{
+  vehicles: Vehicle[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}> {
+  try {
+    // Build query string from params
+    const queryParams = new URLSearchParams();
+    
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        queryParams.append(key, String(value));
+      }
+    });
+
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/vehicles?${queryString}` : '/vehicles';
+
+    const response = await apiClient.get<VehicleApiResponse>(endpoint, {
+      next: {
+        revalidate: 30, // Shorter revalidation for search results
+        tags: ['vehicles', 'search'],
+      },
+    });
+
+    if (response.success && response.data) {
+      const vehicles = (response.data.vehicles || []).map((vehicle) => {
+        const makeName = vehicle.make.name;
+        const modelName = vehicle.model.name;
+        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+        
+        return {
+          id: vehicle._id,
+          name: vehicleName,
+          brand: makeName,
+          model: modelName,
+          year: vehicle.year,
+          price: vehicle.pricing.listPrice,
+          discountPrice: undefined,
+          isOffer: false,
+          featured: vehicle.marketing.featured,
+          mileage: vehicle.odometer.value,
+          fuelType: vehicle.engine.fuelType.name,
+          transmission: vehicle.transmission.type.name,
+          images: vehicle.media.images || [],
+          slug: vehicle.marketing.slug,
+          description: vehicle.marketing.description,
+          hstRequired: vehicle.pricing.taxes.hst > 0,
+          licensing: vehicle.pricing.taxes.licensing > 0,
+          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+          tradeInsWelcome: false,
+          location: undefined,
+          phone: undefined,
+          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          createdAt: vehicle.createdAt,
+          updatedAt: vehicle.updatedAt,
+        };
+      });
+
+      return {
+        vehicles,
+        pagination: response.data.pagination || {
+          total: vehicles.length,
+          page: params.page || 1,
+          limit: params.limit || 10,
+          totalPages: Math.ceil(vehicles.length / (params.limit || 10)),
+        },
+      };
+    }
+
+    return {
+      vehicles: [],
+      pagination: {
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+      },
+    };
+  } catch (error) {
+    console.error('Failed to search vehicles:', error);
+    return {
+      vehicles: [],
+      pagination: {
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+      },
+    };
   }
 }
 

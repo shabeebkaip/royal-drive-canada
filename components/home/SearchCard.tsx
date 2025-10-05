@@ -1,99 +1,237 @@
 "use client"
-import React, { useState } from 'react'
-import { inventories, brands, carTypes } from "@/constants";
+import React, { useState, useEffect } from 'react'
 import Dropdown from "@/components/shared/Dropdown";
+import { useRouter } from 'next/navigation';
+import { Brand, VehicleType } from '@/types/api';
+
+interface FuelType {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface TransmissionType {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface Model {
+  _id: string;
+  name: string;
+  make: string;
+  slug: string;
+}
 
 const SearchCard = () => {
-  const [selectedName, setSelectedName] = useState('');
+  const router = useRouter();
+  
+  // Form states
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedBrand, setSelectedBrand] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
-  const [selectedPrice, setSelectedPrice] = useState('');
+  const [selectedPriceMin, setSelectedPriceMin] = useState('');
+  const [selectedPriceMax, setSelectedPriceMax] = useState('');
   const [selectedBodyType, setSelectedBodyType] = useState('');
   const [selectedFuelType, setSelectedFuelType] = useState('');
+  const [selectedTransmission, setSelectedTransmission] = useState('');
+  const [selectedYearMin, setSelectedYearMin] = useState('');
+  const [selectedYearMax, setSelectedYearMax] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 
-  // Get unique brands from inventory
-  const availableBrands = brands.filter(brand =>
-    inventories.some(vehicle => vehicle.brand === brand.name)
-  );
+  // Data from API
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [models, setModels] = useState<Model[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
+  const [transmissions, setTransmissions] = useState<TransmissionType[]>([]);
+  const [bodyTypes, setBodyTypes] = useState<VehicleType[]>([]);
+  const [vehicleCount, setVehicleCount] = useState(0);
 
-  // Get unique vehicle names from inventory
-  const availableVehicleNames = [...new Set(inventories.map(vehicle => vehicle.name))];
+  // Fetch filter options from API
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        // Fetch brands
+        const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown');
+        const brandsData = await brandsRes.json();
+        
+        if (brandsData.success && brandsData.data) {
+          // API returns array directly in data, not data.makes
+          const brandsList = Array.isArray(brandsData.data) ? brandsData.data : brandsData.data.makes || [];
+          const activeBrands = brandsList.map((b: any) => ({
+            id: b._id,
+            name: b.name,
+            logo: b.logo,
+            slug: b.slug
+          }));
+          setBrands(activeBrands);
+        }
 
-  // Get models based on selected brand
-  const availableModels = selectedBrand
-    ? [...new Set(inventories
-        .filter(vehicle => vehicle.brand === selectedBrand)
-        .map(vehicle => vehicle.model))]
-    : [];
+        // Fetch body types
+        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types');
+        const bodyTypesData = await bodyTypesRes.json();
+        if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
+          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: any) => ({
+            id: vt._id,
+            name: vt.name,
+            image: vt.icon || vt.image,
+            slug: vt.slug
+          })));
+        }
 
-  // Get unique fuel types from inventory
-  const availableFuelTypes = [...new Set(inventories.map(vehicle => vehicle.fuelType))];
+        // Fetch fuel types
+        const fuelTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/fuel-types');
+        const fuelTypesData = await fuelTypesRes.json();
+        if (fuelTypesData.success && fuelTypesData.data?.fuelTypes) {
+          setFuelTypes(fuelTypesData.data.fuelTypes.filter((ft: any) => ft.active));
+        }
 
-  // Generate realistic price ranges based on actual inventory
-  const priceRanges = [
-    { value: "0-5000", label: "Under $5,000" },
-    { value: "5000-10000", label: "$5,000 - $10,000" },
-    { value: "10000-20000", label: "$10,000 - $20,000" },
-    { value: "20000-30000", label: "$20,000 - $30,000" },
-    { value: "30000-40000", label: "$30,000 - $40,000" },
-    { value: "40000+", label: "$40,000+" },
-  ];
+        // Fetch transmissions
+        const transmissionsRes = await fetch('https://api.royaldrivecanada.com/api/v1/transmissions');
+        const transmissionsData = await transmissionsRes.json();
+        if (transmissionsData.success && transmissionsData.data?.transmissions) {
+          setTransmissions(transmissionsData.data.transmissions.filter((t: any) => t.active));
+        }
 
-  // Get actual vehicle count
-  const vehicleCount = inventories.length;
+        // Get vehicle count
+        const vehiclesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicles?limit=1');
+        const vehiclesData = await vehiclesRes.json();
+        if (vehiclesData.success && vehiclesData.data?.pagination) {
+          setVehicleCount(vehiclesData.data.pagination.total);
+        }
+      } catch (error) {
+        console.error('Failed to fetch filter options:', error);
+      }
+    };
+
+    fetchFilterOptions();
+  }, []);
+
+  // Fetch models when brand is selected
+  useEffect(() => {
+    const fetchModels = async () => {
+      if (!selectedBrand) {
+        setModels([]);
+        setSelectedModel('');
+        return;
+      }
+
+      try {
+        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}`);
+        const modelsData = await modelsRes.json();
+        if (modelsData.success && modelsData.data?.models) {
+          setModels(modelsData.data.models.filter((m: any) => m.active));
+        }
+      } catch (error) {
+        console.error('Failed to fetch models:', error);
+      }
+    };
+
+    fetchModels();
+  }, [selectedBrand]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSearching(true);
 
-    setTimeout(() => {
-      setIsSearching(false);
-      console.log('Search params:', {
-        name: selectedName,
-        brand: selectedBrand,
-        model: selectedModel,
-        price: selectedPrice,
-        bodyType: selectedBodyType,
-        fuelType: selectedFuelType
-      });
-    }, 1000);
+    // Build search params
+    const params = new URLSearchParams();
+    
+    if (searchQuery) params.append('q', searchQuery);
+    if (selectedBrand) params.append('make', selectedBrand);
+    if (selectedModel) params.append('model', selectedModel);
+    if (selectedPriceMin) params.append('minPrice', selectedPriceMin);
+    if (selectedPriceMax) params.append('maxPrice', selectedPriceMax);
+    if (selectedBodyType) params.append('vehicleType', selectedBodyType);
+    if (selectedFuelType) params.append('fuelType', selectedFuelType);
+    if (selectedTransmission) params.append('transmission', selectedTransmission);
+    if (selectedYearMin) params.append('minYear', selectedYearMin);
+    if (selectedYearMax) params.append('maxYear', selectedYearMax);
+
+    // Redirect to vehicles page with filters
+    router.push(`/vehicles?${params.toString()}`);
   };
 
   const handleReset = () => {
-    setSelectedName('');
+    setSearchQuery('');
     setSelectedBrand('');
     setSelectedModel('');
-    setSelectedPrice('');
+    setSelectedPriceMin('');
+    setSelectedPriceMax('');
     setSelectedBodyType('');
     setSelectedFuelType('');
+    setSelectedTransmission('');
+    setSelectedYearMin('');
+    setSelectedYearMax('');
   };
 
   // Transform data for dropdown options
-  const vehicleNameOptions = availableVehicleNames.map(name => ({
-    value: name,
-    label: name
-  }));
-
-  const brandOptions = availableBrands.map(brand => ({
-    value: brand.name,
+  const brandOptions = brands.map(brand => ({
+    value: brand.id,
     label: brand.name
   }));
 
-  const modelOptions = availableModels.map(model => ({
-    value: model,
-    label: model
+  const modelOptions = models.map(model => ({
+    value: model._id,
+    label: model.name
   }));
 
-  const fuelTypeOptions = availableFuelTypes.map(fuelType => ({
-    value: fuelType,
-    label: fuelType
+  const fuelTypeOptions = fuelTypes.map(ft => ({
+    value: ft._id,
+    label: ft.name
   }));
 
-  const bodyTypeOptions = carTypes.map(type => ({
-    value: type.name.toLowerCase(),
+  const transmissionOptions = transmissions.map(t => ({
+    value: t._id,
+    label: t.name
+  }));
+
+  const bodyTypeOptions = bodyTypes.map(type => ({
+    value: type.id.toString(),
     label: type.name
   }));
+
+  const priceMinOptions = [
+    { value: '', label: 'No Min' },
+    { value: '5000', label: '$5,000' },
+    { value: '10000', label: '$10,000' },
+    { value: '15000', label: '$15,000' },
+    { value: '20000', label: '$20,000' },
+    { value: '25000', label: '$25,000' },
+    { value: '30000', label: '$30,000' },
+    { value: '40000', label: '$40,000' },
+    { value: '50000', label: '$50,000' },
+  ];
+
+  const priceMaxOptions = [
+    { value: '', label: 'No Max' },
+    { value: '10000', label: '$10,000' },
+    { value: '15000', label: '$15,000' },
+    { value: '20000', label: '$20,000' },
+    { value: '25000', label: '$25,000' },
+    { value: '30000', label: '$30,000' },
+    { value: '40000', label: '$40,000' },
+    { value: '50000', label: '$50,000' },
+    { value: '75000', label: '$75,000' },
+    { value: '100000', label: '$100,000' },
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const yearMinOptions = [
+    { value: '', label: 'No Min' },
+    ...Array.from({ length: 30 }, (_, i) => currentYear - i).map(year => ({
+      value: year.toString(),
+      label: year.toString()
+    }))
+  ];
+
+  const yearMaxOptions = [
+    { value: '', label: 'No Max' },
+    ...Array.from({ length: 30 }, (_, i) => currentYear - i).map(year => ({
+      value: year.toString(),
+      label: year.toString()
+    }))
+  ];
 
   return (
     <div className="w-full max-w-6xl mx-auto">
@@ -124,17 +262,23 @@ const SearchCard = () => {
         {/* Compact Search Form */}
         <div className="p-6">
           <form onSubmit={handleSearch} className="space-y-6">
+            
+            {/* Search Bar */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Search Keywords
+              </label>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="e.g., Toyota Camry Hybrid, 2020 Honda..."
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
 
             {/* Compact Filter Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Dropdown
-                label="Vehicle Name"
-                value={selectedName}
-                onChange={setSelectedName}
-                options={vehicleNameOptions}
-                placeholder="All Vehicles"
-              />
-
               <Dropdown
                 label="Brand"
                 value={selectedBrand}
@@ -152,15 +296,31 @@ const SearchCard = () => {
                 onChange={setSelectedModel}
                 options={modelOptions}
                 placeholder="All Models"
-                disabled={!selectedBrand}
+                disabled={!selectedBrand || models.length === 0}
               />
 
               <Dropdown
-                label="Price Range"
-                value={selectedPrice}
-                onChange={setSelectedPrice}
-                options={priceRanges}
-                placeholder="All Prices"
+                label="Body Type"
+                value={selectedBodyType}
+                onChange={setSelectedBodyType}
+                options={bodyTypeOptions}
+                placeholder="All Types"
+              />
+
+              <Dropdown
+                label="Price Min"
+                value={selectedPriceMin}
+                onChange={setSelectedPriceMin}
+                options={priceMinOptions}
+                placeholder="No Min"
+              />
+
+              <Dropdown
+                label="Price Max"
+                value={selectedPriceMax}
+                onChange={setSelectedPriceMax}
+                options={priceMaxOptions}
+                placeholder="No Max"
               />
 
               <Dropdown
@@ -172,11 +332,27 @@ const SearchCard = () => {
               />
 
               <Dropdown
-                label="Body Type"
-                value={selectedBodyType}
-                onChange={setSelectedBodyType}
-                options={bodyTypeOptions}
-                placeholder="All Types"
+                label="Transmission"
+                value={selectedTransmission}
+                onChange={setSelectedTransmission}
+                options={transmissionOptions}
+                placeholder="All Transmissions"
+              />
+
+              <Dropdown
+                label="Year Min"
+                value={selectedYearMin}
+                onChange={setSelectedYearMin}
+                options={yearMinOptions}
+                placeholder="No Min"
+              />
+
+              <Dropdown
+                label="Year Max"
+                value={selectedYearMax}
+                onChange={setSelectedYearMax}
+                options={yearMaxOptions}
+                placeholder="No Max"
               />
             </div>
 
@@ -204,7 +380,7 @@ const SearchCard = () => {
                 )}
               </button>
 
-              {/* Clear Button Only */}
+              {/* Clear Button */}
               <button
                 type="button"
                 onClick={handleReset}
@@ -222,28 +398,39 @@ const SearchCard = () => {
               <span className="text-sm font-medium text-gray-600">Quick:</span>
               <button
                 type="button"
-                onClick={() => setSelectedFuelType('Hybrid')}
+                onClick={() => {
+                  const hybridFuel = fuelTypes.find(ft => ft.name.toLowerCase().includes('hybrid'));
+                  if (hybridFuel) setSelectedFuelType(hybridFuel._id);
+                }}
                 className="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >
                 Hybrid
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedPrice('0-10000')}
+                onClick={() => {
+                  setSelectedPriceMax('10000');
+                }}
                 className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >
                 Under $10K
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedBrand('Toyota')}
+                onClick={() => {
+                  const toyota = brands.find(b => b.name.toLowerCase() === 'toyota');
+                  if (toyota) setSelectedBrand(toyota.id);
+                }}
                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >
                 Toyota
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedBrand('Honda')}
+                onClick={() => {
+                  const honda = brands.find(b => b.name.toLowerCase() === 'honda');
+                  if (honda) setSelectedBrand(honda.id);
+                }}
                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >
                 Honda

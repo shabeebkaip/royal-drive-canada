@@ -1,384 +1,908 @@
 'use client'
 
-import React, {useState, useMemo} from 'react'
-import {inventories, brands} from '@/constants'
+import React, { useState, useEffect, useMemo } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import VehicleCard from '@/components/shared/VehicleCard'
 import PageHero from '@/components/shared/PageHero'
 import Dropdown from '@/components/shared/Dropdown'
-import {Search, LayoutGrid, List, SlidersHorizontal, Car, DollarSign} from 'lucide-react'
+import { Search, LayoutGrid, List, SlidersHorizontal, Car, DollarSign, X } from 'lucide-react'
+import { Vehicle, Brand, VehicleType } from '@/types/api'
+
+interface FuelType {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface TransmissionType {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface Model {
+  _id: string;
+  name: string;
+  make: string;
+  slug: string;
+}
 
 const VehiclesPage = () => {
-    // Filter states
-    const [searchTerm, setSearchTerm] = useState('')
-    const [selectedBrand, setSelectedBrand] = useState('')
-    const [selectedFuelType, setSelectedFuelType] = useState('')
-    const [selectedTransmission, setSelectedTransmission] = useState('')
-    const [priceRange, setPriceRange] = useState('')
-    const [mileageRange, setMileageRange] = useState('')
-    const [yearRange, setYearRange] = useState('')
-    const [safetyCertified, setSafetyCertified] = useState(false)
-    const [featuredOnly, setFeaturedOnly] = useState(false)
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
-    // Layout state
-    const [isHorizontal, setIsHorizontal] = useState(false)
-    const [showFilters, setShowFilters] = useState(false)
+  // Filter states from URL
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '')
+  const [selectedBrand, setSelectedBrand] = useState(searchParams.get('make') || '')
+  const [selectedModel, setSelectedModel] = useState(searchParams.get('model') || '')
+  const [selectedFuelType, setSelectedFuelType] = useState(searchParams.get('fuelType') || '')
+  const [selectedTransmission, setSelectedTransmission] = useState(searchParams.get('transmission') || '')
+  const [selectedBodyType, setSelectedBodyType] = useState(searchParams.get('vehicleType') || '')
+  const [selectedDrivetrain, setSelectedDrivetrain] = useState(searchParams.get('drivetrain') || '')
+  const [selectedCondition, setSelectedCondition] = useState(searchParams.get('condition') || '')
+  const [selectedStatus, setSelectedStatus] = useState(searchParams.get('status') || '')
+  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '')
+  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '')
+  const [minYear, setMinYear] = useState(searchParams.get('minYear') || '')
+  const [maxYear, setMaxYear] = useState(searchParams.get('maxYear') || '')
+  const [minMileage, setMinMileage] = useState(searchParams.get('minMileage') || '')
+  const [maxMileage, setMaxMileage] = useState(searchParams.get('maxMileage') || '')
+  const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || 'created_desc')
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 1)
+  
+  // Layout state
+  const [isHorizontal, setIsHorizontal] = useState(false)
+  const [showFilters, setShowFilters] = useState(true) // Default to showing filters on desktop
 
-    // Filter options
-    const fuelTypes = [...new Set(inventories.map(v => v.fuelType))].filter(Boolean)
-    const transmissions = [...new Set(inventories.map(v => v.transmission))].filter(Boolean)
-    const priceRanges = [
-        {value: '', label: 'Any Price'},
-        {value: '0-5000', label: 'Under $5,000'},
-        {value: '5000-10000', label: '$5,000 - $10,000'},
-        {value: '10000-15000', label: '$10,000 - $15,000'},
-        {value: '15000-25000', label: '$15,000 - $25,000'},
-        {value: '25000-35000', label: '$25,000 - $35,000'},
-        {value: '35000+', label: '$35,000+'}
-    ]
-    const mileageRanges = [
-        {value: '', label: 'Any Mileage'},
-        {value: '0-50000', label: 'Under 50,000 km'},
-        {value: '50000-100000', label: '50,000 - 100,000 km'},
-        {value: '100000-150000', label: '100,000 - 150,000 km'},
-        {value: '150000-200000', label: '150,000 - 200,000 km'},
-        {value: '200000+', label: '200,000+ km'}
-    ]
-    const yearRanges = [
-        {value: '', label: 'Any Year'},
-        {value: '2020+', label: '2020 & Newer'},
-        {value: '2015-2019', label: '2015 - 2019'},
-        {value: '2010-2014', label: '2010 - 2014'},
-        {value: '2005-2009', label: '2005 - 2009'}
-    ]
+  // Data states
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [loading, setLoading] = useState(true)
+  const [brands, setBrands] = useState<Brand[]>([])
+  const [models, setModels] = useState<Model[]>([])
+  const [fuelTypes, setFuelTypes] = useState<FuelType[]>([])
+  const [transmissions, setTransmissions] = useState<TransmissionType[]>([])
+  const [bodyTypes, setBodyTypes] = useState<VehicleType[]>([])
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    limit: 12,
+    totalPages: 0
+  })
 
-    // Filtered vehicles
-    const filteredVehicles = useMemo(() => {
-        return inventories.filter(vehicle => {
-            // Search term filter
-            if (searchTerm && !vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                !vehicle.brand.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                !vehicle.model.toLowerCase().includes(searchTerm.toLowerCase())) {
-                return false
-            }
+  // Fetch filter options
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        // Fetch brands
+        const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown')
+        const brandsData = await brandsRes.json()
+        if (brandsData.success && brandsData.data) {
+          // API returns array directly in data, not data.makes
+          const brandsList = Array.isArray(brandsData.data) ? brandsData.data : brandsData.data.makes || []
+          setBrands(brandsList.map((b: any) => ({
+            id: b._id,
+            name: b.name,
+            logo: b.logo,
+            slug: b.slug
+          })))
+        }
 
-            // Brand filter
-            if (selectedBrand && vehicle.brand !== selectedBrand) return false
+        // Fetch body types
+        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types')
+        const bodyTypesData = await bodyTypesRes.json()
+        if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
+          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: any) => ({
+            id: vt._id,
+            name: vt.name,
+            image: vt.icon || vt.image,
+            slug: vt.slug
+          })))
+        }
 
-            // Fuel type filter
-            if (selectedFuelType && vehicle.fuelType !== selectedFuelType) return false
+        // Fetch fuel types
+        const fuelTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/fuel-types')
+        const fuelTypesData = await fuelTypesRes.json()
+        if (fuelTypesData.success && fuelTypesData.data?.fuelTypes) {
+          setFuelTypes(fuelTypesData.data.fuelTypes.filter((ft: any) => ft.active))
+        }
 
-            // Transmission filter
-            if (selectedTransmission && vehicle.transmission !== selectedTransmission) return false
-
-            // Price range filter
-            if (priceRange && vehicle.price) {
-                const [min, max] = priceRange.split('-').map(p => p.replace('+', ''))
-                const price = vehicle.price
-                if (priceRange.includes('+')) {
-                    if (price < parseInt(min)) return false
-                } else {
-                    if (price < parseInt(min) || price > parseInt(max)) return false
-                }
-            }
-
-            // Mileage range filter
-            if (mileageRange && vehicle.mileage) {
-                const [min, max] = mileageRange.split('-').map(m => m.replace('+', ''))
-                const mileage = vehicle.mileage
-                if (mileageRange.includes('+')) {
-                    if (mileage < parseInt(min)) return false
-                } else {
-                    if (mileage < parseInt(min) || mileage > parseInt(max)) return false
-                }
-            }
-
-            // Year range filter
-            if (yearRange) {
-                const year = vehicle.year
-                if (yearRange.includes('+')) {
-                    if (year < parseInt(yearRange.replace('+', ''))) return false
-                } else {
-                    const [min, max] = yearRange.split('-').map(y => parseInt(y))
-                    if (year < min || year > max) return false
-                }
-            }
-
-            // Safety certified filter
-            if (safetyCertified && !vehicle.safetyCertified) return false
-
-            // Featured only filter
-            if (featuredOnly && !vehicle.featured) return false
-
-            return true
-        })
-    }, [searchTerm, selectedBrand, selectedFuelType, selectedTransmission, priceRange, mileageRange, yearRange, safetyCertified, featuredOnly])
-
-    // Clear all filters
-    const clearFilters = () => {
-        setSearchTerm('')
-        setSelectedBrand('')
-        setSelectedFuelType('')
-        setSelectedTransmission('')
-        setPriceRange('')
-        setMileageRange('')
-        setYearRange('')
-        setSafetyCertified(false)
-        setFeaturedOnly(false)
+        // Fetch transmissions
+        const transmissionsRes = await fetch('https://api.royaldrivecanada.com/api/v1/transmissions')
+        const transmissionsData = await transmissionsRes.json()
+        if (transmissionsData.success && transmissionsData.data?.transmissions) {
+          setTransmissions(transmissionsData.data.transmissions.filter((t: any) => t.active))
+        }
+      } catch (error) {
+        console.error('Failed to fetch filter options:', error)
+      }
     }
 
-    return (
-        <div className="min-h-screen bg-white">
-            {/* Hero Section */}
-            <PageHero
-                title="Our Vehicle Collection"
-                subtitle="Discover quality pre-owned vehicles with transparent pricing, safety certifications, and exceptional value. Every vehicle is carefully inspected and ready for the road."
-                backgroundImage="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
-                compact={true}
-                badges={[
-                    {
-                        text: `${inventories.length} Vehicles Available`,
-                        icon: <Car className="w-4 h-4 text-blue-400"/>
-                    },
-                    {
-                        text: "All Budgets Welcome",
-                        icon: <DollarSign className="w-4 h-4 text-green-400"/>
-                    }
-                ]}
-                stats={[
-                    {value: `${inventories.length}`, label: "Total Vehicles"},
-                    {value: `${inventories.filter(v => v.featured).length}`, label: "Featured Vehicles"},
-                    {value: `${inventories.filter(v => v.safetyCertified).length}`, label: "Safety Certified"}
-                ]}
-                cta={{
-                    primary: {
-                        text: "Call (647) 622-2202",
-                        action: "call"
-                    },
-                    secondary: {
-                        text: "Get Directions",
-                        action: "directions"
-                    }
-                }}
-            />
+    fetchFilterOptions()
+  }, [])
 
-            {/* Main Content */}
-            <div className="container mx-auto px-4 py-12">
-                {/* Search and Filter Header */}
-                <div className="mb-8">
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        {/* Search Bar */}
-                        <div className="mb-6">
-                            <div className="relative">
-                                <Search
-                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"/>
-                                <input
-                                    type="text"
-                                    placeholder="Search by make, model, or keyword..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                                />
-                            </div>
-                        </div>
+  // Fetch models when brand changes
+  useEffect(() => {
+    const fetchModels = async () => {
+      if (!selectedBrand) {
+        setModels([])
+        return
+      }
 
-                        {/* Filter Toggle and Layout Controls */}
-                        <div
-                            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => setShowFilters(!showFilters)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                                >
-                                    <SlidersHorizontal className="w-4 h-4"/>
-                                    Filters
-                                    {(selectedBrand || selectedFuelType || selectedTransmission || priceRange || mileageRange || yearRange || safetyCertified || featuredOnly) && (
-                                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                      Active
+      try {
+        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}`)
+        const modelsData = await modelsRes.json()
+        if (modelsData.success && modelsData.data?.models) {
+          setModels(modelsData.data.models.filter((m: any) => m.active))
+        }
+      } catch (error) {
+        console.error('Failed to fetch models:', error)
+      }
+    }
+
+    fetchModels()
+  }, [selectedBrand])
+
+  // Fetch vehicles based on filters
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      setLoading(true)
+      try {
+        const params = new URLSearchParams()
+        
+        if (searchTerm) params.append('q', searchTerm)
+        if (selectedBrand) params.append('make', selectedBrand)
+        if (selectedModel) params.append('model', selectedModel)
+        if (selectedFuelType) params.append('fuelType', selectedFuelType)
+        if (selectedTransmission) params.append('transmission', selectedTransmission)
+        if (selectedBodyType) params.append('vehicleType', selectedBodyType)
+        if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
+        if (selectedCondition) params.append('condition', selectedCondition)
+        if (selectedStatus) params.append('status', selectedStatus)
+        if (minPrice) params.append('minPrice', minPrice)
+        if (maxPrice) params.append('maxPrice', maxPrice)
+        if (minYear) params.append('minYear', minYear)
+        if (maxYear) params.append('maxYear', maxYear)
+        if (minMileage) params.append('minMileage', minMileage)
+        if (maxMileage) params.append('maxMileage', maxMileage)
+        if (sortBy) params.append('sortBy', sortBy)
+        params.append('page', page.toString())
+        params.append('limit', '12')
+
+        const response = await fetch(`https://api.royaldrivecanada.com/api/v1/vehicles?${params.toString()}`)
+        const data = await response.json()
+
+        if (data.success && data.data?.vehicles) {
+          const transformedVehicles = data.data.vehicles.map((vehicle: any) => ({
+            id: vehicle._id,
+            name: `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,
+            brand: vehicle.make.name,
+            model: vehicle.model.name,
+            year: vehicle.year,
+            price: vehicle.pricing.listPrice,
+            mileage: vehicle.odometer.value,
+            fuelType: vehicle.engine.fuelType.name,
+            transmission: vehicle.transmission.type.name,
+            images: vehicle.media.images || [],
+            slug: vehicle.marketing.slug,
+            description: vehicle.marketing.description,
+            featured: vehicle.marketing.featured,
+            safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+            carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+            createdAt: vehicle.createdAt,
+            updatedAt: vehicle.updatedAt,
+          }))
+
+          setVehicles(transformedVehicles)
+          if (data.data.pagination) {
+            setPagination(data.data.pagination)
+          }
+        } else {
+          setVehicles([])
+        }
+      } catch (error) {
+        console.error('Failed to fetch vehicles:', error)
+        setVehicles([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVehicles()
+  }, [searchTerm, selectedBrand, selectedModel, selectedFuelType, selectedTransmission, 
+      selectedBodyType, selectedDrivetrain, selectedCondition, selectedStatus,
+      minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, sortBy, page])
+
+  // Update URL when filters change
+  const updateURL = () => {
+    const params = new URLSearchParams()
+    
+    if (searchTerm) params.append('q', searchTerm)
+    if (selectedBrand) params.append('make', selectedBrand)
+    if (selectedModel) params.append('model', selectedModel)
+    if (selectedFuelType) params.append('fuelType', selectedFuelType)
+    if (selectedTransmission) params.append('transmission', selectedTransmission)
+    if (selectedBodyType) params.append('vehicleType', selectedBodyType)
+    if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
+    if (selectedCondition) params.append('condition', selectedCondition)
+    if (selectedStatus) params.append('status', selectedStatus)
+    if (minPrice) params.append('minPrice', minPrice)
+    if (maxPrice) params.append('maxPrice', maxPrice)
+    if (minYear) params.append('minYear', minYear)
+    if (maxYear) params.append('maxYear', maxYear)
+    if (minMileage) params.append('minMileage', minMileage)
+    if (maxMileage) params.append('maxMileage', maxMileage)
+    if (sortBy) params.append('sortBy', sortBy)
+    if (page > 1) params.append('page', page.toString())
+
+    const queryString = params.toString()
+    router.push(`/vehicles${queryString ? `?${queryString}` : ''}`, { scroll: false })
+  }
+
+  const handleClearFilters = () => {
+    setSearchTerm('')
+    setSelectedBrand('')
+    setSelectedModel('')
+    setSelectedFuelType('')
+    setSelectedTransmission('')
+    setSelectedBodyType('')
+    setSelectedDrivetrain('')
+    setSelectedCondition('')
+    setSelectedStatus('')
+    setMinPrice('')
+    setMaxPrice('')
+    setMinYear('')
+    setMaxYear('')
+    setMinMileage('')
+    setMaxMileage('')
+    setSortBy('created_desc')
+    setPage(1)
+    router.push('/vehicles')
+  }
+
+  const handleViewDetails = (vehicleId: string) => {
+    const vehicle = vehicles.find(v => v.id === vehicleId)
+    if (vehicle?.slug) {
+      router.push(`/vehicles/${vehicle.slug}`)
+    }
+  }
+
+  // Dropdown options
+  const brandOptions = brands.map(brand => ({
+    value: brand.id,
+    label: brand.name
+  }))
+
+  const modelOptions = models.map(model => ({
+    value: model._id,
+    label: model.name
+  }))
+
+  const fuelTypeOptions = fuelTypes.map(ft => ({
+    value: ft._id,
+    label: ft.name
+  }))
+
+  const transmissionOptions = transmissions.map(t => ({
+    value: t._id,
+    label: t.name
+  }))
+
+  const bodyTypeOptions = bodyTypes.map(type => ({
+    value: type.id.toString(),
+    label: type.name
+  }))
+
+  const sortOptions = [
+    { value: 'created_desc', label: 'Recently Added' },
+    { value: 'created_asc', label: 'Oldest First' },
+    { value: 'price_asc', label: 'Price: Low to High' },
+    { value: 'price_desc', label: 'Price: High to Low' },
+    { value: 'year_desc', label: 'Year: Newest First' },
+    { value: 'year_asc', label: 'Year: Oldest First' },
+    { value: 'mileage_asc', label: 'Mileage: Low to High' },
+    { value: 'mileage_desc', label: 'Mileage: High to Low' },
+    { value: 'featured', label: 'Featured First' },
+  ]
+
+  const currentYear = new Date().getFullYear()
+  const priceOptions = [
+    { value: '', label: 'Any' },
+    { value: '5000', label: '$5,000' },
+    { value: '10000', label: '$10,000' },
+    { value: '15000', label: '$15,000' },
+    { value: '20000', label: '$20,000' },
+    { value: '30000', label: '$30,000' },
+    { value: '40000', label: '$40,000' },
+    { value: '50000', label: '$50,000' },
+    { value: '75000', label: '$75,000' },
+    { value: '100000', label: '$100,000' },
+  ]
+
+  const yearOptions = [
+    { value: '', label: 'Any' },
+    ...Array.from({ length: 30 }, (_, i) => currentYear - i).map(year => ({
+      value: year.toString(),
+      label: year.toString()
+    }))
+  ]
+
+  const mileageOptions = [
+    { value: '', label: 'Any' },
+    { value: '25000', label: '25,000 km' },
+    { value: '50000', label: '50,000 km' },
+    { value: '75000', label: '75,000 km' },
+    { value: '100000', label: '100,000 km' },
+    { value: '150000', label: '150,000 km' },
+    { value: '200000', label: '200,000 km' },
+  ]
+
+  const drivetrainOptions = [
+    { value: '', label: 'All Drivetrains' },
+    { value: 'FWD', label: 'FWD (Front Wheel Drive)' },
+    { value: 'RWD', label: 'RWD (Rear Wheel Drive)' },
+    { value: 'AWD', label: 'AWD (All Wheel Drive)' },
+    { value: '4WD', label: '4WD (4 Wheel Drive)' },
+  ]
+
+  const conditionOptions = [
+    { value: '', label: 'All Conditions' },
+    { value: 'New', label: 'New' },
+    { value: 'Used', label: 'Used' },
+    { value: 'Certified Pre-Owned', label: 'Certified Pre-Owned' },
+  ]
+
+  const statusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'available', label: 'Available' },
+    { value: 'sold', label: 'Sold' },
+    { value: 'pending', label: 'Pending' },
+  ]
+
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    let count = 0
+    if (searchTerm) count++
+    if (selectedBrand) count++
+    if (selectedModel) count++
+    if (selectedFuelType) count++
+    if (selectedTransmission) count++
+    if (selectedBodyType) count++
+    if (selectedDrivetrain) count++
+    if (selectedCondition) count++
+    if (selectedStatus) count++
+    if (minPrice || maxPrice) count++
+    if (minYear || maxYear) count++
+    if (minMileage || maxMileage) count++
+    return count
+  }, [searchTerm, selectedBrand, selectedModel, selectedFuelType, selectedTransmission, 
+      selectedBodyType, selectedDrivetrain, selectedCondition, selectedStatus,
+      minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage])
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <PageHero
+        title="Our Inventory"
+        subtitle="Browse our complete collection of quality pre-owned vehicles"
+      />
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Quick Stats Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+            <div className="flex items-center gap-2 mb-1">
+              <Car className="w-5 h-5 text-blue-600" />
+              <p className="text-xs font-medium text-blue-600 uppercase">Total Vehicles</p>
+            </div>
+            <p className="text-2xl font-bold text-blue-900">{pagination.total}</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+            <div className="flex items-center gap-2 mb-1">
+              <DollarSign className="w-5 h-5 text-green-600" />
+              <p className="text-xs font-medium text-green-600 uppercase">Price Range</p>
+            </div>
+            <p className="text-2xl font-bold text-green-900">$5K-$100K</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
+            <div className="flex items-center gap-2 mb-1">
+              <SlidersHorizontal className="w-5 h-5 text-purple-600" />
+              <p className="text-xs font-medium text-purple-600 uppercase">Active Filters</p>
+            </div>
+            <p className="text-2xl font-bold text-purple-900">{activeFiltersCount}</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
+            <div className="flex items-center gap-2 mb-1">
+              <LayoutGrid className="w-5 h-5 text-orange-600" />
+              <p className="text-xs font-medium text-orange-600 uppercase">View Mode</p>
+            </div>
+            <p className="text-2xl font-bold text-orange-900">{isHorizontal ? 'List' : 'Grid'}</p>
+          </div>
+        </div>
+
+        <div className="flex gap-6">
+          {/* Left Sidebar - Filters */}
+          <aside className={`${
+            showFilters ? 'block' : 'hidden'
+          } lg:block w-full lg:w-80 flex-shrink-0`}>
+            <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 sticky top-6 border border-gray-200">
+              {/* Sidebar Header */}
+              <div className="flex items-center justify-between mb-6 pb-4 border-b">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-bold text-gray-900">Filters</h3>
+                  {activeFiltersCount > 0 && (
+                    <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                      {activeFiltersCount}
                     </span>
-                                    )}
-                                </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="lg:hidden text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-                                {/* Clear Filters */}
-                                {(selectedBrand || selectedFuelType || selectedTransmission || priceRange || mileageRange || yearRange || safetyCertified || featuredOnly) && (
-                                    <button
-                                        onClick={clearFilters}
-                                        className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
-                                    >
-                                        Clear All
-                                    </button>
-                                )}
-                            </div>
+              {/* Search Bar */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  🔍 Search Keywords
+                </label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Make, model, year..."
+                    className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 hover:bg-white transition-colors"
+                  />
+                </div>
+              </div>
 
-                            <div className="flex items-center gap-4">
-                                {/* Results Count */}
-                                <span className="text-gray-600">
-                  {filteredVehicles.length} vehicle{filteredVehicles.length !== 1 ? 's' : ''} found
-                </span>
+              {/* Filters - Scrollable Area */}
+              <div className="space-y-6 max-h-[calc(100vh-300px)] overflow-y-auto pr-2 custom-scrollbar">
+              
+              {/* Vehicle Selection */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Car className="w-4 h-4 text-blue-600" />
+                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Vehicle</h4>
+                </div>
+                
+                <Dropdown
+                  label="Brand"
+                  value={selectedBrand}
+                  onChange={(value) => {
+                    setSelectedBrand(value)
+                    setSelectedModel('')
+                    setPage(1)
+                  }}
+                  options={brandOptions}
+                  placeholder="All Brands"
+                />
 
-                                {/* Layout Toggle */}
-                                <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                                    <button
-                                        onClick={() => setIsHorizontal(false)}
-                                        className={`p-2 rounded transition-colors ${!isHorizontal ? 'bg-white shadow-sm' : 'hover:bg-gray-200'}`}
-                                    >
-                                        <LayoutGrid className="w-4 h-4"/>
-                                    </button>
-                                    <button
-                                        onClick={() => setIsHorizontal(true)}
-                                        className={`p-2 rounded transition-colors ${isHorizontal ? 'bg-white shadow-sm' : 'hover:bg-gray-200'}`}
-                                    >
-                                        <List className="w-4 h-4"/>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                <Dropdown
+                label="Model"
+                value={selectedModel}
+                onChange={(value) => {
+                  setSelectedModel(value)
+                  setPage(1)
+                }}
+                options={modelOptions}
+                placeholder="All Models"
+                disabled={!selectedBrand}
+              />
 
-                        {/* Expandable Filters */}
-                        {showFilters && (
-                            <div className="border-t border-gray-200 pt-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                                    {/* Brand Filter */}
-                                    <Dropdown
-                                        label="Brand"
-                                        value={selectedBrand}
-                                        onChange={setSelectedBrand}
-                                        options={[
-                                            {value: '', label: 'All Brands'},
-                                            ...brands.map(brand => ({value: brand.name, label: brand.name}))
-                                        ]}
-                                    />
+                <Dropdown
+                  label="Body Type"
+                  value={selectedBodyType}
+                  onChange={(value) => {
+                    setSelectedBodyType(value)
+                    setPage(1)
+                  }}
+                  options={bodyTypeOptions}
+                  placeholder="All Types"
+                />
+              </div>
 
-                                    {/* Fuel Type Filter */}
-                                    <Dropdown
-                                        label="Fuel Type"
-                                        value={selectedFuelType}
-                                        onChange={setSelectedFuelType}
-                                        options={[
-                                            {value: '', label: 'All Fuel Types'},
-                                            ...fuelTypes.map(fuel => ({value: fuel, label: fuel}))
-                                        ]}
-                                    />
-
-                                    {/* Price Range Filter */}
-                                    <Dropdown
-                                        label="Price Range"
-                                        value={priceRange}
-                                        onChange={setPriceRange}
-                                        options={priceRanges}
-                                    />
-
-                                    {/* Year Range Filter */}
-                                    <Dropdown
-                                        label="Year"
-                                        value={yearRange}
-                                        onChange={setYearRange}
-                                        options={yearRanges}
-                                    />
-
-                                    {/* Transmission Filter */}
-                                    <Dropdown
-                                        label="Transmission"
-                                        value={selectedTransmission}
-                                        onChange={setSelectedTransmission}
-                                        options={[
-                                            {value: '', label: 'All Transmissions'},
-                                            ...transmissions.map(trans => ({value: trans, label: trans}))
-                                        ]}
-                                    />
-
-                                    {/* Mileage Range Filter */}
-                                    <Dropdown
-                                        label="Mileage"
-                                        value={mileageRange}
-                                        onChange={setMileageRange}
-                                        options={mileageRanges}
-                                    />
-                                </div>
-
-                                {/* Checkbox Filters */}
-                                <div className="flex flex-wrap gap-6 mt-6">
-                                    <label className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={safetyCertified}
-                                            onChange={(e) => setSafetyCertified(e.target.checked)}
-                                            className="mr-2"
-                                        />
-                                        Safety Certified Only
-                                    </label>
-                                    <label className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={featuredOnly}
-                                            onChange={(e) => setFeaturedOnly(e.target.checked)}
-                                            className="mr-2"
-                                        />
-                                        Featured Vehicles Only
-                                    </label>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+              {/* Specifications */}
+              <div className="space-y-4 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <SlidersHorizontal className="w-4 h-4 text-green-600" />
+                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Specifications</h4>
                 </div>
 
-                {/* Vehicle Grid/List */}
-                {filteredVehicles.length > 0 ? (
-                    <div
-                        className={isHorizontal ? 'space-y-6' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}>
-                        {filteredVehicles.map((vehicle) => (
-                            <VehicleCard
-                                key={vehicle.id}
-                                vehicle={vehicle}
-                                showFeaturedBadge={true}
-                                isHorizontal={isHorizontal}
-                                onViewDetails={(id) => {
-                                    // Handle view details - could navigate to individual vehicle page
-                                    console.log('View details for vehicle:', id)
-                                }}
-                                className="h-full"
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-16">
-                        <Car className="w-16 h-16 text-gray-300 mx-auto mb-4"/>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No vehicles found</h3>
-                        <p className="text-gray-600 mb-6">
-                            Try adjusting your filters or search criteria
-                        </p>
-                        <button
-                            onClick={clearFilters}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-                        >
-                            Clear All Filters
-                        </button>
-                    </div>
-                )}
+                <Dropdown
+                  label="Fuel Type"
+                  value={selectedFuelType}
+                  onChange={(value) => {
+                    setSelectedFuelType(value)
+                    setPage(1)
+                  }}
+                  options={fuelTypeOptions}
+                  placeholder="All Fuel Types"
+                />
+
+                <Dropdown
+                  label="Transmission"
+                  value={selectedTransmission}
+                  onChange={(value) => {
+                    setSelectedTransmission(value)
+                    setPage(1)
+                  }}
+                  options={transmissionOptions}
+                  placeholder="All Transmissions"
+                />
+
+                <Dropdown
+                  label="Drivetrain"
+                  value={selectedDrivetrain}
+                  onChange={(value) => {
+                    setSelectedDrivetrain(value)
+                    setPage(1)
+                  }}
+                  options={drivetrainOptions}
+                placeholder="All Drivetrains"
+              />
+
+                <Dropdown
+                  label="Condition"
+                  value={selectedCondition}
+                  onChange={(value) => {
+                    setSelectedCondition(value)
+                    setPage(1)
+                  }}
+                  options={conditionOptions}
+                  placeholder="All Conditions"
+                />
+
+                <Dropdown
+                  label="Status"
+                  value={selectedStatus}
+                  onChange={(value) => {
+                    setSelectedStatus(value)
+                    setPage(1)
+                  }}
+                  options={statusOptions}
+                  placeholder="All Status"
+                />
+              </div>
+
+              {/* Price & Year Range */}
+              <div className="space-y-4 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <DollarSign className="w-4 h-4 text-purple-600" />
+                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Price & Year</h4>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Dropdown
+                    label="Min Price"
+                    value={minPrice}
+                    onChange={(value) => {
+                      setMinPrice(value)
+                      setPage(1)
+                    }}
+                    options={priceOptions}
+                    placeholder="No Min"
+                  />
+
+                  <Dropdown
+                    label="Max Price"
+                    value={maxPrice}
+                    onChange={(value) => {
+                      setMaxPrice(value)
+                      setPage(1)
+                    }}
+                    options={priceOptions}
+                    placeholder="No Max"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Dropdown
+                    label="Min Year"
+                    value={minYear}
+                    onChange={(value) => {
+                      setMinYear(value)
+                      setPage(1)
+                    }}
+                    options={yearOptions}
+                    placeholder="No Min"
+                  />
+
+                  <Dropdown
+                    label="Max Year"
+                    value={maxYear}
+                    onChange={(value) => {
+                      setMaxYear(value)
+                      setPage(1)
+                    }}
+                    options={yearOptions}
+                    placeholder="No Max"
+                  />
+                </div>
+              </div>
+
+              {/* Mileage Range */}
+              <div className="space-y-4 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <LayoutGrid className="w-4 h-4 text-orange-600" />
+                  <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Mileage</h4>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Dropdown
+                    label="Min Mileage"
+                    value={minMileage}
+                    onChange={(value) => {
+                      setMinMileage(value)
+                      setPage(1)
+                    }}
+                    options={mileageOptions}
+                    placeholder="No Min"
+                  />
+
+                  <Dropdown
+                    label="Max Mileage"
+                    value={maxMileage}
+                    onChange={(value) => {
+                      setMaxMileage(value)
+                      setPage(1)
+                    }}
+                    options={mileageOptions}
+                    placeholder="No Max"
+                  />
+                </div>
+              </div>
+
+              {/* Clear Filters Button */}
+              {activeFiltersCount > 0 && (
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    onClick={handleClearFilters}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-700 rounded-lg transition-all font-semibold border border-red-200 shadow-sm hover:shadow-md"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear All {activeFiltersCount} Filter{activeFiltersCount !== 1 ? 's' : ''}
+                  </button>
+                </div>
+              )}
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content Area */}
+          <main className="flex-1 min-w-0">
+            {/* Mobile Filter Toggle & Top Bar */}
+            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                {/* Left: Filter Toggle (Mobile) & Results Count */}
+                <div className="flex items-center gap-4 flex-1">
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                    Filters
+                    {activeFiltersCount > 0 && (
+                      <span className="bg-white text-blue-600 text-xs px-2 py-0.5 rounded-full font-bold">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </button>
+                  
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Car className="w-5 h-5 text-blue-600" />
+                    <h2 className="text-xl font-bold text-gray-900">
+                      {pagination.total} Vehicle{pagination.total !== 1 ? 's' : ''}
+                    </h2>
+                  </div>
+                </div>
+
+                {/* Right: View Toggle & Sort */}
+                <div className="flex items-center gap-3">
+                  {/* View Toggle */}
+                  <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                    <button
+                      onClick={() => setIsHorizontal(false)}
+                      className={`p-2 rounded-lg transition-colors ${
+                        !isHorizontal ? 'bg-white shadow-sm text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                      title="Grid View"
+                    >
+                      <LayoutGrid className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setIsHorizontal(true)}
+                      className={`p-2 rounded-lg transition-colors ${
+                        isHorizontal ? 'bg-white shadow-sm text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                      title="List View"
+                    >
+                      <List className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Sort Dropdown */}
+                  <div className="w-48">
+                    <Dropdown
+                      label=""
+                      value={sortBy}
+                      onChange={setSortBy}
+                      options={sortOptions}
+                      placeholder="Sort By"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Call to Action Section */}
-            <section className="bg-gray-50 py-16">
-                <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                        {`Can't Find What You're Looking For?`}
-                    </h2>
-                    <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                        {` Our inventory changes frequently. Contact us and we'll help you find the perfect vehicle for your needs and budget.`}
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button
-                            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
-                            Call (647) 622-2202
-                        </button>
-                        <button
-                            className="px-8 py-3 bg-white hover:bg-gray-50 text-blue-600 font-semibold rounded-lg border border-blue-600 transition-colors">
-                            Request Specific Vehicle
-                        </button>
-                    </div>
+            {/* Mobile Results Count */}
+            <div className="sm:hidden bg-white rounded-lg shadow-md p-4 mb-6">
+              <div className="flex items-center gap-2">
+                <Car className="w-5 h-5 text-blue-600" />
+                <h2 className="text-lg font-bold text-gray-900">
+                  {pagination.total} Vehicle{pagination.total !== 1 ? 's' : ''} Found
+                </h2>
+              </div>
+            </div>
+
+            {/* Vehicles Grid/List */}
+            {loading ? (
+              <div className="flex items-center justify-center py-32 bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-lg border border-blue-100">
+                <div className="text-center">
+                  <div className="relative w-20 h-20 mx-auto mb-6">
+                    <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <p className="text-gray-700 font-semibold text-lg mb-2">Finding Your Perfect Vehicle</p>
+                  <p className="text-gray-500 text-sm">Please wait while we load the latest inventory...</p>
                 </div>
-            </section>
+              </div>
+            ) : vehicles.length > 0 ? (
+              <>
+                {/* Results Summary */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6 border border-blue-200">
+                  <p className="text-sm text-gray-700">
+                    Showing <span className="font-bold text-blue-600">{vehicles.length}</span> of{' '}
+                    <span className="font-bold text-blue-600">{pagination.total}</span> vehicles
+                    {activeFiltersCount > 0 && (
+                      <span className="ml-2 text-gray-600">
+                        • <span className="font-semibold">{activeFiltersCount}</span> filter{activeFiltersCount !== 1 ? 's' : ''} applied
+                      </span>
+                    )}
+                  </p>
+                </div>
+
+                <div className={`${
+                  isHorizontal 
+                    ? 'space-y-4' 
+                    : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+                }`}>
+                  {vehicles.map((vehicle) => (
+                    <VehicleCard
+                      key={vehicle.id}
+                      vehicle={vehicle}
+                      showFeaturedBadge={true}
+                      onViewDetails={handleViewDetails}
+                      isHorizontal={isHorizontal}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {pagination.totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-8 bg-white rounded-lg shadow-md p-4">
+                    <button
+                      onClick={() => {
+                        setPage(page - 1)
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }}
+                      disabled={page === 1}
+                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Previous
+                    </button>
+
+                    <div className="flex gap-1">
+                      {Array.from({ length: Math.min(pagination.totalPages, 7) }, (_, i) => {
+                        let pageNum;
+                        if (pagination.totalPages <= 7) {
+                          pageNum = i + 1;
+                        } else if (page <= 4) {
+                          pageNum = i + 1;
+                        } else if (page >= pagination.totalPages - 3) {
+                          pageNum = pagination.totalPages - 6 + i;
+                        } else {
+                          pageNum = page - 3 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => {
+                              setPage(pageNum)
+                              window.scrollTo({ top: 0, behavior: 'smooth' })
+                            }}
+                            className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-colors ${
+                              page === pageNum
+                                ? 'bg-blue-600 text-white shadow-md'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setPage(page + 1)
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }}
+                      disabled={page === pagination.totalPages}
+                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg text-center py-20 px-6 border border-gray-200">
+                <div className="max-w-md mx-auto">
+                  {/* Animated Icon */}
+                  <div className="relative w-32 h-32 mx-auto mb-6">
+                    <div className="absolute inset-0 bg-blue-100 rounded-full animate-pulse"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Car className="w-16 h-16 text-blue-400" />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-bold text-gray-900 mb-3">No Vehicles Found</h3>
+                  <p className="text-gray-600 mb-8 leading-relaxed">
+                    We couldn't find any vehicles matching your search criteria. 
+                    Try adjusting your filters or clearing them to see all available vehicles.
+                  </p>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button
+                      onClick={handleClearFilters}
+                      className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg"
+                    >
+                      <X className="w-5 h-5" />
+                      Clear All Filters
+                    </button>
+                    <button
+                      onClick={() => router.push('/contact')}
+                      className="flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors border-2 border-gray-300"
+                    >
+                      Contact Us
+                    </button>
+                  </div>
+                  
+                  {/* Suggestions */}
+                  {activeFiltersCount > 0 && (
+                    <div className="mt-8 p-4 bg-white rounded-lg border border-blue-200">
+                      <p className="text-sm text-gray-600 mb-2">You have {activeFiltersCount} active filter{activeFiltersCount !== 1 ? 's' : ''}</p>
+                      <p className="text-xs text-gray-500">Try removing some filters to see more results</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </main>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default VehiclesPage
