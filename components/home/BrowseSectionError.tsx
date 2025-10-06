@@ -40,7 +40,7 @@ export default function BrowseSectionError({ error, reset }: BrowseSectionErrorP
                 Unable to Load Vehicle Types
               </h3>
               <p className="text-gray-600 mb-6">
-                We're having trouble loading the vehicle types. Please try again.
+                {`We're having trouble loading the vehicle types. Please try again.`}
               </p>
               <button
                 onClick={reset}

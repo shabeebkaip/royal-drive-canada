@@ -16,7 +16,6 @@ interface VehicleCardProps {
 const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
   showFeaturedBadge = false,
-  onViewDetails,
   className = "",
   isHorizontal = false
 }) => {
@@ -30,12 +29,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   const formatMileage = (mileage: number | null | undefined) => {
     if (mileage === null || mileage === undefined || isNaN(mileage)) return "Contact for Details";
     return `${mileage.toLocaleString()} km`;
-  };
-
-  const handleViewDetails = () => {
-    if (onViewDetails) {
-      onViewDetails(vehicle.id);
-    }
   };
 
   if (isHorizontal) {

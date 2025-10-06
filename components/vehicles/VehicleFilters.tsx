@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { Search, X, ChevronDown, ChevronUp } from 'lucide-react'
+import { FuelType, TransmissionType } from '@/types/filters'
 
 interface FilterProps {
   // Search
@@ -9,7 +11,7 @@ interface FilterProps {
   onSearchChange: (value: string) => void
   
   // Brand & Model
-  brands: Array<{ id: string; name: string; logo: string }>
+  brands: Array<{ id: string | number; name: string; logo: string }>
   models: Array<{ _id: string; name: string }>
   selectedBrand: string
   selectedModel: string
@@ -17,7 +19,7 @@ interface FilterProps {
   onModelChange: (value: string) => void
   
   // Body Types
-  bodyTypes: Array<{ id: string; name: string; slug?: string; image?: string }>
+  bodyTypes: Array<{ id: string | number; name: string; slug?: string; image?: string }>
   selectedBodyType: string
   onBodyTypeChange: (value: string) => void
   
@@ -37,12 +39,12 @@ interface FilterProps {
   onMileageChange: (min: number, max: number) => void
   
   // Transmission
-  transmissions: Array<{ _id: string; name: string }>
+  transmissions: TransmissionType[]
   selectedTransmissions: string[]
   onTransmissionsChange: (values: string[]) => void
   
   // Fuel Type
-  fuelTypes: Array<{ _id: string; name: string }>
+  fuelTypes: FuelType[]
   selectedFuelTypes: string[]
   onFuelTypesChange: (values: string[]) => void
   
@@ -457,11 +459,13 @@ const VehicleFilters: React.FC<FilterProps> = ({
                       }`}
                     >
                       {type.image ? (
-                        <div className="w-10 h-10 mb-2 flex items-center justify-center">
-                          <img 
+                        <div className="relative w-10 h-10 mb-2 flex items-center justify-center">
+                          <Image 
                             src={type.image} 
                             alt={type.name}
-                            className="w-full h-full object-contain"
+                            fill
+                            className="object-contain"
+                            sizes="40px"
                           />
                         </div>
                       ) : (

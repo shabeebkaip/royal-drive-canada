@@ -9,7 +9,7 @@ const VehicleGrid = () => {
   const [viewMode, setViewMode] = useState<'vertical' | 'horizontal'>('horizontal');
   const router = useRouter();
 
-  const handleViewDetails = (vehicleId: number) => {
+  const handleViewDetails = (vehicleId: string | number) => {
     // TODO: Navigate to vehicle details page
     console.log('View details for vehicle:', vehicleId);
   };

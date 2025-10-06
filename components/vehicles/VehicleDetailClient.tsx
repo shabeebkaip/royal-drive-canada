@@ -2,18 +2,9 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Heart, Share2, ChevronLeft } from 'lucide-react'
 
-interface VehicleDetailClientProps {
-  vehicle: {
-    media: {
-      images: string[]
-    }
-    make: { name: string }
-    model: { name: string }
-    year: number
-  }
-}
 
 export function ImageGallery({ images, vehicleName }: { images: string[], vehicleName: string }) {
   const [selectedImage, setSelectedImage] = useState(0)
@@ -24,11 +15,16 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
 
   return (
     <>
-      <img
-        src={images[selectedImage]}
-        alt={vehicleName}
-        className="w-full h-full object-contain"
-      />
+      <div className="relative w-full h-full">
+        <Image
+          src={images[selectedImage]}
+          alt={vehicleName}
+          fill
+          className="object-contain"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
+          priority={selectedImage === 0}
+        />
+      </div>
       
       {images.length > 1 && (
         <div className="p-4 bg-gray-50 border-t border-gray-200">
@@ -37,16 +33,18 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
-                className={`aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
                   selectedImage === index
                     ? 'border-blue-600 ring-2 ring-blue-200'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <img
+                <Image
                   src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  alt={`${vehicleName} - Image ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 20vw, 10vw"
                 />
               </button>
             ))}
@@ -93,7 +91,7 @@ export function ShareButton() {
           url: window.location.href,
         })
       } catch (error) {
-        console.log('Share canceled')
+        console.log('Share canceled', error)
       }
     } else {
       // Fallback: copy to clipboard

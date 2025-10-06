@@ -3,25 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Dropdown from "@/components/shared/Dropdown";
 import { useRouter } from 'next/navigation';
 import { Brand, VehicleType } from '@/types/api';
-
-interface FuelType {
-  _id: string;
-  name: string;
-  slug: string;
-}
-
-interface TransmissionType {
-  _id: string;
-  name: string;
-  slug: string;
-}
-
-interface Model {
-  _id: string;
-  name: string;
-  make: string;
-  slug: string;
-}
+import { FuelType, TransmissionType, Model, VehicleTypeAPI, BrandAPI } from '@/types/filters';
 
 const SearchCard = () => {
   const router = useRouter();
@@ -58,7 +40,7 @@ const SearchCard = () => {
         if (brandsData.success && brandsData.data) {
           // API returns array directly in data, not data.makes
           const brandsList = Array.isArray(brandsData.data) ? brandsData.data : brandsData.data.makes || [];
-          const activeBrands = brandsList.map((b: any) => ({
+          const activeBrands = brandsList.map((b: BrandAPI) => ({
             id: b._id,
             name: b.name,
             logo: b.logo,
@@ -71,7 +53,7 @@ const SearchCard = () => {
         const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types');
         const bodyTypesData = await bodyTypesRes.json();
         if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
-          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: any) => ({
+          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: VehicleTypeAPI) => ({
             id: vt._id,
             name: vt.name,
             image: vt.icon || vt.image,
@@ -83,14 +65,14 @@ const SearchCard = () => {
         const fuelTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/fuel-types');
         const fuelTypesData = await fuelTypesRes.json();
         if (fuelTypesData.success && fuelTypesData.data?.fuelTypes) {
-          setFuelTypes(fuelTypesData.data.fuelTypes.filter((ft: any) => ft.active));
+          setFuelTypes(fuelTypesData.data.fuelTypes.filter((ft: FuelType) => ft.active));
         }
 
         // Fetch transmissions
         const transmissionsRes = await fetch('https://api.royaldrivecanada.com/api/v1/transmissions');
         const transmissionsData = await transmissionsRes.json();
         if (transmissionsData.success && transmissionsData.data?.transmissions) {
-          setTransmissions(transmissionsData.data.transmissions.filter((t: any) => t.active));
+          setTransmissions(transmissionsData.data.transmissions.filter((t: TransmissionType) => t.active));
         }
 
         // Get vehicle count
@@ -120,7 +102,7 @@ const SearchCard = () => {
         const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}`);
         const modelsData = await modelsRes.json();
         if (modelsData.success && modelsData.data?.models) {
-          setModels(modelsData.data.models.filter((m: any) => m.active));
+          setModels(modelsData.data.models.filter((m: Model) => m.active));
         }
       } catch (error) {
         console.error('Failed to fetch models:', error);
@@ -419,7 +401,7 @@ const SearchCard = () => {
                 type="button"
                 onClick={() => {
                   const toyota = brands.find(b => b.name.toLowerCase() === 'toyota');
-                  if (toyota) setSelectedBrand(toyota.id);
+                  if (toyota) setSelectedBrand(String(toyota.id));
                 }}
                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >
@@ -429,7 +411,7 @@ const SearchCard = () => {
                 type="button"
                 onClick={() => {
                   const honda = brands.find(b => b.name.toLowerCase() === 'honda');
-                  if (honda) setSelectedBrand(honda.id);
+                  if (honda) setSelectedBrand(String(honda.id));
                 }}
                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors duration-200"
               >

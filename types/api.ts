@@ -4,7 +4,7 @@
  */
 
 export interface VehicleType {
-  id: string;
+  id: string | number;
   name: string;
   image: string;
   slug?: string;
@@ -14,7 +14,7 @@ export interface VehicleType {
 }
 
 export interface Brand {
-  id: string;
+  id: string | number;
   name: string;
   logo: string;
   slug?: string;
@@ -24,16 +24,16 @@ export interface Brand {
 }
 
 export interface Vehicle {
-  id: string;
+  id: string | number;
   name: string;
   brand: string;
   model: string;
   year: number;
-  price: number;
+  price: number | null;
   discountPrice?: number | null;
   isOffer?: boolean;
   featured?: boolean;
-  mileage: number;
+  mileage: number | null;
   fuelType: string;
   transmission: string;
   images: string[];
@@ -68,3 +68,6 @@ export interface PaginatedResponse<T> {
 
 // Re-export vehicle detail types for convenience
 export type { VehicleDetail, VehicleEnquiry } from './vehicle'
+
+// Re-export filter types for convenience
+export type { FuelType, TransmissionType, Model, DropdownOption, VehicleTypeAPI, BrandAPI, ModelAPI, VehicleAPI } from './filters'
