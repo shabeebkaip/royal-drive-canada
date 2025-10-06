@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import VehicleCard from '@/components/shared/VehicleCard'
-import PageHero from '@/components/shared/PageHero'
 import VehicleFilters from '@/components/vehicles/VehicleFilters'
 import { LayoutGrid, List, SlidersHorizontal, Car, X, DollarSign } from 'lucide-react'
 import { Vehicle, Brand, VehicleType } from '@/types/api'
@@ -391,13 +390,69 @@ const VehiclesPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageHero
-        title="Our Inventory"
-        subtitle="Browse our complete collection of quality pre-owned vehicles"
-      />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-6">
+      {/* Rich Description Section - Compact */}
+      <div className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-200 pt-24 sm:pt-28">
+        <div className="container mx-auto px-4 py-4 sm:py-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Title - Compact and Visible */}
+            <div className="text-center mb-4 sm:mb-5">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
+                Quality Pre-Owned Vehicles in Toronto
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                Browse by popular brands
+              </p>
+            </div>
+
+            {/* Brand Logos Carousel - From API */}
+            <div className="mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide sm:justify-center">
+                {brands.slice(0, 12).map((brand) => (
+                  <button
+                    key={brand.id}
+                    onClick={() => {
+                      setSelectedBrand(brand.id)
+                      setSelectedModel('')
+                      setPage(1)
+                      window.scrollTo({ top: 400, behavior: 'smooth' })
+                    }}
+                    className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-lg border-2 transition-all duration-200 p-2 flex items-center justify-center group hover:shadow-lg ${
+                      selectedBrand === brand.id 
+                        ? 'border-blue-500 shadow-md' 
+                        : 'border-gray-200 hover:border-blue-400'
+                    }`}
+                    title={brand.name}
+                  >
+                    {brand.logo ? (
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className={`w-full h-full object-contain transition-all duration-200 ${
+                          selectedBrand === brand.id ? '' : 'grayscale group-hover:grayscale-0'
+                        }`}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                          const textNode = document.createElement('span')
+                          textNode.className = 'text-xs font-bold text-gray-700'
+                          textNode.textContent = brand.name.substring(0, 3).toUpperCase()
+                          target.parentElement?.appendChild(textNode)
+                        }}
+                      />
+                    ) : (
+                      <span className="text-xs font-bold text-gray-700">{brand.name.substring(0, 3).toUpperCase()}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
+        <div className="flex gap-3 sm:gap-4 lg:gap-6">
           {/* Left Sidebar - Filters */}
           <aside className={`${
             showFilters ? 'block' : 'hidden'
@@ -463,18 +518,18 @@ const VehiclesPage = () => {
           {/* Main Content Area */}
           <main className="flex-1 min-w-0">
             {/* Mobile Filter Toggle & Top Bar */}
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-4 sm:mb-6">
+              <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
                 {/* Left: Filter Toggle (Mobile) & Results Count */}
-                <div className="flex items-center gap-4 flex-1">
+                <div className="flex items-center gap-2 sm:gap-4 flex-1">
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                    className="lg:hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base"
                   >
-                    <SlidersHorizontal className="w-4 h-4" />
+                    <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     Filters
                     {activeFiltersCount > 0 && (
-                      <span className="bg-white text-blue-600 text-xs px-2 py-0.5 rounded-full font-bold">
+                      <span className="bg-white text-blue-600 text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-bold">
                         {activeFiltersCount}
                       </span>
                     )}
@@ -531,10 +586,10 @@ const VehiclesPage = () => {
             </div>
 
             {/* Mobile Results Count */}
-            <div className="sm:hidden bg-white rounded-lg shadow-md p-4 mb-6">
+            <div className="sm:hidden bg-white rounded-lg shadow-md p-3 mb-4">
               <div className="flex items-center gap-2">
-                <Car className="w-5 h-5 text-blue-600" />
-                <h2 className="text-lg font-bold text-gray-900">
+                <Car className="w-4 h-4 text-blue-600" />
+                <h2 className="text-base font-bold text-gray-900">
                   {pagination.total} Vehicle{pagination.total !== 1 ? 's' : ''} Found
                 </h2>
               </div>
@@ -542,19 +597,19 @@ const VehiclesPage = () => {
 
             {/* Active Filters Summary */}
             {activeFiltersCount > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-5 mb-6 border border-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+              <div className="bg-white rounded-lg shadow-md p-3 sm:p-5 mb-4 sm:mb-6 border border-gray-200">
+                <div className="flex items-center justify-between mb-3 sm:mb-4 flex-wrap gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wide">
                       Active Filters ({activeFiltersCount})
                     </h3>
                   </div>
                   <button
                     onClick={handleClearFilters}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:text-white bg-red-50 hover:bg-red-600 rounded-lg transition-all duration-200 border border-red-200 hover:border-red-600"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-white bg-red-50 hover:bg-red-600 rounded-lg transition-all duration-200 border border-red-200 hover:border-red-600"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-3 h-3 sm:w-4 sm:h-4" />
                     Clear All
                   </button>
                 </div>
@@ -772,8 +827,8 @@ const VehiclesPage = () => {
             ) : vehicles.length > 0 ? (
               <>
                 {/* Results Summary */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6 border border-blue-200">
-                  <p className="text-sm text-gray-700">
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 border border-blue-200">
+                  <p className="text-xs sm:text-sm text-gray-700">
                     Showing <span className="font-bold text-blue-600">{vehicles.length}</span> of{' '}
                     <span className="font-bold text-blue-600">{pagination.total}</span> vehicles
                     {activeFiltersCount > 0 && (
@@ -786,8 +841,8 @@ const VehiclesPage = () => {
 
                 <div className={`${
                   isHorizontal 
-                    ? 'space-y-4' 
-                    : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+                    ? 'space-y-3 sm:space-y-4' 
+                    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6'
                 }`}>
                   {vehicles.map((vehicle) => (
                     <VehicleCard
@@ -802,19 +857,20 @@ const VehiclesPage = () => {
 
                 {/* Pagination */}
                 {pagination.totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-8 bg-white rounded-lg shadow-md p-4">
+                  <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8 bg-white rounded-lg shadow-md p-3 sm:p-4">
                     <button
                       onClick={() => {
                         setPage(page - 1)
                         window.scrollTo({ top: 0, behavior: 'smooth' })
                       }}
                       disabled={page === 1}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="px-2 sm:px-4 py-1.5 sm:py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      Previous
+                      <span className="hidden sm:inline">Previous</span>
+                      <span className="sm:hidden">Prev</span>
                     </button>
 
-                    <div className="flex gap-1">
+                    <div className="flex gap-0.5 sm:gap-1">
                       {Array.from({ length: Math.min(pagination.totalPages, 7) }, (_, i) => {
                         let pageNum;
                         if (pagination.totalPages <= 7) {
@@ -834,7 +890,7 @@ const VehiclesPage = () => {
                               setPage(pageNum)
                               window.scrollTo({ top: 0, behavior: 'smooth' })
                             }}
-                            className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-colors ${
+                            className={`min-w-[32px] sm:min-w-[40px] px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-sm sm:text-base font-medium transition-colors ${
                               page === pageNum
                                 ? 'bg-blue-600 text-white shadow-md'
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
@@ -852,7 +908,7 @@ const VehiclesPage = () => {
                         window.scrollTo({ top: 0, behavior: 'smooth' })
                       }}
                       disabled={page === pagination.totalPages}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="px-2 sm:px-4 py-1.5 sm:py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       Next
                     </button>

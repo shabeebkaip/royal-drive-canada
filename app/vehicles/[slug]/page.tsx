@@ -579,25 +579,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                     price: vehicle.pricing.listPrice
                   }}
                 />
-                <VehicleEnquiryDialog 
-                  vehicle={{
-                    id: vehicle._id,
-                    slug: vehicle.marketing.slug,
-                    year: vehicle.year,
-                    make: vehicle.make,
-                    model: vehicle.model,
-                    stockNumber: vehicle.marketing.slug.toUpperCase(),
-                    price: vehicle.pricing.listPrice
-                  }}
-                  trigger={
-                    <button className="w-full px-6 py-3.5 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors border-2 border-blue-600">
-                      Make an Offer
-                    </button>
-                  }
-                />
-                <button className="w-full px-6 py-3.5 bg-gray-50 text-gray-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors border border-gray-200">
-                  Get Pre-Approved
-                </button>
               </div>
 
               <div className="pt-6 border-t border-gray-200 space-y-4">
@@ -642,17 +623,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Calculator Placeholder */}
-            <div className="bg-blue-50 rounded-lg shadow-sm border border-blue-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Payment Calculator</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Estimate your monthly payments
-              </p>
-              <button className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                Calculate Payment
-              </button>
             </div>
           </div>
         </div>
