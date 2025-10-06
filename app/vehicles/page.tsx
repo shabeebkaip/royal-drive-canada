@@ -41,9 +41,7 @@ const VehiclesPage = () => {
   const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>(
     searchParams.get('transmission') ? searchParams.get('transmission')!.split(',') : []
   )
-  const [selectedBodyTypes, setSelectedBodyTypes] = useState<string[]>(
-    searchParams.get('vehicleType') ? searchParams.get('vehicleType')!.split(',') : []
-  )
+  const [selectedBodyType, setSelectedBodyType] = useState(searchParams.get('vehicleType') || '')
   const [selectedDrivetrain, setSelectedDrivetrain] = useState(searchParams.get('drivetrain') || '')
   const [selectedCondition, setSelectedCondition] = useState(searchParams.get('condition') || '')
   const [selectedStatus, setSelectedStatus] = useState(searchParams.get('status') || '')
@@ -94,11 +92,11 @@ const VehiclesPage = () => {
           })))
         }
 
-        // Fetch body types
-        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types')
+        // Fetch body types (using dropdown API)
+        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types/dropdown')
         const bodyTypesData = await bodyTypesRes.json()
-        if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
-          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: any) => ({
+        if (bodyTypesData.success && bodyTypesData.data) {
+          setBodyTypes(bodyTypesData.data.map((vt: any) => ({
             id: vt._id,
             name: vt.name,
             image: vt.icon || vt.image,
@@ -165,7 +163,7 @@ const VehiclesPage = () => {
         if (selectedModel) params.append('model', selectedModel)
         if (selectedFuelTypes.length) params.append('fuelType', selectedFuelTypes.join(','))
         if (selectedTransmissions.length) params.append('transmission', selectedTransmissions.join(','))
-        if (selectedBodyTypes.length) params.append('vehicleType', selectedBodyTypes.join(','))
+        if (selectedBodyType) params.append('vehicleType', selectedBodyType)
         if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
         if (selectedCondition) params.append('condition', selectedCondition)
         if (selectedStatus) params.append('status', selectedStatus)
@@ -220,7 +218,7 @@ const VehiclesPage = () => {
 
     fetchVehicles()
   }, [searchTerm, selectedBrand, selectedModel, selectedFuelTypes, selectedTransmissions, 
-      selectedBodyTypes, selectedDrivetrain, selectedCondition, selectedStatus,
+      selectedBodyType, selectedDrivetrain, selectedCondition, selectedStatus,
       minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, sortBy, page])
 
   // Update URL when filters change
@@ -232,7 +230,7 @@ const VehiclesPage = () => {
     if (selectedModel) params.append('model', selectedModel)
     if (selectedFuelTypes.length) params.append('fuelType', selectedFuelTypes.join(','))
     if (selectedTransmissions.length) params.append('transmission', selectedTransmissions.join(','))
-    if (selectedBodyTypes.length) params.append('vehicleType', selectedBodyTypes.join(','))
+    if (selectedBodyType) params.append('vehicleType', selectedBodyType)
     if (selectedDrivetrain) params.append('drivetrain', selectedDrivetrain)
     if (selectedCondition) params.append('condition', selectedCondition)
     if (selectedStatus) params.append('status', selectedStatus)
@@ -255,7 +253,7 @@ const VehiclesPage = () => {
     setSelectedModel('')
     setSelectedFuelTypes([])
     setSelectedTransmissions([])
-    setSelectedBodyTypes([])
+    setSelectedBodyType('')
     setSelectedColors([])
     setSelectedDrivetrain('')
     setSelectedCondition('')
@@ -378,7 +376,7 @@ const VehiclesPage = () => {
     if (selectedModel) count++
     count += selectedFuelTypes.length
     count += selectedTransmissions.length
-    count += selectedBodyTypes.length
+    if (selectedBodyType) count++
     count += selectedColors.length
     if (selectedDrivetrain) count++
     if (selectedCondition) count++
@@ -388,7 +386,7 @@ const VehiclesPage = () => {
     if (minMileage > 0 || maxMileage < 200000) count++
     return count
   }, [searchTerm, selectedBrand, selectedModel, selectedFuelTypes, selectedTransmissions, 
-      selectedBodyTypes, selectedColors, selectedDrivetrain, selectedCondition, selectedStatus,
+      selectedBodyType, selectedColors, selectedDrivetrain, selectedCondition, selectedStatus,
       minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage])
 
   return (
@@ -399,41 +397,6 @@ const VehiclesPage = () => {
       />
 
       <div className="container mx-auto px-4 py-8">
-        {/* Quick Stats Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
-            <div className="flex items-center gap-2 mb-1">
-              <Car className="w-5 h-5 text-blue-600" />
-              <p className="text-xs font-medium text-blue-600 uppercase">Total Vehicles</p>
-            </div>
-            <p className="text-2xl font-bold text-blue-900">{pagination.total}</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
-            <div className="flex items-center gap-2 mb-1">
-              <DollarSign className="w-5 h-5 text-green-600" />
-              <p className="text-xs font-medium text-green-600 uppercase">Price Range</p>
-            </div>
-            <p className="text-2xl font-bold text-green-900">$5K-$100K</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
-            <div className="flex items-center gap-2 mb-1">
-              <SlidersHorizontal className="w-5 h-5 text-purple-600" />
-              <p className="text-xs font-medium text-purple-600 uppercase">Active Filters</p>
-            </div>
-            <p className="text-2xl font-bold text-purple-900">{activeFiltersCount}</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
-            <div className="flex items-center gap-2 mb-1">
-              <LayoutGrid className="w-5 h-5 text-orange-600" />
-              <p className="text-xs font-medium text-orange-600 uppercase">View Mode</p>
-            </div>
-            <p className="text-2xl font-bold text-orange-900">{isHorizontal ? 'List' : 'Grid'}</p>
-          </div>
-        </div>
-
         <div className="flex gap-6">
           {/* Left Sidebar - Filters */}
           <aside className={`${
@@ -456,8 +419,11 @@ const VehiclesPage = () => {
                 setPage(1)
               }}
               bodyTypes={bodyTypes}
-              selectedBodyTypes={selectedBodyTypes}
-              onBodyTypesChange={setSelectedBodyTypes}
+              selectedBodyType={selectedBodyType}
+              onBodyTypeChange={(value) => {
+                setSelectedBodyType(value)
+                setPage(1)
+              }}
               minPrice={minPrice}
               maxPrice={maxPrice}
               onPriceChange={(min, max) => {
@@ -573,6 +539,223 @@ const VehiclesPage = () => {
                 </h2>
               </div>
             </div>
+
+            {/* Active Filters Summary */}
+            {activeFiltersCount > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-5 mb-6 border border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-5 h-5 text-blue-600" />
+                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                      Active Filters ({activeFiltersCount})
+                    </h3>
+                  </div>
+                  <button
+                    onClick={handleClearFilters}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:text-white bg-red-50 hover:bg-red-600 rounded-lg transition-all duration-200 border border-red-200 hover:border-red-600"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear All
+                  </button>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {searchTerm && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm border border-blue-200">
+                      <span className="font-medium">Search:</span>
+                      <span className="font-semibold">{searchTerm}</span>
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="ml-1 hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedBrand && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-sm border border-purple-200">
+                      <span className="font-medium">Brand:</span>
+                      <span className="font-semibold">{brands.find(b => b.id === selectedBrand)?.name}</span>
+                      <button
+                        onClick={() => {
+                          setSelectedBrand('')
+                          setSelectedModel('')
+                        }}
+                        className="ml-1 hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedModel && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-sm border border-purple-200">
+                      <span className="font-medium">Model:</span>
+                      <span className="font-semibold">{models.find(m => m._id === selectedModel)?.name}</span>
+                      <button
+                        onClick={() => setSelectedModel('')}
+                        className="ml-1 hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedBodyType && (() => {
+                    const bodyType = bodyTypes.find(t => t.id === selectedBodyType)
+                    return bodyType ? (
+                      <div key={selectedBodyType} className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
+                        <span className="font-medium">Type:</span>
+                        <span className="font-semibold">{bodyType.name}</span>
+                        <button
+                          onClick={() => setSelectedBodyType('')}
+                          className="ml-1 hover:bg-green-200 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : null
+                  })()}
+                  
+                  {selectedFuelTypes.length > 0 && selectedFuelTypes.map((fuelTypeId) => {
+                    const fuelType = fuelTypes.find(ft => ft._id === fuelTypeId)
+                    return fuelType ? (
+                      <div key={fuelTypeId} className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-sm border border-amber-200">
+                        <span className="font-medium">Fuel:</span>
+                        <span className="font-semibold">{fuelType.name}</span>
+                        <button
+                          onClick={() => setSelectedFuelTypes(selectedFuelTypes.filter(id => id !== fuelTypeId))}
+                          className="ml-1 hover:bg-amber-200 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : null
+                  })}
+                  
+                  {selectedTransmissions.length > 0 && selectedTransmissions.map((transId) => {
+                    const transmission = transmissions.find(t => t._id === transId)
+                    return transmission ? (
+                      <div key={transId} className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm border border-indigo-200">
+                        <span className="font-medium">Transmission:</span>
+                        <span className="font-semibold">{transmission.name}</span>
+                        <button
+                          onClick={() => setSelectedTransmissions(selectedTransmissions.filter(id => id !== transId))}
+                          className="ml-1 hover:bg-indigo-200 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : null
+                  })}
+                  
+                  {selectedColors.length > 0 && selectedColors.map((color) => (
+                    <div key={color} className="inline-flex items-center gap-2 px-3 py-1.5 bg-pink-50 text-pink-700 rounded-lg text-sm border border-pink-200">
+                      <span className="font-medium">Color:</span>
+                      <span className="font-semibold capitalize">{color}</span>
+                      <button
+                        onClick={() => setSelectedColors(selectedColors.filter(c => c !== color))}
+                        className="ml-1 hover:bg-pink-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  {(minPrice > 0 || maxPrice < 100000) && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm border border-emerald-200">
+                      <span className="font-medium">Price:</span>
+                      <span className="font-semibold">
+                        ${minPrice.toLocaleString()} - ${maxPrice.toLocaleString()}
+                      </span>
+                      <button
+                        onClick={() => {
+                          setMinPrice(0)
+                          setMaxPrice(100000)
+                        }}
+                        className="ml-1 hover:bg-emerald-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {(minYear > 2000 || maxYear < new Date().getFullYear()) && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-50 text-cyan-700 rounded-lg text-sm border border-cyan-200">
+                      <span className="font-medium">Year:</span>
+                      <span className="font-semibold">{minYear} - {maxYear}</span>
+                      <button
+                        onClick={() => {
+                          setMinYear(2000)
+                          setMaxYear(new Date().getFullYear())
+                        }}
+                        className="ml-1 hover:bg-cyan-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {(minMileage > 0 || maxMileage < 200000) && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 text-teal-700 rounded-lg text-sm border border-teal-200">
+                      <span className="font-medium">Mileage:</span>
+                      <span className="font-semibold">
+                        {minMileage.toLocaleString()} - {maxMileage.toLocaleString()} km
+                      </span>
+                      <button
+                        onClick={() => {
+                          setMinMileage(0)
+                          setMaxMileage(200000)
+                        }}
+                        className="ml-1 hover:bg-teal-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedCondition && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 rounded-lg text-sm border border-slate-200">
+                      <span className="font-medium">Condition:</span>
+                      <span className="font-semibold capitalize">{selectedCondition}</span>
+                      <button
+                        onClick={() => setSelectedCondition('')}
+                        className="ml-1 hover:bg-slate-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedDrivetrain && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-sm border border-orange-200">
+                      <span className="font-medium">Drivetrain:</span>
+                      <span className="font-semibold capitalize">{selectedDrivetrain}</span>
+                      <button
+                        onClick={() => setSelectedDrivetrain('')}
+                        className="ml-1 hover:bg-orange-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {selectedStatus && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-50 text-rose-700 rounded-lg text-sm border border-rose-200">
+                      <span className="font-medium">Status:</span>
+                      <span className="font-semibold capitalize">{selectedStatus}</span>
+                      <button
+                        onClick={() => setSelectedStatus('')}
+                        className="ml-1 hover:bg-rose-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Vehicles Grid/List */}
             {loading ? (

@@ -17,9 +17,9 @@ interface FilterProps {
   onModelChange: (value: string) => void
   
   // Body Types
-  bodyTypes: Array<{ id: number; name: string; slug?: string; image?: string }>
-  selectedBodyTypes: string[]
-  onBodyTypesChange: (values: string[]) => void
+  bodyTypes: Array<{ id: string; name: string; slug?: string; image?: string }>
+  selectedBodyType: string
+  onBodyTypeChange: (value: string) => void
   
   // Price Range
   minPrice: number
@@ -69,8 +69,8 @@ const VehicleFilters: React.FC<FilterProps> = ({
   onBrandChange,
   onModelChange,
   bodyTypes,
-  selectedBodyTypes,
-  onBodyTypesChange,
+  selectedBodyType,
+  onBodyTypeChange,
   minPrice,
   maxPrice,
   onPriceChange,
@@ -445,11 +445,11 @@ const VehicleFilters: React.FC<FilterProps> = ({
             {expandedSections.bodyType && (
               <div className="grid grid-cols-3 gap-2">
                 {bodyTypes.map((type) => {
-                  const isSelected = selectedBodyTypes.includes(type.id.toString())
+                  const isSelected = selectedBodyType === type.id.toString()
                   return (
                     <button
                       key={type.id}
-                      onClick={() => toggleArraySelection(selectedBodyTypes, type.id.toString(), onBodyTypesChange)}
+                      onClick={() => onBodyTypeChange(isSelected ? '' : type.id.toString())}
                       className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${
                         isSelected
                           ? 'border-blue-600 bg-blue-50 shadow-sm'

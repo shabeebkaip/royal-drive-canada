@@ -4,7 +4,7 @@
  */
 
 export interface VehicleType {
-  id: number;
+  id: string;
   name: string;
   image: string;
   slug?: string;

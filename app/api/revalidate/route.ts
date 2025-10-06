@@ -21,7 +21,19 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { tag, tags } = body;
+    const { tag, tags, slug } = body;
+
+    // Support vehicle slug revalidation (matches backend cache key format)
+    if (slug) {
+      revalidateTag(`vehicle-${slug}`);
+      return NextResponse.json({ 
+        revalidated: true, 
+        type: 'vehicle',
+        slug,
+        tag: `vehicle-${slug}`,
+        timestamp: new Date().toISOString()
+      });
+    }
 
     if (tag) {
       revalidateTag(tag);
@@ -42,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: 'Missing tag or tags parameter' },
+      { error: 'Missing slug, tag, or tags parameter' },
       { status: 400 }
     );
   } catch (error) {
@@ -54,8 +66,21 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Example usage from admin panel:
+// Example usage from backend when vehicle is updated:
 // 
+// // Revalidate specific vehicle (recommended)
+// fetch('https://royaldrivecanada.com/api/revalidate', {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Authorization': 'Bearer YOUR_SECRET_TOKEN'
+//   },
+//   body: JSON.stringify({ 
+//     slug: '2020-mercedes-benz-glc' 
+//   })
+// });
+//
+// // Revalidate by tag
 // fetch('https://royaldrivecanada.com/api/revalidate', {
 //   method: 'POST',
 //   headers: {

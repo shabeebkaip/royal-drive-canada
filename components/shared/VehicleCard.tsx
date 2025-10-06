@@ -1,5 +1,6 @@
 "use client";
 import React from 'react'
+import Link from 'next/link'
 import ImageSlider from "./ImageSlider";
 import { Star, CheckCircle, Fuel, Gauge, Settings, MapPin, FileText, RefreshCw } from 'lucide-react';
 import { Vehicle } from '@/types/api';
@@ -149,12 +150,12 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                       <span className="text-sm text-gray-500">+ HST</span>
                     </div>
                   </div>
-                  <button
-                    onClick={handleViewDetails}
+                  <Link
+                    href={`/vehicles/${vehicle.slug || vehicle.id}`}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium transition-colors duration-200"
                   >
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -233,12 +234,12 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               <p className="text-xs text-gray-500 mb-1">Starting at</p>
               <span className="text-2xl font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
             </div>
-            <button
-              onClick={handleViewDetails}
+            <Link
+              href={`/vehicles/${vehicle.slug || vehicle.id}`}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105"
             >
               View Details
-            </button>
+            </Link>
           </div>
           <p className="text-xs text-gray-400 mt-1">+ HST & Licensing</p>
         </div>
