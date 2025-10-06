@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import VehicleCard from '@/components/shared/VehicleCard'
 import VehicleFilters from '@/components/vehicles/VehicleFilters'
-import { LayoutGrid, List, SlidersHorizontal, Car, X, DollarSign } from 'lucide-react'
+import { LayoutGrid, List, SlidersHorizontal, Car, X, DollarSign, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Vehicle, Brand, VehicleType } from '@/types/api'
 
 interface FuelType {
@@ -58,7 +58,7 @@ const VehiclesPage = () => {
   
   // Layout state
   const [isHorizontal, setIsHorizontal] = useState(false)
-  const [showFilters, setShowFilters] = useState(true) // Default to showing filters on desktop
+  const [showFilters, setShowFilters] = useState(false) // Hidden by default on mobile, visible on desktop
 
   // Data states
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
@@ -74,6 +74,24 @@ const VehiclesPage = () => {
     limit: 12,
     totalPages: 0
   })
+
+  // Ref for brand logos carousel
+  const brandScrollRef = useRef<HTMLDivElement>(null)
+
+  // Scroll brand logos left/right
+  const scrollBrands = (direction: 'left' | 'right') => {
+    if (brandScrollRef.current) {
+      const scrollAmount = 300
+      const newScrollLeft = direction === 'left' 
+        ? brandScrollRef.current.scrollLeft - scrollAmount
+        : brandScrollRef.current.scrollLeft + scrollAmount
+      
+      brandScrollRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      })
+    }
+  }
 
   // Fetch filter options
   useEffect(() => {
@@ -406,9 +424,38 @@ const VehiclesPage = () => {
             </div>
 
             {/* Brand Logos Carousel - From API */}
-            <div className="mb-3 sm:mb-4">
-              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide sm:justify-center">
-                {brands.slice(0, 12).map((brand) => (
+            <div className="mb-3 sm:mb-4 relative group">
+              {/* Left Scroll Button */}
+              <button
+                onClick={() => scrollBrands('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-700" />
+              </button>
+
+              {/* Right Scroll Button */}
+              <button
+                onClick={() => scrollBrands('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-700" />
+              </button>
+
+              <div 
+                ref={brandScrollRef}
+                className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide sm:justify-center"
+                onWheel={(e) => {
+                  // Enable horizontal scroll with mouse wheel
+                  const container = e.currentTarget
+                  if (container.scrollWidth > container.clientWidth) {
+                    e.preventDefault()
+                    container.scrollLeft += e.deltaY
+                  }
+                }}
+              >
+                {brands?.map((brand) => (
                   <button
                     key={brand.id}
                     onClick={() => {
@@ -452,11 +499,30 @@ const VehiclesPage = () => {
       </div>
 
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
-        <div className="flex gap-3 sm:gap-4 lg:gap-6">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6">
+          {/* Mobile Filter Backdrop */}
+          {showFilters && (
+            <div 
+              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowFilters(false)}
+            />
+          )}
+
           {/* Left Sidebar - Filters */}
           <aside className={`${
-            showFilters ? 'block' : 'hidden'
-          } lg:block w-full lg:w-80 flex-shrink-0 sticky top-6`}>
+            showFilters ? 'fixed inset-y-0 left-0 z-50 w-full sm:w-96 overflow-y-auto' : 'hidden'
+          } lg:block lg:w-80 flex-shrink-0 lg:sticky lg:top-6 lg:z-auto bg-white lg:bg-transparent`}>
+            {/* Mobile Close Button */}
+            <div className="lg:hidden sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
+              <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+
             <VehicleFilters
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
@@ -544,9 +610,9 @@ const VehiclesPage = () => {
                 </div>
 
                 {/* Right: View Toggle & Sort */}
-                <div className="flex items-center gap-3">
-                  {/* View Toggle */}
-                  <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                  {/* View Toggle - Hidden on mobile */}
+                  <div className="hidden sm:flex items-center gap-1 bg-gray-100 rounded-lg p-1">
                     <button
                       onClick={() => setIsHorizontal(false)}
                       className={`p-2 rounded-lg transition-colors ${
@@ -567,12 +633,12 @@ const VehiclesPage = () => {
                     </button>
                   </div>
 
-                  {/* Sort Dropdown */}
-                  <div className="w-48">
+                  {/* Sort Dropdown - Full width on mobile */}
+                  <div className="flex-1 sm:flex-none sm:w-48">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      className="w-full px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                     >
                       {sortOptions.map((option) => (
                         <option key={option.value} value={option.value}>

@@ -65,3 +65,6 @@ export interface PaginatedResponse<T> {
     totalPages: number;
   };
 }
+
+// Re-export vehicle detail types for convenience
+export type { VehicleDetail, VehicleEnquiry } from './vehicle'

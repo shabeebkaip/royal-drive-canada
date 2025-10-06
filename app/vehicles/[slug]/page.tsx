@@ -8,96 +8,7 @@ import {
 } from 'lucide-react'
 import { ImageGallery, FavoriteButton, BackButton, ShareButton } from '@/components/vehicles/VehicleDetailClient'
 import VehicleEnquiryDialog from '@/components/vehicles/VehicleEnquiryDialog'
-
-interface VehicleDetail {
-  _id: string
-  make: { _id: string; name: string; logo: string; slug: string }
-  model: { _id: string; name: string; slug: string }
-  year: number
-  type: { _id: string; name: string; icon: string; slug: string }
-  trim?: string
-  engine: {
-    size: number
-    cylinders: number
-    fuelType: { _id: string; name: string; slug: string }
-    horsepower: number
-  }
-  transmission: {
-    type: { _id: string; name: string; slug: string }
-  }
-  drivetrain: { _id: string; name: string; slug: string }
-  odometer: {
-    value: number
-    unit: string
-    isAccurate: boolean
-  }
-  condition: string
-  accidentHistory: boolean
-  numberOfPreviousOwners: number
-  carfax: {
-    hasCleanHistory: boolean
-    serviceRecords: number
-  }
-  pricing: {
-    listPrice: number
-    currency: string
-    taxes: {
-      hst: number
-      licensing: number
-    }
-    financing: {
-      available: boolean
-    }
-  }
-  features: {
-    exterior: string[]
-    interior: string[]
-    safety: string[]
-    technology: string[]
-    convenience: string[]
-  }
-  specifications: {
-    exteriorColor: string
-    interiorColor: string
-    doors: number
-    seatingCapacity: number
-  }
-  status: {
-    _id: string
-    name: string
-    color: string
-    slug: string
-  }
-  availability: {
-    inStock: boolean
-    lastUpdated: string
-  }
-  media: {
-    images: string[]
-    videos: string[]
-    documents: string[]
-  }
-  ontario: {
-    safetyStandard: {
-      passed: boolean
-    }
-    emissionTest: {
-      required: boolean
-    }
-    uvip: {
-      required: boolean
-      cost: number
-    }
-  }
-  marketing: {
-    featured: boolean
-    description: string
-    keywords: string[]
-    slug: string
-  }
-  createdAt: string
-  updatedAt: string
-}
+import { VehicleDetail } from '@/types/vehicle'
 
 // Helper function
 const formatMileage = (value: number) => {
@@ -229,10 +140,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Images and Details */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Main Image Gallery */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="relative aspect-video bg-gray-900">
@@ -260,20 +171,22 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {/* Vehicle Title */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+              <div className="flex items-start justify-between mb-4 sm:mb-6">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
                     {vehicle.year} {vehicle.make.name} {vehicle.model.name}
                     {vehicle.trim && ` ${vehicle.trim}`}
                   </h1>
-                  <p className="text-lg text-gray-600">{vehicle.type.name}</p>
+                  <p className="text-base sm:text-lg text-gray-600">{vehicle.type.name}</p>
                 </div>
-                <ShareButton />
+                <div className="ml-2 flex-shrink-0">
+                  <ShareButton />
+                </div>
               </div>
 
               {/* Key Specs */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t border-gray-200">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
                 <div className="flex items-start gap-3">
                   <div className="p-2.5 bg-blue-50 rounded-lg flex-shrink-0">
                     <Gauge className="w-5 h-5 text-blue-600" />
@@ -318,16 +231,16 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
             {/* Description */}
             {vehicle.marketing.description && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
-                <p className="text-gray-700 leading-relaxed">{vehicle.marketing.description}</p>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Description</h2>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{vehicle.marketing.description}</p>
               </div>
             )}
 
             {/* Specifications */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Specifications</h2>
-              <div className="grid grid-cols-2 gap-x-8 gap-y-1">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Specifications</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-0">
                 <div className="flex justify-between py-4 border-b border-gray-100">
                   <span className="text-sm text-gray-600">Year</span>
                   <span className="text-sm font-semibold text-gray-900">{vehicle.year}</span>
@@ -401,9 +314,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
             {/* Features */}
             {allFeatures.length > 0 ? (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Features & Options</h2>
-                <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Features & Options</h2>
+                <div className="space-y-4 sm:space-y-6">
                   {vehicle.features.exterior.length > 0 && (
                     <div>
                       <h3 className="text-md font-semibold text-gray-900 mb-3">Exterior</h3>
@@ -472,15 +385,15 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 </div>
               </div>
             ) : vehicle.marketing.description && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Vehicle Description</h2>
-                <p className="text-gray-700 leading-relaxed">{vehicle.marketing.description}</p>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Vehicle Description</h2>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{vehicle.marketing.description}</p>
               </div>
             )}
 
             {/* Vehicle History */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Vehicle History</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Vehicle History</h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
@@ -551,23 +464,23 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
           </div>
 
           {/* Right Column - Pricing and Contact */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             {/* Pricing Card */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sticky top-6">
-              <div className="mb-8">
-                <p className="text-sm text-gray-600 mb-2">Price</p>
-                <p className="text-4xl font-bold text-gray-900 mb-1">{formatPrice(vehicle.pricing.listPrice)}</p>
-                <p className="text-sm text-gray-500">+ HST ({vehicle.pricing.taxes.hst}%)</p>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8 lg:sticky lg:top-6">
+              <div className="mb-6 sm:mb-8">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">Price</p>
+                <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1">{formatPrice(vehicle.pricing.listPrice)}</p>
+                <p className="text-xs sm:text-sm text-gray-500">+ HST ({vehicle.pricing.taxes.hst}%)</p>
               </div>
 
               {vehicle.pricing.financing.available && (
-                <div className="p-4 bg-blue-50 rounded-lg mb-6">
-                  <p className="text-sm font-semibold text-blue-900 mb-1">Financing Available</p>
+                <div className="p-3 sm:p-4 bg-blue-50 rounded-lg mb-4 sm:mb-6">
+                  <p className="text-xs sm:text-sm font-semibold text-blue-900 mb-1">Financing Available</p>
                   <p className="text-xs text-blue-700">Ask about our competitive rates</p>
                 </div>
               )}
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
                 <VehicleEnquiryDialog 
                   vehicle={{
                     id: vehicle._id,
@@ -581,44 +494,55 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 />
               </div>
 
-              <div className="pt-6 border-t border-gray-200 space-y-4">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-gray-600 flex-shrink-0" />
+              <div className="pt-4 sm:pt-6 border-t border-gray-200 space-y-3 sm:space-y-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Call us</p>
-                    <p className="text-sm font-semibold text-gray-900">1-800-123-4567</p>
+                    <a href="tel:+16476222202" className="text-xs sm:text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                      (647) 622-2202
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Email us</p>
-                    <p className="text-sm font-semibold text-gray-900">info@royaldrive.ca</p>
+                    <a href="mailto:info@royaldrivecanada.com" className="text-xs sm:text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                      info@royaldrivecanada.com
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Visit us</p>
-                    <p className="text-sm font-semibold text-gray-900">123 Main St, Toronto</p>
+                    <a 
+                      href="https://www.google.com/maps/search/?api=1&query=751+Danforth+Rd+Toronto+ON" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs sm:text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                    >
+                      751 Danforth Rd, Toronto, ON
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Availability */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Availability</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm text-gray-600">In Stock</span>
-                  <span className={`text-sm font-semibold ${vehicle.availability.inStock ? 'text-green-600' : 'text-red-600'}`}>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Availability</h3>
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center justify-between py-1.5 sm:py-2">
+                  <span className="text-xs sm:text-sm text-gray-600">In Stock</span>
+                  <span className={`text-xs sm:text-sm font-semibold ${vehicle.availability.inStock ? 'text-green-600' : 'text-red-600'}`}>
                     {vehicle.availability.inStock ? 'Yes' : 'No'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                  <span className="text-sm text-gray-600">Last Updated</span>
-                  <span className="text-sm font-medium text-gray-900">
+                <div className="flex items-center justify-between py-1.5 sm:py-2 border-t border-gray-100">
+                  <span className="text-xs sm:text-sm text-gray-600">Last Updated</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-900">
                     {new Date(vehicle.availability.lastUpdated).toLocaleDateString()}
                   </span>
                 </div>
