@@ -117,10 +117,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
     }).format(price)
   }
 
-  const formatMileageDisplay = (value: number) => {
-    return new Intl.NumberFormat('en-CA').format(value)
-  }
-
   const allFeatures = [
     ...vehicle.features.exterior,
     ...vehicle.features.interior,
