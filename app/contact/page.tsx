@@ -29,7 +29,7 @@ export default function ContactPage() {
         "addressCountry": "CA"
       },
       "telephone": "(647) 622-2202",
-      "email": "info@royaldrivecanada.com",
+      "email": "royaldrivemotor@gmail.com",
       "url": "https://royaldrivecanada.com",
       "openingHoursSpecification": [
         {
@@ -142,8 +142,8 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-bold text-lg text-gray-900">Email Us</h3>
                       <p className="text-gray-600">
-                        <a href="mailto:info@royaldrivecanada.com" className="hover:text-blue-600 transition-colors">
-                          info@royaldrivecanada.com
+                        <a href="mailto:royaldrivemotor@gmail.com" className="hover:text-blue-600 transition-colors">
+                          royaldrivemotor@gmail.com
                         </a>
                       </p>
                       <p className="text-sm text-gray-500">{`We'll respond within 24 hours`}</p>

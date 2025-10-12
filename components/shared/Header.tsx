@@ -14,6 +14,7 @@ const Header = () => {
         { href: '/', label: 'Home', desc: 'Return to homepage' },
         { href: '/about', label: 'About', desc: 'Learn about our company' },
         { href: '/vehicles', label: 'Our Vehicles', desc: 'Browse our complete inventory' },
+        { href: '/sell-your-car', label: 'Sell Your Car', desc: 'Get a fair offer for your vehicle' },
         { href: '/financing', label: 'Financing', desc: 'Get pre-approved today' },
         { href: '/contact', label: 'Contact Us', desc: 'Get in touch with us' }
     ]

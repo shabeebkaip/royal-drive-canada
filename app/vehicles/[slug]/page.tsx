@@ -504,8 +504,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Email us</p>
-                    <a href="mailto:info@royaldrivecanada.com" className="text-xs sm:text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                      info@royaldrivecanada.com
+                    <a href="mailto:royaldrivemotor@gmail.com" className="text-xs sm:text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                      royaldrivemotor@gmail.com
                     </a>
                   </div>
                 </div>
