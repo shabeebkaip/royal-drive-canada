@@ -34,10 +34,10 @@ const Header = () => {
                 {/* Clean Professional Background */}
                 <div className="absolute inset-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50"></div>
 
-                <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+                <div className="relative container mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-14 sm:h-16">
                         {/* Professional Logo */}
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0 min-w-0">
                             <Link href="/" className="block">
                                 <Logo variant="dark" size="md"/>
                             </Link>
@@ -68,37 +68,39 @@ const Header = () => {
                         </nav>
 
                         {/* Professional Right Side */}
-                        <div className="flex items-center space-x-6">
+                        <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 lg:space-x-6">
                             {/* Contact Information */}
-                            <div className="hidden md:flex items-center space-x-4">
+                            <div className="hidden xl:flex items-center space-x-4">
                                 <div className="flex items-center space-x-2 text-gray-600">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
-                                    <span className="font-semibold text-gray-900">647-622-2202</span>
+                                    <span className="font-semibold text-gray-900 text-sm">647-622-2202</span>
                                 </div>
                                 <div className="w-px h-6 bg-gray-300"></div>
                             </div>
 
                             {/* Professional CTA Button - Updated for All Customers */}
-                            <button
-                                className="hidden sm:inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
-                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <Link
+                                href="/sell-your-car"
+                                className="hidden md:inline-flex items-center px-3 md:px-4 lg:px-6 py-2 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap">
+                                <svg className="w-4 h-4 mr-1.5 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                           d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                 </svg>
-                                Sell Your Car
-                            </button>
+                                <span className="hidden lg:inline">Sell Your Car</span>
+                                <span className="lg:hidden">Sell Car</span>
+                            </Link>
 
                             {/* Professional Mobile Menu Button */}
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className="lg:hidden p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200"
+                                className="lg:hidden p-1.5 sm:p-2 rounded-lg border border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200 flex-shrink-0"
                                 aria-label="Toggle menu"
                             >
                                 <svg
-                                    className={`h-5 w-5 transition-transform duration-200 ${isMenuOpen ? 'rotate-90' : ''}`}
+                                    className={`h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-200 ${isMenuOpen ? 'rotate-90' : ''}`}
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     {isMenuOpen ? (
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
