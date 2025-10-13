@@ -3,7 +3,6 @@ import { Kanit } from "next/font/google";
 import "./globals.css";
 import Header from "../components/shared/Header";
 import Footer from "../components/shared/Footer";
-import { Toaster } from "sonner";
 
 const kanit = Kanit({
   variable: "--font-kanit",
@@ -112,9 +111,6 @@ export default function RootLayout({
           {children}
           <Footer />
         </div>
-        
-        {/* Toast Notifications */}
-        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );

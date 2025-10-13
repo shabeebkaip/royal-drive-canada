@@ -66,7 +66,7 @@ const PageHero: React.FC<PageHeroProps> = ({
   }
 
   return (
-    <section className={`relative overflow-hidden ${compact ? 'min-h-[40vh]' : 'min-h-[70vh]'}`}>
+    <section className={`relative overflow-hidden ${compact ? 'min-h-[60vh]' : 'min-h-[70vh]'}`}>
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0">
@@ -88,7 +88,7 @@ const PageHero: React.FC<PageHeroProps> = ({
       </div>
 
       {/* Content */}
-      <div className={`relative z-10 ${compact ? 'pt-24 pb-8' : 'pt-40 pb-16'}`}>
+      <div className={`relative z-10 ${compact ? 'pt-32 pb-12' : 'pt-40 pb-16'}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
 
@@ -110,10 +110,10 @@ const PageHero: React.FC<PageHeroProps> = ({
             )}
 
             {/* Main Content */}
-            <div className={compact ? 'space-y-4' : 'space-y-6'}>
+            <div className="space-y-6">
               <h1 className={`font-bold leading-tight text-white ${
                 compact 
-                  ? 'text-3xl sm:text-4xl lg:text-4xl' 
+                  ? 'text-3xl sm:text-4xl lg:text-5xl' 
                   : 'text-4xl sm:text-5xl lg:text-6xl'
               }`}>
                 {title}
@@ -121,7 +121,7 @@ const PageHero: React.FC<PageHeroProps> = ({
 
               <p className={`text-gray-200 max-w-3xl mx-auto leading-relaxed ${
                 compact 
-                  ? 'text-base lg:text-lg' 
+                  ? 'text-lg lg:text-xl' 
                   : 'text-xl lg:text-2xl'
               }`}>
                 {subtitle}
@@ -130,13 +130,13 @@ const PageHero: React.FC<PageHeroProps> = ({
 
             {/* Stats */}
             {stats.length > 0 && (
-              <div className={`grid grid-cols-2 md:grid-cols-3 gap-6 max-w-2xl mx-auto ${compact ? 'mt-6' : 'mt-12'}`}>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-12 max-w-2xl mx-auto">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
-                    <div className={`font-bold text-white mb-1 ${compact ? 'text-xl lg:text-2xl' : 'text-2xl lg:text-3xl'}`}>
+                    <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
                       {stat.value}
                     </div>
-                    <div className={`text-gray-300 font-medium uppercase tracking-wide ${compact ? 'text-xs' : 'text-sm'}`}>
+                    <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">
                       {stat.label}
                     </div>
                   </div>
@@ -146,7 +146,7 @@ const PageHero: React.FC<PageHeroProps> = ({
 
             {/* CTA Buttons */}
             {cta && (
-              <div className={`flex flex-col sm:flex-row gap-4 justify-center ${compact ? 'mt-6' : 'mt-10'}`}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
                 {cta.primary && (
                   <button
                     onClick={() => handleAction(cta.primary!.action, cta.primary!.value)}
