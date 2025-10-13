@@ -1,4 +1,5 @@
 import Hero from "../components/home/Hero";
+import MegaMenuBar from "@/components/home/MegaMenuBar";
 import BrowseSection from "@/components/home/BrowseSection";
 import BuyingSelling from "@/components/home/BuyingSelling";
 import FeaturedVehicles from "@/components/home/FeaturedVehicles";
@@ -110,6 +111,7 @@ export default function Home() {
       
       {/* SEO-optimized page content */}
       <div className="relative">
+        <MegaMenuBar />
         <Hero />
         <BrowseSection />
         <BuyingSelling />
