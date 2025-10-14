@@ -16,138 +16,113 @@ const BrowseSectionClient = ({ vehicleTypes, brands }: BrowseSectionClientProps)
   const [activeTab, setActiveTab] = useState<TabType>('types')
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-12 sm:py-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header with Tabs */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 tracking-tight">
-            Explore Our Collection
-          </h2>
+        <div className="mb-8 sm:mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                Browse by Category
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Find your perfect vehicle by type or brand
+              </p>
+            </div>
 
-          {/* Modern Tab Navigation */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-gray-50 rounded-2xl p-2 shadow-lg border border-gray-100">
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setActiveTab('types')}
-                  className={`relative px-8 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                    activeTab === 'types'
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
-                  }`}
-                >
-                  {activeTab === 'types' && (
-                    <div className="absolute inset-0 bg-blue-600 rounded-xl shadow-lg" />
-                  )}
-                  <span className="relative z-10">Vehicle Types</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('brands')}
-                  className={`relative px-8 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                    activeTab === 'brands'
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
-                  }`}
-                >
-                  {activeTab === 'brands' && (
-                    <div className="absolute inset-0 bg-blue-600 rounded-xl shadow-lg" />
-                  )}
-                  <span className="relative z-10">Popular Brands</span>
-                </button>
-              </div>
+            {/* Professional Tab Navigation */}
+            <div className="inline-flex bg-white rounded-lg p-1 shadow-sm border border-gray-200">
+              <button
+                onClick={() => setActiveTab('types')}
+                className={`px-4 sm:px-6 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                  activeTab === 'types'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Vehicle Types
+              </button>
+              <button
+                onClick={() => setActiveTab('brands')}
+                className={`px-4 sm:px-6 py-2 rounded-md font-medium text-sm transition-all duration-200 ${
+                  activeTab === 'brands'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Brands
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Content Area with Smooth Transitions */}
-        <div className="relative min-h-[400px]">
+        {/* Content Area */}
+        <div className="relative">
           {/* Vehicle Types Tab */}
           <div
-            className={`transition-all duration-500 ease-in-out ${
+            className={`transition-all duration-300 ${
               activeTab === 'types'
-                ? 'opacity-100 translate-y-0 pointer-events-auto'
-                : 'opacity-0 translate-y-4 pointer-events-none absolute inset-0'
+                ? 'opacity-100 pointer-events-auto'
+                : 'opacity-0 pointer-events-none absolute inset-0'
             }`}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-              {vehicleTypes.map((type, index) => (
-                <div
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+              {vehicleTypes.map((type) => (
+                <Link
                   key={type.id}
-                  className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl border border-white/50 hover:border-blue-200 flex flex-col items-center p-6 cursor-pointer transition-all duration-300 hover:scale-105"
-                  style={{
-                    animationDelay: `${index * 100}ms`,
-                    animation: activeTab === 'types' ? 'fadeInUp 0.6s ease-out forwards' : 'none'
-                  }}
+                  href={`/vehicles?vehicleType=${type.id}`}
+                  className="group bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all duration-200 p-4 flex flex-col items-center"
                 >
-                  <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-xl  group-hover:from-blue-100 group-hover:to-indigo-200 transition-all duration-300">
-                      <Image
-                        src={type.image}
-                        alt={`${type.name} cars`}
-                        width={64}
-                        height={64}
-                        className="object-contain w-full h-full "
-                      />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 mb-3 flex items-center justify-center">
+                    <Image
+                      src={type.image}
+                      alt={type.name}
+                      width={56}
+                      height={56}
+                      className="object-contain w-full h-full grayscale group-hover:grayscale-0 transition-all duration-200"
+                    />
                   </div>
-                  <h3 className="font-semibold text-gray-800 text-base text-center mb-2 tracking-wide group-hover:text-blue-600 transition-colors duration-300">
+                  <h3 className="font-semibold text-gray-900 text-xs sm:text-sm text-center group-hover:text-blue-600 transition-colors">
                     {type.name}
                   </h3>
-                  <div className="w-8 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-70 group-hover:opacity-100 group-hover:w-12 transition-all duration-300" />
-                </div>
+                </Link>
               ))}
             </div>
           </div>
 
           {/* Brands Tab */}
           <div
-            className={`transition-all duration-500 ease-in-out ${
+            className={`transition-all duration-300 ${
               activeTab === 'brands'
-                ? 'opacity-100 translate-y-0 pointer-events-auto'
-                : 'opacity-0 translate-y-4 pointer-events-none absolute inset-0'
+                ? 'opacity-100 pointer-events-auto'
+                : 'opacity-0 pointer-events-none absolute inset-0'
             }`}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {brands.map((brand, index) => (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
+              {brands.map((brand) => (
                 <Link
-                  href={`/brands/${brand.name.toLowerCase()}`}
+                  href={`/vehicles?make=${brand.id}`}
                   key={brand.id}
-                  className="group flex flex-col items-center justify-center"
-                  style={{
-                    animationDelay: `${index * 80}ms`,
-                    animation: activeTab === 'brands' ? 'fadeInUp 0.6s ease-out forwards' : 'none'
-                  }}
+                  className="group bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all duration-200 p-3 sm:p-4 flex flex-col items-center justify-center aspect-square"
                 >
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl border border-white/50 hover:border-blue-200 flex items-center justify-center w-full h-28 mb-3 transition-all duration-300 group-hover:scale-105">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-2">
                     <Image
                       src={brand.logo}
-                      alt={`${brand.name} logo`}
-                      width={80}
-                      height={80}
-                      className="object-contain w-16 h-16 drop-shadow-sm"
+                      alt={brand.name}
+                      width={56}
+                      height={56}
+                      className="object-contain w-full h-full grayscale group-hover:grayscale-0 transition-all duration-200"
                     />
                   </div>
-                  <span className="font-semibold text-gray-800 text-sm text-center mb-2 tracking-wide group-hover:text-blue-600 transition-colors duration-300">
+                  <span className="font-medium text-gray-900 text-xs text-center group-hover:text-blue-600 transition-colors line-clamp-1">
                     {brand.name}
                   </span>
-                  <div className="w-6 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-70 group-hover:opacity-100 group-hover:w-8 transition-all duration-300" />
                 </Link>
               ))}
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   )
 }
