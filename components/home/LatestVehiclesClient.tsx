@@ -34,187 +34,118 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles })
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-100/40 to-indigo-100/40 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-100/40 to-pink-100/40 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Enhanced Header Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 backdrop-blur-sm border border-blue-200/30 text-blue-700 px-5 py-2.5 rounded-full text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" />
-            Latest Arrivals
-            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
-          </div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Discover Your
-            <span className="block text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text">
-              Perfect Ride
-            </span>
-          </h2>
-
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            Explore our curated collection of premium pre-owned vehicles, each carefully inspected
-            and selected for exceptional quality and value.
-          </p>
-
-          {/* Stats Bar */}
-          {vehicles.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-8 mb-12">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-                  <TrendingUp className="w-6 h-6 text-green-500" />
-                  {stats.totalVehicles}
-                </div>
-                <p className="text-sm text-gray-600 font-medium">Latest Vehicles</p>
+    <section className="py-12 sm:py-16 bg-white">
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* Header Section */}
+        <div className="mb-8 sm:mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="w-5 h-5 text-blue-600" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  Latest Arrivals
+                </h2>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-                  <Sparkles className="w-6 h-6 text-yellow-500" />
-                  {stats.featuredCount}
-                </div>
-                <p className="text-sm text-gray-600 font-medium">Featured Models</p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-                  <Eye className="w-6 h-6 text-blue-500" />
-                  ${stats.avgPrice.toLocaleString()}
-                </div>
-                <p className="text-sm text-gray-600 font-medium">Average Price</p>
-              </div>
+              <p className="text-sm sm:text-base text-gray-600">
+                Recently added vehicles to our inventory
+              </p>
             </div>
-          )}
+
+            {vehicles.length > 0 && (
+              <button
+                onClick={handleViewAllCars}
+                className="hidden sm:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
+              >
+                View All
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Controls Section */}
         {vehicles.length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
+          <div className="flex items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-1 border border-gray-200/50 shadow-lg">
+              <div className="inline-flex bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode('horizontal')}
-                  className={`p-3 rounded-lg transition-all duration-200 ${
+                  className={`p-2 rounded-md transition-colors ${
                     viewMode === 'horizontal'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
-                  aria-label="Horizontal view"
+                  aria-label="List view"
                 >
-                  <Rows3 className="w-5 h-5" />
+                  <Rows3 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('vertical')}
-                  className={`p-3 rounded-lg transition-all duration-200 ${
+                  className={`p-2 rounded-md transition-colors ${
                     viewMode === 'vertical'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                   aria-label="Grid view"
                 >
-                  <Grid3X3 className="w-5 h-5" />
+                  <Grid3X3 className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600">
-                <span>Showing</span>
-                <span className="font-semibold text-gray-900">{vehicles.length}</span>
-                <span>latest vehicles</span>
-              </div>
+              <span className="text-sm text-gray-600">
+                {vehicles.length} vehicles
+              </span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleViewAllCars}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105"
-              >
-                View All Cars
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+            <button
+              onClick={handleViewAllCars}
+              className="sm:hidden flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
+            >
+              View All
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         )}
         
         {/* Vehicle Grid */}
         {vehicles.length > 0 ? (
-          <div className={`transition-all duration-500 ${
+          <div className={`${
             viewMode === 'horizontal' 
-              ? 'space-y-6' 
-              : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'
+              ? 'space-y-4' 
+              : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
           }`}>
-            {vehicles.map((vehicle, index) => (
-              <div
+            {vehicles.map((vehicle) => (
+              <VehicleCard
                 key={vehicle.id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <VehicleCard
-                  vehicle={vehicle}
-                  showFeaturedBadge={true}
-                  onViewDetails={handleViewDetails}
-                  isHorizontal={viewMode === 'horizontal'}
-                />
-              </div>
+                vehicle={vehicle}
+                showFeaturedBadge={true}
+                onViewDetails={handleViewDetails}
+                isHorizontal={viewMode === 'horizontal'}
+              />
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <div className="text-gray-400 mb-4">
-              <Sparkles className="w-16 h-16 mx-auto" />
+          <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <TrendingUp className="w-6 h-6 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No Vehicles Available</h3>
-            <p className="text-gray-600">Check back soon for our latest arrivals!</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">No Vehicles Available</h3>
+            <p className="text-sm text-gray-500">Check back soon for our latest arrivals</p>
           </div>
         )}
 
-        {/* View All Cars Section */}
+        {/* View All Section - Mobile Only */}
         {vehicles.length > 0 && (
-          <div className="text-center mt-16">
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 shadow-xl max-w-md mx-auto">
-              <div className="mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <ArrowRight className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Explore Our Full Collection
-                </h3>
-                <p className="text-gray-600">
-                  Browse all vehicles with advanced search and filters
-                </p>
-              </div>
-
-              <button
-                onClick={handleViewAllCars}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105"
-              >
-                View All Cars
-              </button>
-            </div>
+          <div className="text-center mt-8 sm:hidden">
+            <button
+              onClick={handleViewAllCars}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-sm"
+            >
+              View All Vehicles
+            </button>
           </div>
         )}
       </div>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out forwards;
-          opacity: 0;
-        }
-      `}</style>
     </section>
   )
 }

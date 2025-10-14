@@ -72,13 +72,6 @@ const VehicleGrid = () => {
               </div>
               <p className="text-sm text-gray-600 font-medium">Featured Models</p>
             </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-                <Eye className="w-6 h-6 text-blue-500" />
-                ${stats.avgPrice.toLocaleString()}
-              </div>
-              <p className="text-sm text-gray-600 font-medium">Average Price</p>
-            </div>
           </div>
         </div>
 
