@@ -12,7 +12,7 @@ const Hero = async () => {
   return (
     <section className="relative bg-white">
       {/* Hero Container - Less padding on mobile (no mega menu), more on lg+ (with mega menu) */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-40 pb-12 sm:pb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-24 lg:pt-40 pb-12 sm:pb-16">
         
         {/* Top Section: Headline + Featured Car */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-8 sm:mb-12">
