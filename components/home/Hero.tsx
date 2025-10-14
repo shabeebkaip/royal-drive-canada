@@ -73,7 +73,7 @@ const Hero = async () => {
         </div>
 
         {/* Bottom Section: Search Card */}
-        <div className="max-w-5xl mx-auto mb-8 sm:mb-12">
+        <div className="container mx-auto mb-8 sm:mb-12">
           <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-1.5 sm:p-2">
             <SearchCard />
           </div>

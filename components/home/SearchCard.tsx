@@ -99,9 +99,11 @@ const SearchCard = () => {
       }
 
       try {
-        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}`);
+        // Backend now correctly filters by make parameter
+        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}&active=true&limit=100`);
         const modelsData = await modelsRes.json();
         if (modelsData.success && modelsData.data?.models) {
+          // Backend already filters by make, just use the active models
           setModels(modelsData.data.models.filter((m: Model) => m.active));
         }
       } catch (error) {
@@ -216,7 +218,7 @@ const SearchCard = () => {
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto">
       {/* Compact Professional Card */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-200">
 
