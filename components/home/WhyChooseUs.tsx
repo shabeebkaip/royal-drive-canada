@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Shield,
   Award,
@@ -167,12 +168,16 @@ const WhyChooseUs = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
-                Browse Certified Vehicles
-              </button>
-              <button className="px-6 py-3 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium rounded-lg transition-colors text-sm">
-                Learn More About Us
-              </button>
+              <Link href="/vehicles">
+                <button className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
+                  Browse Certified Vehicles
+                </button>
+              </Link>
+              <Link href="/about">
+                <button className="w-full sm:w-auto px-6 py-3 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium rounded-lg transition-colors text-sm">
+                  Learn More About Us
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -10,19 +10,17 @@ interface VehicleTypeApiResponse {
   success: boolean;
   message: string;
   timestamp: string;
-  data: {
-    vehicleTypes: VehicleTypeRaw[];
-  };
+  data: VehicleTypeRaw[];
 }
 
 interface VehicleTypeRaw {
   _id: string;
   name: string;
-  icon: string;
+  icon?: string;
   slug: string;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
+  active?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /**
@@ -33,7 +31,7 @@ interface VehicleTypeRaw {
  */
 export async function getVehicleTypes(): Promise<VehicleType[]> {
   try {
-    const response = await apiClient.get<VehicleTypeApiResponse>('/vehicle-types', {
+    const response = await apiClient.get<VehicleTypeApiResponse>('/vehicle-types/dropdown', {
       // Next.js 15 fetch caching with revalidation
       // This will revalidate the cache every 60 seconds
       // ensuring new vehicle types appear within 1 minute
@@ -44,11 +42,11 @@ export async function getVehicleTypes(): Promise<VehicleType[]> {
     });
 
     // Transform API response to match our VehicleType interface
-    if (response.success && response.data?.vehicleTypes) {
-      return response.data.vehicleTypes.map((type, index) => ({
-        id: index + 1, // Generate numeric ID from index
+    if (response.success && Array.isArray(response.data)) {
+      return response.data.map((type) => ({
+        id: type._id, // Use MongoDB _id as the ID
         name: type.name,
-        image: type.icon, // Map 'icon' to 'image'
+        image: type.icon || '', // Map 'icon' to 'image'
         slug: type.slug,
         description: '',
         createdAt: type.createdAt,
@@ -70,24 +68,26 @@ export async function getVehicleTypes(): Promise<VehicleType[]> {
  */
 export async function getVehicleTypeBySlug(slug: string): Promise<VehicleType | null> {
   try {
-    const response = await apiClient.get<VehicleTypeApiResponse>(`/vehicle-types/slug/${slug}`, {
+    const response = await apiClient.get<VehicleTypeApiResponse>(`/vehicle-types/dropdown`, {
       next: { 
         revalidate: 60,
         tags: ['vehicle-types', `vehicle-type-${slug}`]
       },
     });
 
-    if (response.success && response.data?.vehicleTypes?.[0]) {
-      const type = response.data.vehicleTypes[0];
-      return {
-        id: 1, // Single item doesn't need sequential ID
-        name: type.name,
-        image: type.icon,
-        slug: type.slug,
-        description: '',
-        createdAt: type.createdAt,
-        updatedAt: type.updatedAt,
-      };
+    if (response.success && Array.isArray(response.data)) {
+      const type = response.data.find(t => t.slug === slug);
+      if (type) {
+        return {
+          id: type._id,
+          name: type.name,
+          image: type.icon || '',
+          slug: type.slug,
+          description: '',
+          createdAt: type.createdAt,
+          updatedAt: type.updatedAt,
+        };
+      }
     }
 
     return null;
