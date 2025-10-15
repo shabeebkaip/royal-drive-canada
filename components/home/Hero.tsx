@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import SearchCard from '@/components/home/SearchCard'
 import { getFeaturedVehicles } from '@/lib/api'
@@ -24,7 +23,7 @@ const Hero = async () => {
                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
               </svg>
               <span className="text-xs sm:text-sm font-semibold text-blue-700">
-                Toronto's Trusted Used Car Dealership
+                {`Toronto's Trusted Used Car Dealership`}
               </span>
             </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Shield, CheckCircle } from "lucide-react";
+import {  CheckCircle } from "lucide-react";
 
 const CertificationsSection = () => {
   const certifications = [

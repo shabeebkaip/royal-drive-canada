@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {Star, Award, Users, Calendar} from "lucide-react";
+import {Star, Users, Calendar} from "lucide-react";
 
 const HeroSection = () => {
     const [vehicleCount, setVehicleCount] = useState<number>(100);

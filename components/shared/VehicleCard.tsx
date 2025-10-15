@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import ImageSlider from "./ImageSlider";
-import { Star, CheckCircle, Fuel, Gauge, Settings, MapPin, FileText, RefreshCw } from 'lucide-react';
+import { Star, CheckCircle, Fuel, Gauge, Settings } from 'lucide-react';
 import { Vehicle } from '@/types/api';
 
 interface VehicleCardProps {

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Brand, VehicleType } from '@/types/api'
-import { BrandAPI, VehicleTypeAPI, FuelType, TransmissionType } from '@/types/filters'
+import { BrandAPI, VehicleTypeAPI, FuelType } from '@/types/filters'
 
 const MegaMenuBar = () => {
     const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null)

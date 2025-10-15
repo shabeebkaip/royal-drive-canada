@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image'
 
 interface PageHeroProps {
   title: string
@@ -33,7 +32,6 @@ interface PageHeroProps {
 const PageHero: React.FC<PageHeroProps> = ({
   title,
   subtitle,
-  backgroundImage = '/bg.jpg',
   badges = [],
   stats = [],
   cta,

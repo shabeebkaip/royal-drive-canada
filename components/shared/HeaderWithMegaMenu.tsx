@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import Logo from './Logo'
-import { Brand, VehicleType } from '@/types/api'
-import { BrandAPI, VehicleTypeAPI } from '@/types/filters'
+import { Brand } from '@/types/api'
+import { BrandAPI } from '@/types/filters'
 
 interface MegaMenuProps {
   showMegaMenu: boolean

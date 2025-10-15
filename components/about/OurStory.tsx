@@ -30,21 +30,6 @@ const OurStory = () => {
     }
   ]
 
-  const getColorClasses = (color: string) => {
-    switch (color) {
-      case 'blue':
-        return 'bg-blue-50 border-blue-200 text-blue-600'
-      case 'red':
-        return 'bg-red-50 border-red-200 text-red-600'
-      case 'green':
-        return 'bg-green-50 border-green-200 text-green-600'
-      case 'purple':
-        return 'bg-purple-50 border-purple-200 text-purple-600'
-      default:
-        return 'bg-gray-50 border-gray-200 text-gray-600'
-    }
-  }
-
   return (
     <section className="py-12 sm:py-16 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

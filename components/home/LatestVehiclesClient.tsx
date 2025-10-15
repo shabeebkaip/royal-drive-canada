@@ -1,36 +1,32 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
+import React, { useState } from "react";
 import VehicleCard from "../shared/VehicleCard";
-import { ArrowRight, Grid3X3, Rows3, Sparkles, TrendingUp, Eye } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { Vehicle } from '@/types/api';
+import { ArrowRight, Grid3X3, Rows3, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Vehicle } from "@/types/api";
 
 interface LatestVehiclesClientProps {
   vehicles: Vehicle[];
 }
 
-const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles }) => {
-  const [viewMode, setViewMode] = useState<'vertical' | 'horizontal'>('horizontal');
+const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({
+  vehicles,
+}) => {
+  const [viewMode, setViewMode] = useState<"vertical" | "horizontal">(
+    "horizontal"
+  );
   const router = useRouter();
 
   const handleViewDetails = (vehicleId: string) => {
     // Navigate to vehicle details page using slug
-    const vehicle = vehicles.find(v => v.id === vehicleId);
+    const vehicle = vehicles.find((v) => v.id === vehicleId);
     if (vehicle?.slug) {
       router.push(`/vehicles/${vehicle.slug}`);
     }
   };
 
   const handleViewAllCars = () => {
-    router.push('/vehicles');
-  };
-
-  const stats = {
-    totalVehicles: vehicles.length,
-    avgPrice: vehicles.length > 0 
-      ? Math.round(vehicles.reduce((sum, v) => sum + (v.price || 0), 0) / vehicles.length)
-      : 0,
-    featuredCount: vehicles.filter(v => v.featured).length
+    router.push("/vehicles");
   };
 
   return (
@@ -69,22 +65,22 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles })
             <div className="flex items-center gap-3">
               <div className="inline-flex bg-gray-100 rounded-lg p-1">
                 <button
-                  onClick={() => setViewMode('horizontal')}
+                  onClick={() => setViewMode("horizontal")}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'horizontal'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    viewMode === "horizontal"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                   aria-label="List view"
                 >
                   <Rows3 className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('vertical')}
+                  onClick={() => setViewMode("vertical")}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'vertical'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    viewMode === "vertical"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                   aria-label="Grid view"
                 >
@@ -106,21 +102,23 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles })
             </button>
           </div>
         )}
-        
+
         {/* Vehicle Grid */}
         {vehicles.length > 0 ? (
-          <div className={`${
-            viewMode === 'horizontal' 
-              ? 'space-y-4' 
-              : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
-          }`}>
+          <div
+            className={`${
+              viewMode === "horizontal"
+                ? "space-y-4"
+                : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+            }`}
+          >
             {vehicles.map((vehicle) => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
                 showFeaturedBadge={true}
                 onViewDetails={handleViewDetails}
-                isHorizontal={viewMode === 'horizontal'}
+                isHorizontal={viewMode === "horizontal"}
               />
             ))}
           </div>
@@ -129,8 +127,12 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles })
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
               <TrendingUp className="w-6 h-6 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">No Vehicles Available</h3>
-            <p className="text-sm text-gray-500">Check back soon for our latest arrivals</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              No Vehicles Available
+            </h3>
+            <p className="text-sm text-gray-500">
+              Check back soon for our latest arrivals
+            </p>
           </div>
         )}
 
@@ -147,7 +149,7 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({ vehicles })
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default LatestVehiclesClient
+export default LatestVehiclesClient;

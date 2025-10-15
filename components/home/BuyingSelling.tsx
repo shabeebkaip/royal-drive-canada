@@ -14,7 +14,7 @@ const BuyingSelling = () => {
             Buy or Sell With Confidence
           </h2>
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
-            Professional service whether you're buying your next vehicle or selling your current one
+            {`Professional service whether you're buying your next vehicle or selling your current one`}
           </p>
         </div>
 
