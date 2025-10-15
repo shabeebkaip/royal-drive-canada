@@ -48,7 +48,6 @@ export default function FinancingPage() {
         <PageHero
           title="Car Financing Made Easy"
           subtitle="Get approved for auto financing with competitive rates and flexible terms. All credit types welcome at Royal Drive Canada."
-          backgroundImage="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
           compact={true}
           badges={[
             {
@@ -82,95 +81,95 @@ export default function FinancingPage() {
         />
 
         {/* Financing Options */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Financing Solutions for Everyone</h2>
-              <p className="text-xl text-gray-600">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Financing Solutions for Everyone</h2>
+              <p className="text-base text-gray-600">
                 We work with multiple lenders to find the best rates for your situation
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-medium text-gray-900">Excellent Credit</h3>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">Excellent Credit</h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 text-sm mb-4">
                   Enjoy the lowest rates and best terms available for qualified buyers.
                 </p>
-                <ul className="space-y-3 text-gray-700">
+                <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Competitive interest rates from 3.9%
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Flexible payment terms up to 96 months
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Quick approval process
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Multiple lender options
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                  <Shield className="w-6 h-6 text-blue-600" />
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-medium text-gray-900">Fair Credit</h3>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">Fair Credit</h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 text-sm mb-4">
                   Rebuilding your credit? We have solutions that work for you.
                 </p>
-                <ul className="space-y-3 text-gray-700">
+                <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Competitive rates for fair credit
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Flexible down payment options
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Credit improvement programs
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Personal service and guidance
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-                  <Users className="w-6 h-6 text-orange-600" />
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <Users className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-medium text-gray-900">Challenged Credit</h3>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">Challenged Credit</h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 text-sm mb-4">
                   {`Past credit challenges don't have to stop you from getting a quality vehicle.`}
                 </p>
-                <ul className="space-y-3 text-gray-700">
+                <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Second chance financing programs
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     No credit turned away
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Build your credit with payments
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-orange-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
                     Fresh start opportunities
                   </li>
                 </ul>
@@ -180,51 +179,51 @@ export default function FinancingPage() {
         </section>
 
         {/* Application Process */}
-        <section className="py-16">
+        <section className="py-12 sm:py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple Application Process</h2>
-              <p className="text-xl text-gray-600">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Simple Application Process</h2>
+              <p className="text-base text-gray-600">
                 Get pre-approved in minutes with our streamlined process
               </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-4 gap-6">
               {[
                 {
                   step: "1",
                   title: "Apply Online",
                   description: "Fill out our secure online application in just 5 minutes",
-                  icon: <CreditCard className="w-8 h-8" />
+                  icon: <CreditCard className="w-6 h-6" />
                 },
                 {
                   step: "2",
                   title: "Get Pre-Approved",
                   description: "Receive instant pre-approval with terms and rates",
-                  icon: <CheckCircle className="w-8 h-8" />
+                  icon: <CheckCircle className="w-6 h-6" />
                 },
                 {
                   step: "3",
                   title: "Choose Your Vehicle",
                   description: "Browse our inventory and find your perfect match",
-                  icon: <Shield className="w-8 h-8" />
+                  icon: <Shield className="w-6 h-6" />
                 },
                 {
                   step: "4",
                   title: "Drive Away Today",
                   description: "Complete the paperwork and drive off the lot",
-                  icon: <Users className="w-8 h-8" />
+                  icon: <Users className="w-6 h-6" />
                 }
               ].map((item, index) => (
                 <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-white border border-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
                     <span className="text-blue-600">{item.icon}</span>
                   </div>
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-4">
-                    {item.step}
+                  <div className="text-sm font-medium text-blue-600 mb-3">
+                    Step {item.step}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-gray-600">{item.description}</p>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -232,12 +231,12 @@ export default function FinancingPage() {
         </section>
 
         {/* Application Form */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Apply for Financing</h2>
-                <p className="text-xl text-gray-600">
+            <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 sm:p-8">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Apply for Financing</h2>
+                <p className="text-base text-gray-600">
                   {`Get pre-approved in minutes - it won't affect your credit score`}
                 </p>
               </div>
@@ -352,12 +351,12 @@ export default function FinancingPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors text-sm"
                 >
                   Get Pre-Approved Now
                 </button>
 
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-xs text-gray-500 text-center">
                   By submitting this form, you agree to our privacy policy. This will not affect your credit score.
                 </p>
               </form>
@@ -366,44 +365,44 @@ export default function FinancingPage() {
         </section>
 
         {/* Why Choose Our Financing */}
-        <section className="py-16">
+        <section className="py-12 sm:py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Our Financing?</h2>
-              <p className="text-xl text-gray-600">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Why Choose Our Financing?</h2>
+              <p className="text-base text-gray-600">
                 We make car financing simple, transparent, and affordable
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  icon: <CheckCircle className="w-8 h-8 text-green-600" />,
+                  icon: <CheckCircle className="w-6 h-6 text-blue-600" />,
                   title: "No Hidden Fees",
                   description: "Transparent pricing with no surprise charges"
                 },
                 {
-                  icon: <Clock className="w-8 h-8 text-blue-600" />,
+                  icon: <Clock className="w-6 h-6 text-blue-600" />,
                   title: "Quick Approval",
                   description: "Get approved in as little as 24 hours"
                 },
                 {
-                  icon: <Shield className="w-8 h-8 text-purple-600" />,
+                  icon: <Shield className="w-6 h-6 text-blue-600" />,
                   title: "Secure Process",
                   description: "Your information is protected and secure"
                 },
                 {
-                  icon: <Users className="w-8 h-8 text-orange-600" />,
+                  icon: <Users className="w-6 h-6 text-blue-600" />,
                   title: "Expert Support",
                   description: "Our financing experts guide you every step"
                 }
               ].map((feature, index) => (
                 <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-white border border-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
                     {feature.icon}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">{feature.title}</h3>
+                  <p className="text-sm text-gray-600">{feature.description}</p>
                 </div>
               ))}
             </div>

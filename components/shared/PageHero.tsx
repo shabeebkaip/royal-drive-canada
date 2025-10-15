@@ -66,42 +66,22 @@ const PageHero: React.FC<PageHeroProps> = ({
   }
 
   return (
-    <section className={`relative overflow-hidden ${compact ? 'min-h-[60vh]' : 'min-h-[70vh]'}`}>
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0">
-          <Image
-            src={backgroundImage}
-            alt="Background"
-            fill
-            priority
-            className="object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gray-900/75" />
-        </div>
-
-        {/* Geometric overlay for modern touch */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
-        </div>
-      </div>
-
+    <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white border-b border-gray-200">
       {/* Content */}
-      <div className={`relative z-10 ${compact ? 'pt-32 pb-12' : 'pt-40 pb-16'}`}>
+      <div className={`relative ${compact ? 'pt-24 pb-12 sm:pt-28 sm:pb-16' : 'pt-32 pb-16 sm:pt-40 sm:pb-20'}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
 
             {/* Badges */}
             {badges.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-3 mb-8 mt-4">
+              <div className="flex flex-wrap justify-center gap-3 mb-6">
                 {badges.map((badge, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20"
+                    className="inline-flex items-center px-3 py-1.5 rounded-lg bg-white border border-gray-200 shadow-sm"
                   >
                     {badge.icon && <span className="mr-2">{badge.icon}</span>}
-                    <span className="text-white/95 text-sm font-medium">
+                    <span className="text-gray-700 text-sm font-medium">
                       {badge.text}
                     </span>
                   </div>
@@ -110,19 +90,19 @@ const PageHero: React.FC<PageHeroProps> = ({
             )}
 
             {/* Main Content */}
-            <div className="space-y-6">
-              <h1 className={`font-bold leading-tight text-white ${
+            <div className="space-y-4">
+              <h1 className={`font-medium leading-tight text-gray-900 ${
                 compact 
-                  ? 'text-3xl sm:text-4xl lg:text-5xl' 
-                  : 'text-4xl sm:text-5xl lg:text-6xl'
+                  ? 'text-2xl sm:text-3xl lg:text-4xl' 
+                  : 'text-3xl sm:text-4xl lg:text-5xl'
               }`}>
                 {title}
               </h1>
 
-              <p className={`text-gray-200 max-w-3xl mx-auto leading-relaxed ${
+              <p className={`text-gray-600 max-w-3xl mx-auto leading-relaxed ${
                 compact 
-                  ? 'text-lg lg:text-xl' 
-                  : 'text-xl lg:text-2xl'
+                  ? 'text-base lg:text-lg' 
+                  : 'text-lg lg:text-xl'
               }`}>
                 {subtitle}
               </p>
@@ -130,13 +110,13 @@ const PageHero: React.FC<PageHeroProps> = ({
 
             {/* Stats */}
             {stats.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-12 max-w-2xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
                 {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                  <div key={index} className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div className="text-xl lg:text-2xl font-medium text-gray-900 mb-1">
                       {stat.value}
                     </div>
-                    <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">
+                    <div className="text-gray-600 text-xs font-medium uppercase tracking-wide">
                       {stat.label}
                     </div>
                   </div>
@@ -146,11 +126,11 @@ const PageHero: React.FC<PageHeroProps> = ({
 
             {/* CTA Buttons */}
             {cta && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
                 {cta.primary && (
                   <button
                     onClick={() => handleAction(cta.primary!.action, cta.primary!.value)}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
                   >
                     {cta.primary.text}
                   </button>
@@ -158,7 +138,7 @@ const PageHero: React.FC<PageHeroProps> = ({
                 {cta.secondary && (
                   <button
                     onClick={() => handleAction(cta.secondary!.action, cta.secondary!.value)}
-                    className="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg transition-all duration-200 hover:border-white/50"
+                    className="px-6 py-3 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium rounded-lg transition-colors text-sm"
                   >
                     {cta.secondary.text}
                   </button>
@@ -168,9 +148,6 @@ const PageHero: React.FC<PageHeroProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Bottom fade effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent" />
     </section>
   )
 }
