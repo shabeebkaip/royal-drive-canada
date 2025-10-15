@@ -46,23 +46,18 @@ const OurStory = () => {
   }
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 sm:py-16 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12">
           {/* Left Content */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-200 mb-6">
-                <div className="w-2 h-2 bg-blue-600 rounded-full mr-2"></div>
-                <span className="text-blue-700 text-sm font-semibold">Our Story</span>
-              </div>
-
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Built on Trust,
                 <span className="block text-blue-600">Driven by Excellence</span>
               </h2>
 
-              <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+              <div className="space-y-4 text-base text-gray-600">
                 <p>
                     {`Royal Drive was founded with a clear vision: to revolutionize the pre-owned car
                     buying experience in Toronto. We believe that purchasing a vehicle should be
@@ -83,49 +78,26 @@ const OurStory = () => {
           </div>
 
           {/* Right Image */}
-          <div className="relative">
-            <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src="/bg.jpg"
-                alt="Royal Drive Dealership"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-              {/* Floating Stats Card */}
-              <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">100%</div>
-                    <div className="text-xs text-gray-600">Certified</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">50+</div>
-                    <div className="text-xs text-gray-600">Vehicles</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">24/7</div>
-                    <div className="text-xs text-gray-600">Support</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="relative h-80 lg:h-96 rounded-lg overflow-hidden border border-gray-200">
+            <Image
+              src="/bg.jpg"
+              alt="Royal Drive Dealership"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
 
         {/* Values Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {values.map((value, index) => (
             <div
               key={index}
-              className="text-center group hover:-translate-y-2 transition-all duration-300"
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 hover:shadow-sm transition-all"
             >
-              <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl border-2 ${getColorClasses(value.color)} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                <value.icon className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{value.description}</p>
+              <value.icon className="w-8 h-8 text-blue-600 mb-4" />
+              <h3 className="text-lg font-bold text-gray-900 mb-3">{value.title}</h3>
+              <p className="text-sm text-gray-600">{value.description}</p>
             </div>
           ))}
         </div>

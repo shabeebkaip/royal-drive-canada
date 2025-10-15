@@ -1,70 +1,67 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {Star, Award, Users, Calendar} from "lucide-react";
 
 const HeroSection = () => {
+    const [vehicleCount, setVehicleCount] = useState<number>(100);
+
+    useEffect(() => {
+        const fetchVehicleCount = async () => {
+            try {
+                const response = await fetch('https://api.royaldrivecanada.com/api/v1/vehicles?limit=1');
+                const data = await response.json();
+                if (data.success && data.data?.pagination?.total) {
+                    setVehicleCount(data.data.pagination.total);
+                }
+            } catch (error) {
+                console.error('Failed to fetch vehicle count:', error);
+            }
+        };
+
+        fetchVehicleCount();
+    }, []);
+
     const stats = [
-        {icon: Users, number: "100+", label: "Quality Vehicles"},
+        {icon: Users, number: `${vehicleCount}+`, label: "Quality Vehicles"},
         {icon: Star, number: "100%", label: "Safety Certified"},
         {icon: Calendar, number: "24/7", label: "Support Available"},
-        {icon: Award, number: "10+", label: "Current Inventory"},
     ];
 
     return (
-        <section
-            className="relative min-h-[70vh] overflow-hidden bg-gradient-to-br from-blue-900 via-gray-800 to-gray-900">
-            {/* Background Image */}
-            <div className="absolute inset-0">
-                <Image
-                    src="https://res.cloudinary.com/dm5c31z7w/image/upload/v1756556283/bg_bfnqou.jpg"
-                    alt="Royal Drive Dealership"
-                    fill
-                    priority
-                    className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gray-900/75"/>
-            </div>
-
+        <section className="bg-white">
             {/* Content */}
-            <div className="relative z-10 pt-32 pb-16">
+            <div className="pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                         {/* Left Content */}
-                        <div className="space-y-8">
-                            <div
-                                className="inline-flex items-center px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                                <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                                <span className="text-white/95 text-sm font-semibold">
-                  About Royal Drive
-                </span>
-                            </div>
-
+                        <div className="space-y-6">
                             <div>
-                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                                    <span className="block">Your Trusted</span>
-                                    <span className="block text-blue-400">
+                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                                    Your Trusted
+                                    <span className="block text-blue-600">
                     Automotive Partner
                   </span>
                                 </h1>
 
-                                <p className="text-xl text-gray-300 leading-relaxed">
+                                <p className="text-base sm:text-lg text-gray-600">
                                     {`Royal Drive is Toronto's destination for quality pre-owned vehicles.
                   We're committed to providing exceptional service, transparent pricing, and
                   helping you find the perfect vehicle for your needs and budget.`}
                                 </p>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex flex-col sm:flex-row gap-3">
                                 <Link href="/vehicles">
                                     <button
-                                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg">
+                                        className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
                                         Our Inventory
                                     </button>
                                 </Link>
                                 <Link href="/contact">
                                     <button
-                                        className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg transition-colors duration-200">
+                                        className="w-full sm:w-auto px-6 py-3 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium rounded-lg transition-colors text-sm">
                                         Contact Us
                                     </button>
                                 </Link>
@@ -72,20 +69,17 @@ const HeroSection = () => {
                         </div>
 
                         {/* Right Stats Grid */}
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             {stats.map((stat, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center hover:bg-white/15 transition-all duration-300"
+                                    className="bg-gray-50 border border-gray-200 rounded-lg p-5 text-center hover:border-gray-300 hover:shadow-sm transition-all"
                                 >
-                                    <div
-                                        className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                                        <stat.icon className="w-6 h-6 text-white"/>
-                                    </div>
-                                    <div className="text-2xl font-bold text-white mb-2">
+                                    <stat.icon className="w-8 h-8 text-blue-600 mx-auto mb-3"/>
+                                    <div className="text-2xl font-bold text-gray-900 mb-1">
                                         {stat.number}
                                     </div>
-                                    <div className="text-gray-300 text-sm font-medium">
+                                    <div className="text-gray-600 text-sm">
                                         {stat.label}
                                     </div>
                                 </div>

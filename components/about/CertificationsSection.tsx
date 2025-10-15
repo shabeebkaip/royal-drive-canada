@@ -24,23 +24,16 @@ const CertificationsSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-12 sm:py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-50 border border-green-200 mb-6">
-            <Shield className="w-4 h-4 text-green-600 mr-2" />
-            <span className="text-green-700 text-sm font-semibold">
-              Trust & Excellence
-            </span>
-          </div>
-
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Certified Excellence &
-            <span className="block text-green-600">Industry Recognition</span>
+            <span className="block text-blue-600">Industry Recognition</span>
           </h2>
 
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-gray-600 max-w-3xl mx-auto">
             Our commitment to quality and customer satisfaction has earned us
             industry certifications and recognition from leading automotive
             organizations.
@@ -48,29 +41,26 @@ const CertificationsSection = () => {
         </div>
 
         {/* Certifications */}
-        <div className="mb-20">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Industry Certifications
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {certifications.map((cert, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300 border border-gray-200"
+                className="bg-gray-50 rounded-lg p-6 text-center border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all"
               >
-                <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-2xl flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-4 bg-white rounded-lg flex items-center justify-center border border-gray-200">
                   <Image
                     src={cert.logo}
                     alt={cert.title}
-                    width={80}
-                    height={50}
-                    className="object-contain max-w-[80px] max-h-[50px]"
+                    width={70}
+                    height={45}
+                    className="object-contain max-w-[70px] max-h-[45px]"
                   />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">
+                <h4 className="text-lg font-bold text-gray-900 mb-2">
                   {cert.title}
                 </h4>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600">
                   {cert.description}
                 </p>
               </div>
@@ -99,24 +89,22 @@ const CertificationsSection = () => {
         {/*</div>*/}
 
         {/* Call to Action */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 lg:p-12 border border-gray-200">
+        <div className="bg-gray-50 rounded-lg p-8 border border-gray-200">
           <div className="text-center">
-            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            <CheckCircle className="w-8 h-8 text-blue-600 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
               Experience the Royal Drive Difference
             </h3>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
               Join thousands of satisfied customers who have chosen Royal Drive
               for their automotive needs. Experience our certified quality and
               award-winning service today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-sm">
                 Browse Our Inventory
               </button>
-              <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+              <button className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-colors text-sm">
                 Schedule a Visit
               </button>
             </div>
