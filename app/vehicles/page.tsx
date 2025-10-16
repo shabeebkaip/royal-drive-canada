@@ -218,6 +218,9 @@ const VehiclesPageContent = () => {
       try {
         const params = new URLSearchParams();
 
+        // ALWAYS exclude sold vehicles
+        params.append("excludeStatus", "sold");
+
         if (searchTerm) params.append("q", searchTerm);
         if (selectedBrand) params.append("make", selectedBrand);
         if (selectedModel) params.append("model", selectedModel);
@@ -245,7 +248,12 @@ const VehiclesPageContent = () => {
         const data = await response.json();
 
         if (data.success && data.data?.vehicles) {
-          const transformedVehicles = data.data.vehicles.map(
+          const transformedVehicles = data.data.vehicles
+            .filter((vehicle: VehicleAPI) => {
+              // ALWAYS filter out sold vehicles on client-side as well
+              return vehicle.status?.slug !== 'sold';
+            })
+            .map(
             (vehicle: VehicleAPI) => ({
               id: vehicle._id,
               name: `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,

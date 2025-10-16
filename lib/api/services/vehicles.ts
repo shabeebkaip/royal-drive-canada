@@ -90,6 +90,14 @@ interface VehicleRaw {
     keywords: string[];
     slug: string;
   };
+  status?: {
+    _id: string;
+    name: string;
+    color: string;
+    slug: string;
+    isDefault?: boolean;
+    active?: boolean;
+  };
   ontario?: {
     safetyStandard: {
       passed: boolean;
@@ -116,7 +124,7 @@ interface VehicleRaw {
 export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]> {
   try {
     const response = await apiClient.get<VehicleApiResponse>(
-      `/vehicles?featured=true&limit=${limit}`,
+      `/vehicles?featured=true&limit=${limit}&excludeStatus=sold`,
       {
         // Next.js 15 fetch caching with revalidation
         // This will revalidate the cache every 60 seconds
@@ -130,7 +138,9 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
 
     // Transform API response to match our Vehicle interface
     if (response.success && response.data?.vehicles) {
-      return response.data.vehicles.map((vehicle) => {
+      return response.data.vehicles
+        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
+        .map((vehicle) => {
         // Extract data from nested API structure
         const makeName = vehicle.make.name;
         const modelName = vehicle.model.name;
@@ -180,7 +190,7 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
 export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
   try {
     const response = await apiClient.get<VehicleApiResponse>(
-      `/vehicles?limit=${limit}&sort=-createdAt`,
+      `/vehicles?limit=${limit}&sort=-createdAt&excludeStatus=sold`,
       {
         next: {
           revalidate: 60,
@@ -190,7 +200,9 @@ export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
     );
 
     if (response.success && response.data?.vehicles) {
-      return response.data.vehicles.map((vehicle) => {
+      return response.data.vehicles
+        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
+        .map((vehicle) => {
         // Extract data from nested API structure
         const makeName = vehicle.make.name;
         const modelName = vehicle.model.name;
@@ -237,7 +249,7 @@ export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
  */
 export async function getVehicles(): Promise<Vehicle[]> {
   try {
-    const response = await apiClient.get<VehicleApiResponse>('/vehicles', {
+    const response = await apiClient.get<VehicleApiResponse>('/vehicles?excludeStatus=sold', {
       next: {
         revalidate: 60,
         tags: ['vehicles'],
@@ -245,7 +257,9 @@ export async function getVehicles(): Promise<Vehicle[]> {
     });
 
     if (response.success && response.data?.vehicles) {
-      return response.data.vehicles.map((vehicle) => {
+      return response.data.vehicles
+        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
+        .map((vehicle) => {
         // Extract data from nested API structure
         const makeName = vehicle.make.name;
         const modelName = vehicle.model.name;
@@ -338,6 +352,9 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
     // Build query string from params
     const queryParams = new URLSearchParams();
     
+    // ALWAYS exclude sold vehicles
+    queryParams.append('excludeStatus', 'sold');
+    
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         queryParams.append(key, String(value));
@@ -345,7 +362,7 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
     });
 
     const queryString = queryParams.toString();
-    const endpoint = queryString ? `/vehicles?${queryString}` : '/vehicles';
+    const endpoint = `/vehicles?${queryString}`;
 
     const response = await apiClient.get<VehicleApiResponse>(endpoint, {
       next: {
@@ -355,7 +372,9 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
     });
 
     if (response.success && response.data) {
-      const vehicles = (response.data.vehicles || []).map((vehicle) => {
+      const vehicles = (response.data.vehicles || [])
+        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
+        .map((vehicle) => {
         const makeName = vehicle.make.name;
         const modelName = vehicle.model.name;
         const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
