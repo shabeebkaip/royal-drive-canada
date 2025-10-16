@@ -99,6 +99,14 @@ export interface VehicleAPI {
     description?: string
     featured?: boolean
   }
+  status?: {
+    _id: string
+    name: string
+    color: string
+    slug: string
+    isDefault?: boolean
+    active?: boolean
+  }
   ontario?: {
     safetyStandard: {
       passed: boolean

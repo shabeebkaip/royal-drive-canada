@@ -6,7 +6,13 @@ import { Star, CheckCircle, Fuel, Gauge, Settings } from 'lucide-react';
 import { Vehicle } from '@/types/api';
 
 interface VehicleCardProps {
-  vehicle: Vehicle;
+  vehicle: Vehicle & { 
+    status?: { 
+      slug?: string;
+      name?: string;
+      color?: string;
+    } 
+  };
   showFeaturedBadge?: boolean;
   onViewDetails?: (vehicleId: string) => void;
   className?: string;
@@ -19,6 +25,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   className = "",
   isHorizontal = false
 }) => {
+  console.log('Rendering VehicleCard for:', vehicle);
   // Format price for display
   const formatPrice = (price: number | null | undefined) => {
     if (price === null || price === undefined || isNaN(price)) return "Contact for Price";
@@ -31,6 +38,11 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
     return `${mileage.toLocaleString()} km`;
   };
 
+  // Check if vehicle is coming soon and use placeholder image
+  const vehicleImages = vehicle.status?.slug === 'coming-soon' 
+    ? ['/coming-soon.jpeg'] 
+    : vehicle.images;
+
   if (isHorizontal) {
     // Horizontal Layout
     return (
@@ -40,7 +52,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           <div className="relative sm:w-64 lg:w-72 flex-shrink-0">
             <div className="relative h-40 sm:h-full overflow-hidden bg-gray-100">
               <ImageSlider
-                images={vehicle.images}
+                images={vehicleImages}
                 alt={vehicle.name}
                 className="w-full h-full"
               />
@@ -49,6 +61,13 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               {showFeaturedBadge && vehicle.featured && (
                 <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
                   Featured
+                </div>
+              )}
+
+              {/* Coming Soon Badge */}
+              {vehicle.status?.slug === 'coming-soon' && (
+                <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium">
+                  Coming Soon
                 </div>
               )}
             </div>
@@ -137,7 +156,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       {/* Image Section */}
       <div className="relative overflow-hidden">
         <ImageSlider
-          images={vehicle.images}
+          images={vehicleImages}
           alt={vehicle.name}
           className="h-44 sm:h-48"
         />
@@ -147,6 +166,13 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
             <Star className="w-3 h-3 fill-current" />
             Featured
+          </div>
+        )}
+
+        {/* Coming Soon Badge */}
+        {vehicle.status?.slug === 'coming-soon' && (
+          <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium">
+            Coming Soon
           </div>
         )}
       </div>

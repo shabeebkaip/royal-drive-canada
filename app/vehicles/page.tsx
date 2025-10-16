@@ -262,6 +262,11 @@ const VehiclesPageContent = () => {
               featured: vehicle.marketing.featured,
               safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
               carfax: vehicle.carfax?.hasCleanHistory ? "Clean" : undefined,
+              status: vehicle.status ? {
+                slug: vehicle.status.slug,
+                name: vehicle.status.name,
+                color: vehicle.status.color,
+              } : undefined,
               createdAt: vehicle.createdAt,
               updatedAt: vehicle.updatedAt,
             })
@@ -269,7 +274,14 @@ const VehiclesPageContent = () => {
 
           setVehicles(transformedVehicles);
           if (data.data.pagination) {
-            setPagination(data.data.pagination);
+            const paginationData = {
+              total: data.data.pagination.total,
+              page: data.data.pagination.page,
+              limit: data.data.pagination.limit,
+              totalPages: data.data.pagination.pages, // API returns 'pages' not 'totalPages'
+            };
+            console.log('Pagination data:', paginationData);
+            setPagination(paginationData);
           }
         } else {
           setVehicles([]);
