@@ -279,35 +279,49 @@ const VehicleFilters: React.FC<FilterProps> = ({
             </button>
 
             {expandedSections.price && (
-              <div className="space-y-3 pt-1">
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Min</span>
-                    <span className="font-medium">{formatCurrency(minPrice)}</span>
-                  </div>
+              <div className="pt-1">
+                <div className="flex justify-between text-xs text-gray-600 mb-2">
+                  <span>Min: <span className="font-medium">{formatCurrency(minPrice)}</span></span>
+                  <span>Max: <span className="font-medium">{formatCurrency(maxPrice)}</span></span>
+                </div>
+                <div className="relative h-1.5 bg-gray-200 rounded-lg">
+                  {/* Active range bar */}
+                  <div 
+                    className="absolute h-full bg-blue-600 rounded-lg"
+                    style={{
+                      left: `${(minPrice / 100000) * 100}%`,
+                      right: `${100 - (maxPrice / 100000) * 100}%`
+                    }}
+                  />
+                  {/* Min slider */}
                   <input
                     type="range"
                     min="0"
                     max="100000"
                     step="1000"
                     value={minPrice}
-                    onChange={(e) => onPriceChange(Number(e.target.value), maxPrice)}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMin = Number(e.target.value)
+                      if (newMin < maxPrice) {
+                        onPriceChange(newMin, maxPrice)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
-                </div>
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Max</span>
-                    <span className="font-medium">{formatCurrency(maxPrice)}</span>
-                  </div>
+                  {/* Max slider */}
                   <input
                     type="range"
                     min="0"
                     max="100000"
                     step="1000"
                     value={maxPrice}
-                    onChange={(e) => onPriceChange(minPrice, Number(e.target.value))}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMax = Number(e.target.value)
+                      if (newMax > minPrice) {
+                        onPriceChange(minPrice, newMax)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
                 </div>
               </div>
@@ -336,35 +350,49 @@ const VehicleFilters: React.FC<FilterProps> = ({
             </button>
 
             {expandedSections.year && (
-              <div className="space-y-3 pt-1">
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Min</span>
-                    <span className="font-medium">{minYear}</span>
-                  </div>
+              <div className="pt-1">
+                <div className="flex justify-between text-xs text-gray-600 mb-2">
+                  <span>Min: <span className="font-medium">{minYear}</span></span>
+                  <span>Max: <span className="font-medium">{maxYear}</span></span>
+                </div>
+                <div className="relative h-1.5 bg-gray-200 rounded-lg">
+                  {/* Active range bar */}
+                  <div 
+                    className="absolute h-full bg-blue-600 rounded-lg"
+                    style={{
+                      left: `${((minYear - 2000) / (new Date().getFullYear() - 2000)) * 100}%`,
+                      right: `${100 - ((maxYear - 2000) / (new Date().getFullYear() - 2000)) * 100}%`
+                    }}
+                  />
+                  {/* Min slider */}
                   <input
                     type="range"
                     min="2000"
                     max={new Date().getFullYear()}
                     step="1"
                     value={minYear}
-                    onChange={(e) => onYearChange(Number(e.target.value), maxYear)}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMin = Number(e.target.value)
+                      if (newMin < maxYear) {
+                        onYearChange(newMin, maxYear)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
-                </div>
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Max</span>
-                    <span className="font-medium">{maxYear}</span>
-                  </div>
+                  {/* Max slider */}
                   <input
                     type="range"
                     min="2000"
                     max={new Date().getFullYear()}
                     step="1"
                     value={maxYear}
-                    onChange={(e) => onYearChange(minYear, Number(e.target.value))}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMax = Number(e.target.value)
+                      if (newMax > minYear) {
+                        onYearChange(minYear, newMax)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
                 </div>
               </div>
@@ -393,35 +421,49 @@ const VehicleFilters: React.FC<FilterProps> = ({
             </button>
 
             {expandedSections.mileage && (
-              <div className="space-y-3 pt-1">
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Min</span>
-                    <span className="font-medium">{formatMileage(minMileage)}</span>
-                  </div>
+              <div className="pt-1">
+                <div className="flex justify-between text-xs text-gray-600 mb-2">
+                  <span>Min: <span className="font-medium">{formatMileage(minMileage)}</span></span>
+                  <span>Max: <span className="font-medium">{formatMileage(maxMileage)}</span></span>
+                </div>
+                <div className="relative h-1.5 bg-gray-200 rounded-lg">
+                  {/* Active range bar */}
+                  <div 
+                    className="absolute h-full bg-blue-600 rounded-lg"
+                    style={{
+                      left: `${(minMileage / 200000) * 100}%`,
+                      right: `${100 - (maxMileage / 200000) * 100}%`
+                    }}
+                  />
+                  {/* Min slider */}
                   <input
                     type="range"
                     min="0"
                     max="200000"
                     step="5000"
                     value={minMileage}
-                    onChange={(e) => onMileageChange(Number(e.target.value), maxMileage)}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMin = Number(e.target.value)
+                      if (newMin < maxMileage) {
+                        onMileageChange(newMin, maxMileage)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
-                </div>
-                <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Max</span>
-                    <span className="font-medium">{formatMileage(maxMileage)}</span>
-                  </div>
+                  {/* Max slider */}
                   <input
                     type="range"
                     min="0"
                     max="200000"
                     step="5000"
                     value={maxMileage}
-                    onChange={(e) => onMileageChange(minMileage, Number(e.target.value))}
-                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    onChange={(e) => {
+                      const newMax = Number(e.target.value)
+                      if (newMax > minMileage) {
+                        onMileageChange(minMileage, newMax)
+                      }
+                    }}
+                    className="absolute w-full h-1.5 bg-transparent appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                   />
                 </div>
               </div>
