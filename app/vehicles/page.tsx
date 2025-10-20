@@ -288,7 +288,6 @@ const VehiclesPageContent = () => {
               limit: data.data.pagination.limit,
               totalPages: data.data.pagination.pages, // API returns 'pages' not 'totalPages'
             };
-            console.log('Pagination data:', paginationData);
             setPagination(paginationData);
           }
         } else {

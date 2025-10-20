@@ -28,7 +28,6 @@ const LatestVehiclesClient: React.FC<LatestVehiclesClientProps> = ({
   const handleViewAllCars = () => {
     router.push("/vehicles");
   };
-
   return (
     <section className="py-12 sm:py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6">

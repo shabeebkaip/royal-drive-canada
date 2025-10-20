@@ -16,7 +16,6 @@ interface FeaturedVehiclesClientProps {
 const FeaturedVehiclesClient = ({ vehicles }: FeaturedVehiclesClientProps) => {
   const handleViewDetails = (vehicleId: string | number) => {
     // TODO: Navigate to vehicle details page
-    console.log('View details for vehicle:', vehicleId);
   };
 
   return (

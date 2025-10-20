@@ -25,7 +25,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   className = "",
   isHorizontal = false
 }) => {
-  console.log('Rendering VehicleCard for:', vehicle);
   // Format price for display
   const formatPrice = (price: number | null | undefined) => {
     if (price === null || price === undefined || isNaN(price)) return "Contact for Price";

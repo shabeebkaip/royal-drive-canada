@@ -11,7 +11,6 @@ const VehicleGrid = () => {
 
   const handleViewDetails = (vehicleId: string | number) => {
     // TODO: Navigate to vehicle details page
-    console.log('View details for vehicle:', vehicleId);
   };
 
   const handleViewAllCars = () => {
