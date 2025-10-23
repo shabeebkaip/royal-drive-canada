@@ -114,7 +114,11 @@ export interface VehicleAPI {
   }
   carfax?: {
     hasCleanHistory: boolean
+    serviceRecords?: number
+    reportUrl?: string
   }
+  numberOfPreviousOwners?: number
+  accidentHistory?: boolean
   createdAt: string
   updatedAt: string
 }

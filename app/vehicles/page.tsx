@@ -270,6 +270,8 @@ const VehiclesPageContent = () => {
               featured: vehicle.marketing.featured,
               safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
               carfax: vehicle.carfax,
+              numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+              accidentHistory: vehicle.accidentHistory,
               status: vehicle.status ? {
                 slug: vehicle.status.slug,
                 name: vehicle.status.name,

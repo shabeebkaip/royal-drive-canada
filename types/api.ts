@@ -50,6 +50,8 @@ export interface Vehicle {
     serviceRecords?: number;
     reportUrl?: string;
   };
+  numberOfPreviousOwners?: number;
+  accidentHistory?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

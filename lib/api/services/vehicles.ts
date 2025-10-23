@@ -108,6 +108,8 @@ interface VehicleRaw {
     serviceRecords: number;
     reportUrl?: string;
   };
+  numberOfPreviousOwners?: number;
+  accidentHistory?: boolean;
   internal: {
     stockNumber: string;
     daysInInventory: number;
@@ -170,6 +172,8 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
           location: undefined,
           phone: undefined,
           carfax: vehicle.carfax,
+          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+          accidentHistory: vehicle.accidentHistory,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -232,6 +236,8 @@ export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
           location: undefined,
           phone: undefined,
           carfax: vehicle.carfax,
+          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+          accidentHistory: vehicle.accidentHistory,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -289,6 +295,8 @@ export async function getVehicles(): Promise<Vehicle[]> {
           location: undefined,
           phone: undefined,
           carfax: vehicle.carfax,
+          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+          accidentHistory: vehicle.accidentHistory,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -403,6 +411,8 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
           location: undefined,
           phone: undefined,
           carfax: vehicle.carfax,
+          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+          accidentHistory: vehicle.accidentHistory,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -484,6 +494,8 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
         location: undefined,
         phone: undefined,
         carfax: vehicle.carfax,
+        numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+        accidentHistory: vehicle.accidentHistory,
         createdAt: vehicle.createdAt,
         updatedAt: vehicle.updatedAt,
       };

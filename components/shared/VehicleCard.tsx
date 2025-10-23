@@ -12,6 +12,12 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   className = "",
   isHorizontal = false
 }) => {
+  // Debug: Log badge-related data
+  console.log('🚗 Vehicle:', vehicle.name);
+  console.log('👤 numberOfPreviousOwners:', vehicle.numberOfPreviousOwners);
+  console.log('🚨 accidentHistory:', vehicle.accidentHistory);
+  console.log('✅ CARFAX:', vehicle.carfax);
+  
   // Format price for display
   const formatPrice = (price: number | null | undefined) => {
     if (price === null || price === undefined || isNaN(price)) return "Contact for Price";
