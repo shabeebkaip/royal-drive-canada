@@ -1,23 +1,10 @@
 "use client";
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import ImageSlider from "./ImageSlider";
-import { Star, CheckCircle, Fuel, Gauge, Settings } from 'lucide-react';
-import { Vehicle } from '@/types/api';
-
-interface VehicleCardProps {
-  vehicle: Vehicle & { 
-    status?: { 
-      slug?: string;
-      name?: string;
-      color?: string;
-    } 
-  };
-  showFeaturedBadge?: boolean;
-  onViewDetails?: (vehicleId: string) => void;
-  className?: string;
-  isHorizontal?: boolean;
-}
+import { Star, CheckCircle, Fuel, Gauge, Settings, Shield, User } from 'lucide-react';
+import { VehicleCardProps } from '@/types/vehicleCard';
 
 const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
@@ -25,9 +12,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   className = "",
   isHorizontal = false
 }) => {
-  console.log(vehicle, "vehicle in card")
-  console.log("CARFAX data:", vehicle.carfax)
-  console.log("Has clean history:", vehicle.carfax?.hasCleanHistory)
   // Format price for display
   const formatPrice = (price: number | null | undefined) => {
     if (price === null || price === undefined || isNaN(price)) return "Contact for Price";
@@ -66,31 +50,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                 </div>
               )}
 
-              {/* CARFAX Badge */}
-              {vehicle.carfax?.hasCleanHistory && (
-                vehicle.carfax.reportUrl ? (
-                  <a 
-                    href={vehicle.carfax.reportUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 hover:shadow-lg transition-shadow z-10"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span style={{ color: '#003d7a' }}>CARFAX</span>
-                  </a>
-                ) : (
-                  <div className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 z-10">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span style={{ color: '#003d7a' }}>CARFAX</span>
-                  </div>
-                )
-              )}
-
               {/* Coming Soon Badge */}
               {vehicle.status?.slug === 'coming-soon' && (
                 <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
@@ -120,6 +79,60 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                     </>
                   )}
                 </div>
+              </div>
+
+              {/* Premium Badges Section */}
+              <div className="mb-3 flex flex-wrap gap-2">
+                {/* CARFAX Badge */}
+                {vehicle.carfax?.hasCleanHistory && (
+                  vehicle.carfax.reportUrl ? (
+                    <a
+                      href={vehicle.carfax.reportUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border-2 border-green-500 rounded-md hover:bg-green-50 transition-colors group"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Image
+                        src="/certifications/carfax.png"
+                        alt="CARFAX"
+                        width={60}
+                        height={16}
+                        className="object-contain"
+                      />
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                    </a>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border-2 border-green-500 rounded-md">
+                      <Image
+                        src="/certifications/carfax.png"
+                        alt="CARFAX"
+                        width={60}
+                        height={16}
+                        className="object-contain"
+                      />
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                  )
+                )}
+
+                {/* Single Owner Badge */}
+                {(vehicle.numberOfPreviousOwners !== undefined && vehicle.numberOfPreviousOwners <= 1) && (
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 border border-blue-200 rounded-md">
+                    <User className="w-3.5 h-3.5 text-blue-600" />
+                    <span className="text-xs font-semibold text-blue-700">
+                      {vehicle.numberOfPreviousOwners === 0 ? 'First Owner' : 'Single Owner'}
+                    </span>
+                  </div>
+                )}
+
+                {/* No Accidents Badge */}
+                {!vehicle.accidentHistory && (
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-50 border border-green-200 rounded-md">
+                    <Shield className="w-3.5 h-3.5 text-green-600" />
+                    <span className="text-xs font-semibold text-green-700">No Accidents</span>
+                  </div>
+                )}
               </div>
 
               {/* Vehicle Information Grid */}
@@ -196,31 +209,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           </div>
         )}
 
-        {/* CARFAX Badge */}
-        {vehicle.carfax?.hasCleanHistory && (
-          vehicle.carfax.reportUrl ? (
-            <a 
-              href={vehicle.carfax.reportUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 hover:shadow-lg transition-shadow z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span style={{ color: '#003d7a' }}>CARFAX</span>
-            </a>
-          ) : (
-            <div className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 z-10">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span style={{ color: '#003d7a' }}>CARFAX</span>
-            </div>
-          )
-        )}
-
         {/* Coming Soon Badge */}
         {vehicle.status?.slug === 'coming-soon' && (
           <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
@@ -248,6 +236,60 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               </>
             )}
           </div>
+        </div>
+
+        {/* Premium Badges Section */}
+        <div className="mb-3 flex flex-wrap gap-2">
+          {/* CARFAX Badge */}
+          {vehicle.carfax?.hasCleanHistory && (
+            vehicle.carfax.reportUrl ? (
+              <a
+                href={vehicle.carfax.reportUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border-2 border-green-500 rounded-md hover:bg-green-50 transition-colors group"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Image
+                  src="/certifications/carfax.png"
+                  alt="CARFAX"
+                  width={60}
+                  height={16}
+                  className="object-contain"
+                />
+                <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+              </a>
+            ) : (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border-2 border-green-500 rounded-md">
+                <Image
+                  src="/certifications/carfax.png"
+                  alt="CARFAX"
+                  width={60}
+                  height={16}
+                  className="object-contain"
+                />
+                <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+              </div>
+            )
+          )}
+
+          {/* Single Owner Badge */}
+          {(vehicle.numberOfPreviousOwners !== undefined && vehicle.numberOfPreviousOwners <= 1) && (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 border border-blue-200 rounded-md">
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              <span className="text-xs font-semibold text-blue-700">
+                {vehicle.numberOfPreviousOwners === 0 ? 'First Owner' : 'Single Owner'}
+              </span>
+            </div>
+          )}
+
+          {/* No Accidents Badge */}
+          {!vehicle.accidentHistory && (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-50 border border-green-200 rounded-md">
+              <Shield className="w-3.5 h-3.5 text-green-600" />
+              <span className="text-xs font-semibold text-green-700">No Accidents</span>
+            </div>
+          )}
         </div>
 
         {/* Vehicle Details */}
