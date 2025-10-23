@@ -127,7 +127,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   const vehicleName = `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-20">
       {/* Back Button */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -135,17 +135,17 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-12 sm:py-8 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Images and Details */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Main Image Gallery */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <div className="relative aspect-video bg-gray-900">
+              <div className="relative aspect-video bg-white">
                 {vehicle.media.images.length > 0 ? (
                   <ImageGallery images={vehicle.media.images} vehicleName={vehicleName} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
                     <Car className="w-24 h-24 text-gray-600" />
                   </div>
                 )}
