@@ -42,10 +42,10 @@ const SearchCard = () => {
         }
 
         // Fetch body types
-        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types');
+        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types/dropdown');
         const bodyTypesData = await bodyTypesRes.json();
-        if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
-          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: VehicleTypeAPI) => ({
+        if (bodyTypesData.success && bodyTypesData.data) {
+          setBodyTypes(bodyTypesData.data.map((vt: VehicleTypeAPI) => ({
             id: vt._id,
             name: vt.name,
             image: vt.icon || vt.image,
