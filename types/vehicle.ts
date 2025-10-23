@@ -57,6 +57,7 @@ export interface VehicleDetail {
   carfax: {
     hasCleanHistory: boolean
     serviceRecords: number
+    reportUrl?: string
   }
   pricing: {
     listPrice: number

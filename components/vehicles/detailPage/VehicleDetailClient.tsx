@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Heart, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ImageLightbox } from './ImageLightbox'
 
 
 export function ImageGallery({ images, vehicleName }: { images: string[], vehicleName: string }) {
@@ -11,6 +12,7 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [showLightbox, setShowLightbox] = useState(false)
 
   // Detect mobile device
   useEffect(() => {
@@ -64,10 +66,11 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
   return (
     <>
       <div 
-        className="relative w-full h-full group bg-white"
+        className="relative w-full h-full group bg-white cursor-pointer"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onClick={() => setShowLightbox(true)}
       >
         <Image
           src={images[selectedImage]}
@@ -98,14 +101,20 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
         {!isMobile && images.length > 1 && (
           <>
             <button
-              onClick={handlePrevious}
+              onClick={(e) => {
+                e.stopPropagation()
+                handlePrevious()
+              }}
               className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/20 hover:bg-gray-800/30 backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
-              onClick={handleNext}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleNext()
+              }}
               className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/20 hover:bg-gray-800/30 backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-10"
               aria-label="Next image"
             >
@@ -122,7 +131,11 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
             {images.map((image, index) => (
               <button
                 key={index}
-                onClick={() => setSelectedImage(index)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedImage(index)
+                  setShowLightbox(true)
+                }}
                 className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
                   selectedImage === index
                     ? 'border-blue-600 ring-2 ring-blue-200 scale-105'
@@ -140,6 +153,16 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
             ))}
           </div>
         </div>
+      )}
+
+      {/* Image Lightbox */}
+      {showLightbox && (
+        <ImageLightbox
+          images={images}
+          initialIndex={selectedImage}
+          onClose={() => setShowLightbox(false)}
+          vehicleName={vehicleName}
+        />
       )}
     </>
   )

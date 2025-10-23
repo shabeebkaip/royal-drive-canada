@@ -6,9 +6,12 @@ import {
   MapPin, Phone, Mail, 
   Shield, FileText, Wrench, Zap, Clock
 } from 'lucide-react'
-import { ImageGallery, FavoriteButton, BackButton, ShareButton } from '@/components/vehicles/VehicleDetailClient'
+import { ImageGallery, FavoriteButton, BackButton, ShareButton } from '@/components/vehicles/detailPage/VehicleDetailClient'
 import VehicleEnquiryDialog from '@/components/vehicles/VehicleEnquiryDialog'
 import { VehicleDetail } from '@/types/vehicle'
+import './vehicle-description.css'
+import Specifications from '@/components/vehicles/detailPage/Specifications'
+import VehicleHistory from '@/components/vehicles/detailPage/VehicleHistory'
 
 // Helper function
 const formatMileage = (value: number) => {
@@ -183,8 +186,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               {/* Key Specs */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 bg-blue-50 rounded-lg flex-shrink-0">
-                    <Gauge className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-gray-50 rounded flex-shrink-0">
+                    <Gauge className="w-5 h-5 text-gray-700" />
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Mileage</p>
@@ -193,8 +196,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 bg-green-50 rounded-lg flex-shrink-0">
-                    <Fuel className="w-5 h-5 text-green-600" />
+                  <div className="p-2 bg-gray-50 rounded flex-shrink-0">
+                    <Fuel className="w-5 h-5 text-gray-700" />
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Fuel Type</p>
@@ -203,8 +206,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 bg-purple-50 rounded-lg flex-shrink-0">
-                    <Settings className="w-5 h-5 text-purple-600" />
+                  <div className="p-2 bg-gray-50 rounded flex-shrink-0">
+                    <Settings className="w-5 h-5 text-gray-700" />
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Transmission</p>
@@ -213,8 +216,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 bg-orange-50 rounded-lg flex-shrink-0">
-                    <Zap className="w-5 h-5 text-orange-600" />
+                  <div className="p-2 bg-gray-50 rounded flex-shrink-0">
+                    <Zap className="w-5 h-5 text-gray-700" />
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Drivetrain</p>
@@ -228,84 +231,15 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             {vehicle.marketing.description && (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Description</h2>
-                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{vehicle.marketing.description}</p>
+                <div 
+                  className="vehicle-description-content"
+                  dangerouslySetInnerHTML={{ __html: vehicle.marketing.description }}
+                />
               </div>
             )}
 
             {/* Specifications */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Specifications</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-0">
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Year</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.year}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Make</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.make.name}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Model</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.model.name}</span>
-                </div>
-                {vehicle.trim && (
-                  <div className="flex justify-between py-4 border-b border-gray-100">
-                    <span className="text-sm text-gray-600">Trim</span>
-                    <span className="text-sm font-semibold text-gray-900">{vehicle.trim}</span>
-                  </div>
-                )}
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Body Type</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.type.name}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Condition</span>
-                  <span className="text-sm font-semibold text-gray-900 capitalize">{vehicle.condition}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Exterior Color</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.specifications.exteriorColor}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Interior Color</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.specifications.interiorColor}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Doors</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.specifications.doors}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Seating</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.specifications.seatingCapacity} passengers</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Engine Size</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.engine.size}L</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Cylinders</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.engine.cylinders}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Horsepower</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.engine.horsepower} HP</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Previous Owners</span>
-                  <span className="text-sm font-semibold text-gray-900">{vehicle.numberOfPreviousOwners}</span>
-                </div>
-                <div className="flex justify-between py-4 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Last Updated</span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    {new Date(vehicle.updatedAt).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'short', 
-                      day: 'numeric' 
-                    })}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <Specifications vehicle={vehicle} />
 
             {/* Features */}
             {allFeatures.length > 0 ? (
@@ -387,75 +321,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             )}
 
             {/* Vehicle History */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Vehicle History</h2>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Shield className={`w-6 h-6 ${vehicle.carfax.hasCleanHistory ? 'text-green-600' : 'text-red-600'}`} />
-                    <div>
-                      <p className="font-semibold text-gray-900">CARFAX History</p>
-                      <p className="text-sm text-gray-600">
-                        {vehicle.carfax.hasCleanHistory ? 'Clean history report' : 'History issues reported'}
-                      </p>
-                    </div>
-                  </div>
-                  {vehicle.carfax.hasCleanHistory ? (
-                    <Check className="w-6 h-6 text-green-600" />
-                  ) : (
-                    <X className="w-6 h-6 text-red-600" />
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Car className={`w-6 h-6 ${vehicle.accidentHistory ? 'text-red-600' : 'text-green-600'}`} />
-                    <div>
-                      <p className="font-semibold text-gray-900">Accident History</p>
-                      <p className="text-sm text-gray-600">
-                        {vehicle.accidentHistory ? 'Accidents reported' : 'No accidents reported'}
-                      </p>
-                    </div>
-                  </div>
-                  {vehicle.accidentHistory ? (
-                    <X className="w-6 h-6 text-red-600" />
-                  ) : (
-                    <Check className="w-6 h-6 text-green-600" />
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Wrench className={`w-6 h-6 ${vehicle.ontario.safetyStandard.passed ? 'text-green-600' : 'text-orange-600'}`} />
-                    <div>
-                      <p className="font-semibold text-gray-900">Safety Standard</p>
-                      <p className="text-sm text-gray-600">
-                        {vehicle.ontario.safetyStandard.passed ? 'Safety certified' : 'Safety certification pending'}
-                      </p>
-                    </div>
-                  </div>
-                  {vehicle.ontario.safetyStandard.passed ? (
-                    <Check className="w-6 h-6 text-green-600" />
-                  ) : (
-                    <Clock className="w-6 h-6 text-orange-600" />
-                  )}
-                </div>
-
-                {vehicle.carfax.serviceRecords > 0 && (
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-6 h-6 text-blue-600" />
-                      <div>
-                        <p className="font-semibold text-gray-900">Service Records</p>
-                        <p className="text-sm text-gray-600">
-                          {vehicle.carfax.serviceRecords} service record{vehicle.carfax.serviceRecords !== 1 ? 's' : ''} available
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <VehicleHistory vehicle={vehicle} />
           </div>
 
           {/* Right Column - Pricing and Contact */}
