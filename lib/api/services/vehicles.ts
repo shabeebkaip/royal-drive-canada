@@ -106,6 +106,7 @@ interface VehicleRaw {
   carfax?: {
     hasCleanHistory: boolean;
     serviceRecords: number;
+    reportUrl?: string;
   };
   internal: {
     stockNumber: string;
@@ -168,7 +169,7 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
           tradeInsWelcome: false,
           location: undefined,
           phone: undefined,
-          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          carfax: vehicle.carfax,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -230,7 +231,7 @@ export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
           tradeInsWelcome: false,
           location: undefined,
           phone: undefined,
-          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          carfax: vehicle.carfax,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -287,7 +288,7 @@ export async function getVehicles(): Promise<Vehicle[]> {
           tradeInsWelcome: false,
           location: undefined,
           phone: undefined,
-          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          carfax: vehicle.carfax,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -401,7 +402,7 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
           tradeInsWelcome: false,
           location: undefined,
           phone: undefined,
-          carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+          carfax: vehicle.carfax,
           createdAt: vehicle.createdAt,
           updatedAt: vehicle.updatedAt,
         };
@@ -482,7 +483,7 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
         tradeInsWelcome: false,
         location: undefined,
         phone: undefined,
-        carfax: vehicle.carfax?.hasCleanHistory ? 'Clean' : undefined,
+        carfax: vehicle.carfax,
         createdAt: vehicle.createdAt,
         updatedAt: vehicle.updatedAt,
       };

@@ -269,7 +269,7 @@ const VehiclesPageContent = () => {
               description: vehicle.marketing.description,
               featured: vehicle.marketing.featured,
               safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-              carfax: vehicle.carfax?.hasCleanHistory ? "Clean" : undefined,
+              carfax: vehicle.carfax,
               status: vehicle.status ? {
                 slug: vehicle.status.slug,
                 name: vehicle.status.name,

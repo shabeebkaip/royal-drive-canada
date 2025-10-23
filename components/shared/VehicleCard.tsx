@@ -25,6 +25,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   className = "",
   isHorizontal = false
 }) => {
+  console.log(vehicle, "vehicle in card")
+  console.log("CARFAX data:", vehicle.carfax)
+  console.log("Has clean history:", vehicle.carfax?.hasCleanHistory)
   // Format price for display
   const formatPrice = (price: number | null | undefined) => {
     if (price === null || price === undefined || isNaN(price)) return "Contact for Price";
@@ -58,14 +61,39 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
               {/* Featured Badge */}
               {showFeaturedBadge && vehicle.featured && (
-                <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
+                <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium z-10">
                   Featured
                 </div>
               )}
 
+              {/* CARFAX Badge */}
+              {vehicle.carfax?.hasCleanHistory && (
+                vehicle.carfax.reportUrl ? (
+                  <a 
+                    href={vehicle.carfax.reportUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 hover:shadow-lg transition-shadow z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span style={{ color: '#003d7a' }}>CARFAX</span>
+                  </a>
+                ) : (
+                  <div className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 z-10">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span style={{ color: '#003d7a' }}>CARFAX</span>
+                  </div>
+                )
+              )}
+
               {/* Coming Soon Badge */}
               {vehicle.status?.slug === 'coming-soon' && (
-                <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium">
+                <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
                   Coming Soon
                 </div>
               )}
@@ -87,7 +115,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                       <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
                       <span className="text-green-600 flex items-center gap-1">
                         <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                        Certified
+                        Safety Certified
                       </span>
                     </>
                   )}
@@ -162,15 +190,40 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Featured Badge */}
         {showFeaturedBadge && vehicle.featured && (
-          <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+          <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1 z-10">
             <Star className="w-3 h-3 fill-current" />
             Featured
           </div>
         )}
 
+        {/* CARFAX Badge */}
+        {vehicle.carfax?.hasCleanHistory && (
+          vehicle.carfax.reportUrl ? (
+            <a 
+              href={vehicle.carfax.reportUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 hover:shadow-lg transition-shadow z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ color: '#003d7a' }}>CARFAX</span>
+            </a>
+          ) : (
+            <div className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded text-xs font-bold shadow-md flex items-center gap-1 z-10">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ color: '#003d7a' }}>CARFAX</span>
+            </div>
+          )
+        )}
+
         {/* Coming Soon Badge */}
         {vehicle.status?.slug === 'coming-soon' && (
-          <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium">
+          <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
             Coming Soon
           </div>
         )}
@@ -190,7 +243,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                 <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
                 <span className="text-green-600 flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" />
-                  Certified
+                  Safety Certified
                 </span>
               </>
             )}

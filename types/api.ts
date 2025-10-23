@@ -45,7 +45,11 @@ export interface Vehicle {
   tradeInsWelcome?: boolean;
   location?: string;
   phone?: string;
-  carfax?: string;
+  carfax?: {
+    hasCleanHistory?: boolean;
+    serviceRecords?: number;
+    reportUrl?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }
