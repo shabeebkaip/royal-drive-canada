@@ -126,7 +126,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   ]
 
   const vehicleName = `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Back Button */}
@@ -466,7 +465,12 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               <div className="mb-6 sm:mb-8">
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">Price</p>
                 <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1">{formatPrice(vehicle.pricing.listPrice)}</p>
-                <p className="text-xs sm:text-sm text-gray-500">+ HST ({vehicle.pricing.taxes.hst}%)</p>
+                <div className="space-y-0.5">
+                  <p className="text-xs sm:text-sm text-gray-500">+ HST ({vehicle.pricing.taxes.hst}%)</p>
+                  {vehicle.pricing.licensingPrice && vehicle.pricing.licensingPrice > 0 && (
+                    <p className="text-xs sm:text-sm text-gray-500">+ Licensing Fee: {formatPrice(vehicle.pricing.licensingPrice)}</p>
+                  )}
+                </div>
               </div>
 
               {vehicle.pricing.financing.available && (

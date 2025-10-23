@@ -68,6 +68,7 @@ export interface VehicleDetail {
     financing: {
       available: boolean
     }
+    licensingPrice?: number
   }
   features: {
     exterior: string[]
