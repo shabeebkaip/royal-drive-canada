@@ -161,16 +161,13 @@ const VehiclesPageContent = () => {
         if (selectedDrivetrain) params.append("drivetrain", selectedDrivetrain);
         if (selectedCondition) params.append("condition", selectedCondition);
         if (selectedStatus) params.append("status", selectedStatus);
-        // Only add price filters if they differ from defaults
-        if (minPrice > 0) params.append("minPrice", minPrice.toString());
-        if (maxPrice < 100000) params.append("maxPrice", maxPrice.toString());
-        // Only add year filters if they differ from defaults
-        if (minYear > 2000) params.append("minYear", minYear.toString());
-        if (maxYear < new Date().getFullYear()) params.append("maxYear", maxYear.toString());
-        // Only add mileage filters if they differ from defaults
-        if (minMileage > 0) params.append("minMileage", minMileage.toString());
-        if (maxMileage < 200000) params.append("maxMileage", maxMileage.toString());
-        if (sortBy && sortBy !== "newest") params.append("sortBy", sortBy);
+        if (minPrice) params.append("minPrice", minPrice.toString());
+        if (maxPrice) params.append("maxPrice", maxPrice.toString());
+        if (minYear) params.append("minYear", minYear.toString());
+        if (maxYear) params.append("maxYear", maxYear.toString());
+        if (minMileage) params.append("minMileage", minMileage.toString());
+        if (maxMileage) params.append("maxMileage", maxMileage.toString());
+        if (sortBy) params.append("sortBy", sortBy);
 
         const response = await fetch(
           `https://api.royaldrivecanada.com/api/v1/vehicles?${params.toString()}`
@@ -180,8 +177,7 @@ const VehiclesPageContent = () => {
         if (data.success && data.data?.vehicles) {
           const transformedVehicles = data.data.vehicles.map((vehicle: VehicleAPI) => ({
             id: vehicle._id,
-            name: `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,
-            brand: vehicle.make.name,
+            make: vehicle.make.name,
             model: vehicle.model.name,
             year: vehicle.year,
             price: vehicle.pricing.listPrice,
@@ -243,12 +239,9 @@ const VehiclesPageContent = () => {
     if (selectedDrivetrain) count++;
     if (selectedCondition) count++;
     if (selectedStatus) count++;
-    // Only count price if it's not the default range
-    if (minPrice > 0 || maxPrice < 100000) count++;
-    // Only count year if it's not the default range
-    if (minYear > 2000 || maxYear < new Date().getFullYear()) count++;
-    // Only count mileage if it's not the default range
-    if (minMileage > 0 || maxMileage < 200000) count++;
+    if (minPrice || maxPrice) count++;
+    if (minYear || maxYear) count++;
+    if (minMileage || maxMileage) count++;
     return count;
   }, [
     searchTerm,
@@ -472,30 +465,6 @@ const VehiclesPageContent = () => {
               <LoadingSkeleton />
             ) : vehicles.length > 0 ? (
               <>
-                {/* Results Summary */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 border border-blue-200">
-                  <p className="text-xs sm:text-sm text-gray-700">
-                    Showing{" "}
-                    <span className="font-bold text-blue-600">
-                      {vehicles.length}
-                    </span>{" "}
-                    of{" "}
-                    <span className="font-bold text-blue-600">
-                      {pagination.total}
-                    </span>{" "}
-                    vehicles
-                    {activeFiltersCount > 0 && (
-                      <span className="ml-2 text-gray-600">
-                        •{" "}
-                        <span className="font-semibold">
-                          {activeFiltersCount}
-                        </span>{" "}
-                        filter{activeFiltersCount !== 1 ? "s" : ""} applied
-                      </span>
-                    )}
-                  </p>
-                </div>
-
                 <VehicleResults
                   vehicles={vehicles}
                   isHorizontal={isHorizontal}
