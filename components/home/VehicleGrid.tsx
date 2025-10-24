@@ -23,8 +23,13 @@ const VehicleGrid = () => {
     featuredCount: inventories.filter(v => v.featured).length
   };
 
-  // Show only first 8 vehicles
-  const displayedVehicles = inventories.slice(0, 8);
+  // Show only first 8 vehicles and transform carfax from string to object
+  const displayedVehicles = inventories.slice(0, 8).map(vehicle => ({
+    ...vehicle,
+    carfax: typeof vehicle.carfax === 'string' 
+      ? { hasCleanHistory: true, serviceRecords: 0, reportUrl: vehicle.carfax }
+      : vehicle.carfax
+  }));
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
