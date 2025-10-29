@@ -44,7 +44,7 @@ export function ImageLightbox({ images, initialIndex, onClose, vehicleName }: Im
   }, [])
 
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <div className="fixed inset-0 z-50 bg-black/10 ">
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/80 to-transparent">
         <div className="flex items-center justify-between p-4">
