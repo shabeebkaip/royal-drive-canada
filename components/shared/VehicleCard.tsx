@@ -35,9 +35,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
     return (
       <div className={`bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-shadow ${className}`}>
         <div className="flex flex-col sm:flex-row">
-          {/* Image Section */}
-          <div className="relative sm:w-64 lg:w-72 flex-shrink-0">
-            <div className="relative h-40 sm:h-full overflow-hidden bg-gray-100">
+          {/* Image Section - Increased height for better mobile viewing */}
+          <div className="relative sm:w-80 lg:w-96 xl:w-[28rem] flex-shrink-0">
+            <div className="relative h-64 sm:h-full overflow-hidden bg-gray-100">
               <ImageSlider
                 images={vehicleImages}
                 alt={vehicle.name}
@@ -138,7 +138,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
               {/* Vehicle Information Grid */}
               <div className="flex-1 mb-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   <div className="bg-gray-50 rounded p-2">
                     <div className="flex items-center gap-1 mb-1">
                       <Gauge className="w-3 h-3 text-gray-500" />
@@ -162,6 +162,18 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                         <span className="text-xs text-gray-500">Trans.</span>
                       </div>
                       <p className="font-semibold text-gray-900 text-sm">{vehicle.transmission}</p>
+                    </div>
+                  )}
+
+                  {vehicle.model && (
+                    <div className="bg-gray-50 rounded p-2">
+                      <div className="flex items-center gap-1 mb-1">
+                        <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <span className="text-xs text-gray-500">Model</span>
+                      </div>
+                      <p className="font-semibold text-gray-900 text-sm">{vehicle.model}</p>
                     </div>
                   )}
                 </div>
@@ -194,12 +206,12 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   // Vertical Layout (Default)
   return (
     <div className={`bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-shadow ${className}`}>
-      {/* Image Section */}
+      {/* Image Section - Increased height for better mobile viewing */}
       <div className="relative overflow-hidden">
         <ImageSlider
           images={vehicleImages}
           alt={vehicle.name}
-          className="h-44 sm:h-48"
+          className="h-64 sm:h-72 md:h-80 lg:h-96"
         />
 
         {/* Featured Badge */}
@@ -219,11 +231,11 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       </div>
 
       {/* Content Section */}
-      <div className="p-4">
+      <div className="p-4 sm:p-5">
         {/* Header */}
         <div className="mb-3">
-          <h3 className="font-bold text-gray-900 text-base mb-1 line-clamp-1">{vehicle.name}</h3>
-          <div className="flex items-center gap-2 flex-wrap text-xs text-gray-600">
+          <h3 className="font-bold text-gray-900 text-base sm:text-lg mb-1 line-clamp-1">{vehicle.name}</h3>
+          <div className="flex items-center gap-2 flex-wrap text-xs sm:text-sm text-gray-600">
             <span>{vehicle.brand}</span>
             <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
             <span>{vehicle.year}</span>
@@ -231,7 +243,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               <>
                 <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
                 <span className="text-green-600 flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                   Safety Certified
                 </span>
               </>
@@ -293,37 +305,59 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           )}
         </div>
 
-        {/* Vehicle Details */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-gray-600">
-              <Gauge className="w-4 h-4" />
-              <span className="text-xs">Mileage</span>
+        {/* Vehicle Details - Enhanced with more information */}
+        <div className="space-y-2.5 mb-4">
+          <div className="flex items-center justify-between py-1">
+            <div className="flex items-center gap-2 text-gray-600">
+              <Gauge className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-xs sm:text-sm">Mileage</span>
             </div>
-            <span className="text-xs font-medium text-gray-900">{formatMileage(vehicle.mileage)}</span>
+            <span className="text-xs sm:text-sm font-semibold text-gray-900">{formatMileage(vehicle.mileage)}</span>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-gray-600">
-              <Fuel className="w-4 h-4" />
-              <span className="text-xs">Fuel Type</span>
+          <div className="flex items-center justify-between py-1">
+            <div className="flex items-center gap-2 text-gray-600">
+              <Fuel className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-xs sm:text-sm">Fuel Type</span>
             </div>
-            <span className="text-xs font-medium text-gray-900 capitalize">{vehicle.fuelType}</span>
+            <span className="text-xs sm:text-sm font-semibold text-gray-900 capitalize">{vehicle.fuelType}</span>
           </div>
+
+          {vehicle.transmission && (
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-2 text-gray-600">
+                <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="text-xs sm:text-sm">Transmission</span>
+              </div>
+              <span className="text-xs sm:text-sm font-semibold text-gray-900">{vehicle.transmission}</span>
+            </div>
+          )}
+
+          {vehicle.model && (
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-2 text-gray-600">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span className="text-xs sm:text-sm">Model</span>
+              </div>
+              <span className="text-xs sm:text-sm font-semibold text-gray-900">{vehicle.model}</span>
+            </div>
+          )}
         </div>
 
         {/* Price Section */}
-        <div className="border-t border-gray-200 pt-3">
-          <div className="flex items-center justify-between gap-2">
+        <div className="border-t border-gray-200 pt-3 mt-2">
+          <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="text-xl font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
+              <span className="text-xl sm:text-2xl font-bold text-gray-900">{formatPrice(vehicle.price)}</span>
               <p className="text-xs text-gray-500">+ HST</p>
             </div>
             <Link
               href={`/vehicles/${vehicle.slug || vehicle.id}`}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
             >
-              View
+              View Details
             </Link>
           </div>
         </div>
