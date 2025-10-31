@@ -8,7 +8,6 @@ import {
   ViewControls,
   ActiveFilters,
   VehicleResults,
-  Pagination,
   EmptyState,
   LoadingSkeleton,
 } from "@/components/vehicles";
@@ -53,6 +52,7 @@ const VehiclesPageContent = () => {
   // Data states
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [brands, setBrands] = useState<BrandAPI[] | null>(null);
   const [models, setModels] = useState<ModelAPI[]>([]);
   const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
@@ -64,6 +64,11 @@ const VehiclesPageContent = () => {
     limit: 12,
     totalPages: 0,
   });
+
+  // Derived flag: do we have more items to load?
+  const hasMore = useMemo(() => {
+    return vehicles.length < (pagination?.total || 0);
+  }, [vehicles.length, pagination.total]);
 
   // Fetch filter options
   useEffect(() => {
@@ -145,7 +150,12 @@ const VehiclesPageContent = () => {
   // Fetch vehicles with filters
   useEffect(() => {
     const fetchVehicles = async () => {
-      setLoading(true);
+      // If page is 1, show loading state; otherwise show loadingMore
+      if (page === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
       try {
         const params = new URLSearchParams();
         params.append("page", page.toString());
@@ -175,7 +185,7 @@ const VehiclesPageContent = () => {
         const response = await fetch(
           `https://api.royaldrivecanada.com/api/v1/vehicles?${params.toString()}`
         );
-        const data = await response.json();
+  const data = await response.json();
 
         if (data.success && data.data?.vehicles) {
           const transformedVehicles = data.data.vehicles.map((vehicle: VehicleAPI) => ({
@@ -198,19 +208,64 @@ const VehiclesPageContent = () => {
             accidentHistory: vehicle.accidentHistory,
           }));
 
-          setVehicles(transformedVehicles);
-          setPagination(data.data.pagination);
+          // If page is 1, replace vehicles; otherwise, append them
+          if (page === 1) {
+            setVehicles(transformedVehicles);
+          } else {
+            setVehicles(prevVehicles => [...prevVehicles, ...transformedVehicles]);
+          }
+
+          // Normalize pagination from API (be robust to naming differences)
+          const apiPg = data.data.pagination || {};
+          const total = Number(
+            apiPg.total ?? data.data.total ?? data.total ?? 0
+          );
+          const limit = Number(
+            apiPg.limit ?? apiPg.perPage ?? data.data.limit ?? 12
+          );
+          const currentPage = Number(
+            apiPg.page ?? apiPg.current ?? data.data.page ?? page
+          );
+          const totalPages = Number(
+            apiPg.totalPages ?? apiPg.pages ?? (limit ? Math.ceil(total / limit) : 1)
+          );
+
+          setPagination({ total, page: currentPage, limit, totalPages });
         }
       } catch (error) {
         console.error("Failed to fetch vehicles:", error);
       } finally {
         setLoading(false);
+        setLoadingMore(false);
       }
     };
 
     fetchVehicles();
   }, [
     page,
+    searchTerm,
+    selectedBrand,
+    selectedModel,
+    selectedBodyType,
+    selectedFuelTypes,
+    selectedTransmissions,
+    selectedColors,
+    selectedDrivetrain,
+    selectedCondition,
+    selectedStatus,
+    minPrice,
+    maxPrice,
+    minYear,
+    maxYear,
+    minMileage,
+    maxMileage,
+    sortBy,
+  ]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [
     searchTerm,
     selectedBrand,
     selectedModel,
@@ -298,6 +353,12 @@ const VehiclesPageContent = () => {
     setSelectedBrand(brandId);
     setSelectedModel("");
     setPage(1);
+  };
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasMore) {
+      setPage(prevPage => prevPage + 1);
+    }
   };
 
   return (
@@ -493,6 +554,14 @@ const VehiclesPageContent = () => {
                         filter{activeFiltersCount !== 1 ? "s" : ""} applied
                       </span>
                     )}
+        {hasMore && (
+                      <span className="ml-2 text-gray-600">
+                        •{" "}
+                        <span className="font-semibold text-green-600">
+          {Math.max(pagination.total - vehicles.length, 0)} more available
+                        </span>
+                      </span>
+                    )}
                   </p>
                 </div>
 
@@ -501,11 +570,34 @@ const VehiclesPageContent = () => {
                   isHorizontal={isHorizontal}
                   onViewDetails={handleViewDetails}
                 />
-                <Pagination
-                  currentPage={page}
-                  totalPages={pagination.totalPages}
-                  onPageChange={setPage}
-                />
+                
+                {/* Load More Button */}
+                {hasMore && (
+                  <div className="flex justify-center mt-8 mb-4">
+                    <button
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                      className="px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:shadow-md flex items-center gap-2"
+                    >
+                      {loadingMore ? (
+                        <>
+                          <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Loading More...
+                        </>
+                      ) : (
+                        <>
+                          Load More Vehicles
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </>
             ) : (
               <EmptyState
