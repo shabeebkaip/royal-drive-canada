@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Brand, VehicleType } from '@/types/api'
-import { BrandAPI, VehicleTypeAPI } from '@/types/filters'
+import { Brand } from '@/types/api'
+import { BrandAPI } from '@/types/filters'
 
 interface QuickFilterOption {
   label: string
@@ -14,7 +14,6 @@ const SubHeader = () => {
   const router = useRouter()
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [brands, setBrands] = useState<Brand[]>([])
-  const [bodyTypes, setBodyTypes] = useState<VehicleType[]>([])
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
@@ -33,18 +32,6 @@ const SubHeader = () => {
             slug: b.slug
           }))
           setBrands(activeBrands)
-        }
-
-        // Fetch body types
-        const bodyTypesRes = await fetch(`${apiBase}/vehicle-types`)
-        const bodyTypesData = await bodyTypesRes.json()
-        if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
-          setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: VehicleTypeAPI) => ({
-            id: vt._id,
-            name: vt.name,
-            image: vt.icon || vt.image,
-            slug: vt.slug
-          })))
         }
       } catch (error) {
         console.error('Failed to fetch filter options:', error)

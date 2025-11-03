@@ -12,7 +12,7 @@ import {
   LoadingSkeleton,
 } from "@/components/vehicles";
 import { X } from "lucide-react";
-import { Vehicle, Brand, VehicleType, FuelType, TransmissionType, Model } from "@/types/api";
+import { Vehicle,  VehicleType, FuelType, TransmissionType } from "@/types/api";
 import { VehicleTypeAPI, BrandAPI, ModelAPI, VehicleAPI } from "@/types/filters";
 
 const VehiclesPageContent = () => {

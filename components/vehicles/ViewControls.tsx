@@ -31,7 +31,6 @@ export const ViewControls: React.FC<ViewControlsProps> = ({
   onViewToggle,
   sortBy,
   onSortChange,
-  showFilters,
   onFilterToggle,
   activeFiltersCount,
 }) => {

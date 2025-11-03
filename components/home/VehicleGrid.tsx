@@ -2,16 +2,13 @@
 import React, { useState } from 'react'
 import { inventories } from "@/constants";
 import VehicleCard from "../shared/VehicleCard";
-import { ArrowRight, Grid3X3, Rows3, Sparkles, TrendingUp, Eye } from 'lucide-react';
+import { ArrowRight, Grid3X3, Rows3, Sparkles, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const VehicleGrid = () => {
   const [viewMode, setViewMode] = useState<'vertical' | 'horizontal'>('horizontal');
   const router = useRouter();
 
-  const handleViewDetails = (vehicleId: string | number) => {
-    // TODO: Navigate to vehicle details page
-  };
 
   const handleViewAllCars = () => {
     router.push('/inventories');
@@ -140,7 +137,6 @@ const VehicleGrid = () => {
               <VehicleCard
                 vehicle={vehicle}
                 showFeaturedBadge={true}
-                onViewDetails={handleViewDetails}
                 isHorizontal={viewMode === 'horizontal'}
               />
             </div>

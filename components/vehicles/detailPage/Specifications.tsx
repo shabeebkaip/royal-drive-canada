@@ -8,7 +8,6 @@ import {
   Gauge, 
   Zap,
   Shield,
-  Clock
 } from "lucide-react";
 
 interface SpecificationsProps {
@@ -23,14 +22,7 @@ interface SpecItem {
 }
 
 const Specifications: React.FC<SpecificationsProps> = ({ vehicle }) => {
-  // Format date helper
-  const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+
 
   // Organize specifications into categories
   const basicSpecs: SpecItem[] = [

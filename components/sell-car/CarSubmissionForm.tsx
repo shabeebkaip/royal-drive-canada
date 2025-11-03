@@ -23,12 +23,18 @@ export default function CarSubmissionForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);  const setField = (path: (keyof CarSubmissionPayload | string)[], value: any) => {
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const setField = (path: (keyof CarSubmissionPayload | string)[], value: string | number | boolean | string[] | undefined) => {
     setForm((prev) => {
-      const copy: any = structuredClone(prev);
-      let obj = copy;
-      for (let i = 0; i < path.length - 1; i++) obj = obj[path[i] as any] ||= {};
-      obj[path[path.length - 1] as any] = value;
+      const copy = JSON.parse(JSON.stringify(prev)) as CarSubmissionPayload;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let obj: any = copy;
+      for (let i = 0; i < path.length - 1; i++) {
+        const key = path[i];
+        obj = obj[key] ||= {};
+      }
+      obj[path[path.length - 1]] = value;
       return copy;
     });
   };
@@ -78,11 +84,12 @@ export default function CarSubmissionForm() {
         });
         setErrorMsg("Submission failed. Please try again later.");
       }
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       toast.error("Submission Failed", {
-        description: err?.message || "Please try again later.",
+        description: error?.message || "Please try again later.",
       });
-      setErrorMsg(err?.message || "Submission failed. Please try again later.");
+      setErrorMsg(error?.message || "Submission failed. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -96,7 +103,7 @@ export default function CarSubmissionForm() {
       <div className="text-center mb-8 pb-8 border-b border-gray-200">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Sell Your Car</h1>
         <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-          Get a fair cash offer for your vehicle. Fill out the details below and we'll get back to you within 24 hours.
+          Get a fair cash offer for your vehicle. Fill out the details below and we&apos;ll get back to you within 24 hours.
         </p>
       </div>
 
@@ -214,7 +221,7 @@ export default function CarSubmissionForm() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Pricing</h2>
-              <p className="text-sm text-gray-600">What's your asking price?</p>
+              <p className="text-sm text-gray-600">What&apos;s your asking price?</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -235,7 +242,7 @@ export default function CarSubmissionForm() {
               <Select value={String(form.pricing.priceFlexible ?? true)} onValueChange={(v) => setField(["pricing","priceFlexible"], v === "true")}>
                 <SelectTrigger className="w-full h-11"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="true">Yes, I'm flexible</SelectItem>
+                  <SelectItem value="true">Yes, I&apos;m flexible</SelectItem>
                   <SelectItem value="false">No, firm price</SelectItem>
                 </SelectContent>
               </Select>
@@ -350,9 +357,6 @@ export default function CarSubmissionForm() {
               "Get Your Free Quote"
             )}
           </button>
-          <p className="text-sm text-gray-500 text-center sm:text-left">
-            We'll respond within 24 hours
-          </p>
         </div>
       </form>
     </div>

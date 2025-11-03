@@ -3,16 +3,16 @@
  * Centralized API client with proper error handling and type safety
  */
 
-const getApiBaseUrl = () => {
+const getApiBaseUrl = (): string => {
   // Server-side (Node.js environment)
   if (typeof window === 'undefined') {
-    return process.env.API_BASE_URL ;
+    return process.env.API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
   }
   // Client-side (browser environment)
-  return process.env.NEXT_PUBLIC_API_BASE_URL ;
+  return process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
 };
 
-const API_BASE_URL = getApiBaseUrl();
+const API_BASE_URL: string = getApiBaseUrl();
 
 interface ApiError {
   message: string;

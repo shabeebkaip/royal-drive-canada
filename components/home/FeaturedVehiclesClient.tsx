@@ -14,9 +14,6 @@ interface FeaturedVehiclesClientProps {
 }
 
 const FeaturedVehiclesClient = ({ vehicles }: FeaturedVehiclesClientProps) => {
-  const handleViewDetails = (vehicleId: string | number) => {
-    // TODO: Navigate to vehicle details page
-  };
 
   return (
     <section className="py-12 sm:py-16 bg-gray-50">
@@ -39,7 +36,6 @@ const FeaturedVehiclesClient = ({ vehicles }: FeaturedVehiclesClientProps) => {
               key={vehicle.id}
               vehicle={vehicle}
               showFeaturedBadge={true}
-              onViewDetails={() => handleViewDetails(vehicle.id)}
             />
           ))}
         </div>

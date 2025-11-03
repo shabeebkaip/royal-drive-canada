@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { VehicleDetail } from '@/types/vehicle'
-import { Shield, Car, Wrench, FileText, Check, X, Clock, User, ExternalLink } from 'lucide-react'
+import {  Car, Wrench, FileText, Check, X, Clock, User, ExternalLink } from 'lucide-react'
 
 interface VehicleHistoryProps {
   vehicle: VehicleDetail

@@ -4,10 +4,6 @@ import React from "react";
 import { X, SlidersHorizontal } from "lucide-react";
 import type { BrandAPI, ModelAPI } from "@/types/filters";
 
-interface FilterChip {
-  label: string;
-  onRemove: () => void;
-}
 
 interface ActiveFiltersProps {
   activeFiltersCount: number;
