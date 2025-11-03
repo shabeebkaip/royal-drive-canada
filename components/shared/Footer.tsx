@@ -191,8 +191,8 @@ const Footer = () => {
                 <p className="text-sm">© {currentYear} Royal Drive. All rights reserved.</p>
                 <div className="hidden sm:block w-px h-4 bg-gray-700"></div>
                 <div className="flex gap-4 text-sm">
-                  <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
-                  <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
+                  <Link href="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
+                  <Link href="/terms-and-conditions" className="hover:text-gray-300 transition-colors">Terms & Conditions</Link>
                 </div>
               </div>
               <div className="text-sm text-gray-500">
