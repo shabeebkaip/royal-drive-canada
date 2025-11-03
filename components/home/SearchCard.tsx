@@ -25,9 +25,10 @@ const SearchCard = () => {
   // Fetch filter options from API
   useEffect(() => {
     const fetchFilterOptions = async () => {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
       try {
         // Fetch brands
-        const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown');
+        const brandsRes = await fetch(`${apiBase}/makes/dropdown`);
         const brandsData = await brandsRes.json();
         
         if (brandsData.success && brandsData.data) {
@@ -42,7 +43,7 @@ const SearchCard = () => {
         }
 
         // Fetch body types
-        const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types/dropdown');
+        const bodyTypesRes = await fetch(`${apiBase}/vehicle-types/dropdown`);
         const bodyTypesData = await bodyTypesRes.json();
         if (bodyTypesData.success && bodyTypesData.data) {
           setBodyTypes(bodyTypesData.data.map((vt: VehicleTypeAPI) => ({
@@ -69,9 +70,10 @@ const SearchCard = () => {
         return;
       }
 
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
       try {
         // Backend now correctly filters by make parameter
-        const modelsRes = await fetch(`https://api.royaldrivecanada.com/api/v1/models?make=${selectedBrand}&active=true&limit=100`);
+        const modelsRes = await fetch(`${apiBase}/models?make=${selectedBrand}&active=true&limit=100`);
         const modelsData = await modelsRes.json();
         if (modelsData.success && modelsData.data?.models) {
           // Backend already filters by make, just use the active models

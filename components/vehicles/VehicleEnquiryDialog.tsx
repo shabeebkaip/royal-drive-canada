@@ -77,8 +77,7 @@ export default function VehicleEnquiryDialog({
 
     try {
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL ||
-        "https://api.royaldrivecanada.com/api/v1";
+        process.env.NEXT_PUBLIC_API_BASE_URL ;  
 
       // Convert time slot to HH:MM format
       const timeSlotMap: Record<string, string> = {

@@ -73,12 +73,13 @@ const VehiclesPageContent = () => {
   // Fetch filter options
   useEffect(() => {
     const fetchFilterOptions = async () => {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
       try {
         const [brandsRes, bodyTypesRes, fuelTypesRes, transmissionsRes] = await Promise.all([
-          fetch("https://api.royaldrivecanada.com/api/v1/makes/dropdown"),
-          fetch("https://api.royaldrivecanada.com/api/v1/vehicle-types/dropdown"),
-          fetch("https://api.royaldrivecanada.com/api/v1/fuel-types"),
-          fetch("https://api.royaldrivecanada.com/api/v1/transmissions"),
+          fetch(`${apiBase}/makes/dropdown`),
+          fetch(`${apiBase}/vehicle-types/dropdown`),
+          fetch(`${apiBase}/fuel-types`),
+          fetch(`${apiBase}/transmissions`),
         ]);
 
         const [brandsData, bodyTypesData, fuelTypesData, transmissionsData] = await Promise.all([
@@ -128,9 +129,10 @@ const VehiclesPageContent = () => {
         return;
       }
 
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
       try {
         const modelsRes = await fetch(
-          "https://api.royaldrivecanada.com/api/v1/models/dropdown"
+          `${apiBase}/models/dropdown`
         );
         const modelsData = await modelsRes.json();
         if (modelsData.success && modelsData.data) {
@@ -150,6 +152,7 @@ const VehiclesPageContent = () => {
   // Fetch vehicles with filters
   useEffect(() => {
     const fetchVehicles = async () => {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
       // If page is 1, show loading state; otherwise show loadingMore
       if (page === 1) {
         setLoading(true);
@@ -183,7 +186,7 @@ const VehiclesPageContent = () => {
         if (sortBy && sortBy !== "newest") params.append("sortBy", sortBy);
 
         const response = await fetch(
-          `https://api.royaldrivecanada.com/api/v1/vehicles?${params.toString()}`
+          `${apiBase}/vehicles?${params.toString()}`
         );
   const data = await response.json();
 

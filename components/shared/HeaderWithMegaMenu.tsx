@@ -38,10 +38,10 @@ const HeaderWithMegaMenu = ({ showMegaMenu = false }: MegaMenuProps) => {
     useEffect(() => {
         if (showMegaMenu) {
             const fetchBrands = async () => {
+                const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
                 try {
-                    const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown')
+                    const brandsRes = await fetch(`${apiBase}/makes/dropdown`)
                     const brandsData = await brandsRes.json()
-                    
                     if (brandsData.success && brandsData.data) {
                         const brandsList = Array.isArray(brandsData.data) ? brandsData.data : brandsData.data.makes || []
                         const activeBrands = brandsList.map((b: BrandAPI) => ({

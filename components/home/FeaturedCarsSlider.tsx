@@ -4,14 +4,14 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import type { Vehicle } from '@/types/api'
 
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import 'swiper/css/effect-fade'
+// Removed effect-fade to avoid missing CSS issues with mismatched Swiper versions
 
 interface FeaturedCarsSliderProps {
   vehicles: Vehicle[]
@@ -32,7 +32,7 @@ const FeaturedCarsSlider = ({ vehicles }: FeaturedCarsSliderProps) => {
   return (
     <div className="relative">
       <Swiper
-        modules={[Autoplay, Pagination, Navigation, EffectFade]}
+        modules={[Autoplay, Pagination, Navigation]}
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
@@ -45,10 +45,6 @@ const FeaturedCarsSlider = ({ vehicles }: FeaturedCarsSliderProps) => {
           dynamicBullets: true,
         }}
         navigation={true}
-        effect="fade"
-        fadeEffect={{
-          crossFade: true,
-        }}
         loop={vehicles.length > 1}
         className="featured-cars-swiper rounded-2xl sm:rounded-3xl"
       >

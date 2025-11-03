@@ -13,9 +13,10 @@ const MegaMenuBar = () => {
 
     useEffect(() => {
         const fetchFilterOptions = async () => {
+            const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
             try {
                 // Fetch brands
-                const brandsRes = await fetch('https://api.royaldrivecanada.com/api/v1/makes/dropdown')
+                const brandsRes = await fetch(`${apiBase}/makes/dropdown`)
                 const brandsData = await brandsRes.json()
                 
                 if (brandsData.success && brandsData.data) {
@@ -30,7 +31,7 @@ const MegaMenuBar = () => {
                 }
 
                 // Fetch body types
-                const bodyTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/vehicle-types')
+                const bodyTypesRes = await fetch(`${apiBase}/vehicle-types`)
                 const bodyTypesData = await bodyTypesRes.json()
                 if (bodyTypesData.success && bodyTypesData.data?.vehicleTypes) {
                     setBodyTypes(bodyTypesData.data.vehicleTypes.map((vt: VehicleTypeAPI) => ({
@@ -42,7 +43,7 @@ const MegaMenuBar = () => {
                 }
 
                 // Fetch fuel types
-                const fuelTypesRes = await fetch('https://api.royaldrivecanada.com/api/v1/fuel-types')
+                const fuelTypesRes = await fetch(`${apiBase}/fuel-types`)
                 const fuelTypesData = await fuelTypesRes.json()
                 if (fuelTypesData.success && fuelTypesData.data?.fuelTypes) {
                     setFuelTypes(fuelTypesData.data.fuelTypes.filter((ft: FuelType) => ft.active))

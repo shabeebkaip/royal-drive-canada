@@ -35,9 +35,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://api.royaldrivecanada.com/api/v1";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { slug } = await params;
 
   try {
@@ -96,8 +94,7 @@ export async function generateMetadata({
 // Fetch vehicle data on the server
 async function getVehicle(slug: string): Promise<VehicleDetail | null> {
   const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://api.royaldrivecanada.com/api/v1";
+    process.env.NEXT_PUBLIC_API_BASE_URL ;
 
   try {
     // Optimized caching strategy aligned with backend

@@ -16,8 +16,9 @@ const WhyChooseUs = () => {
 
   useEffect(() => {
     const fetchVehicleCount = async () => {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ;
       try {
-        const response = await fetch('https://api.royaldrivecanada.com/api/v1/vehicles?limit=1');
+        const response = await fetch(`${apiBase}/vehicles?limit=1`);
         const data = await response.json();
         if (data.success && data.data?.pagination?.total) {
           setVehicleCount(data.data.pagination.total);
