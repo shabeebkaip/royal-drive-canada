@@ -57,6 +57,13 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                   Coming Soon
                 </div>
               )}
+
+              {/* Sold Badge */}
+              {vehicle.status?.name?.toLowerCase() === 'sold' && (
+                <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wide z-10 shadow-lg">
+                  Sold
+                </div>
+              )}
             </div>
           </div>
 
@@ -226,6 +233,13 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         {vehicle.status?.slug === 'coming-soon' && (
           <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
             Coming Soon
+          </div>
+        )}
+
+        {/* Sold Badge */}
+        {vehicle.status?.name?.toLowerCase() === 'sold' && (
+          <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wide z-10 shadow-lg">
+            Sold
           </div>
         )}
       </div>
