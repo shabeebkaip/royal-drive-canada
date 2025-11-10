@@ -6,7 +6,6 @@ import {
   Fuel,
   Settings,
   Car,
-  Check,
   MapPin,
   Phone,
   Mail,
@@ -150,14 +149,6 @@ export default async function VehicleDetailPage({
     }).format(price);
   };
 
-  const allFeatures = [
-    ...vehicle.features.exterior,
-    ...vehicle.features.interior,
-    ...vehicle.features.safety,
-    ...vehicle.features.technology,
-    ...vehicle.features.convenience,
-  ];
-
   const vehicleName = `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`;
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -287,113 +278,6 @@ export default async function VehicleDetailPage({
 
             {/* Specifications */}
             <Specifications vehicle={vehicle} />
-
-            {/* Features */}
-            {allFeatures.length > 0 ? (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
-                  Features & Options
-                </h2>
-                <div className="space-y-4 sm:space-y-6">
-                  {vehicle.features.exterior.length > 0 && (
-                    <div>
-                      <h3 className="text-md font-semibold text-gray-900 mb-3">
-                        Exterior
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {vehicle.features.exterior.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {vehicle.features.interior.length > 0 && (
-                    <div>
-                      <h3 className="text-md font-semibold text-gray-900 mb-3">
-                        Interior
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {vehicle.features.interior.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {vehicle.features.safety.length > 0 && (
-                    <div>
-                      <h3 className="text-md font-semibold text-gray-900 mb-3">
-                        Safety
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {vehicle.features.safety.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {vehicle.features.technology.length > 0 && (
-                    <div>
-                      <h3 className="text-md font-semibold text-gray-900 mb-3">
-                        Technology
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {vehicle.features.technology.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {vehicle.features.convenience.length > 0 && (
-                    <div>
-                      <h3 className="text-md font-semibold text-gray-900 mb-3">
-                        Convenience
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {vehicle.features.convenience.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              vehicle.marketing.description && (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
-                    Vehicle Description
-                  </h2>
-                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                    {vehicle.marketing.description}
-                  </p>
-                </div>
-              )
-            )}
 
             {/* Vehicle History */}
             <VehicleHistory vehicle={vehicle} />
