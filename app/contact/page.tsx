@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import PageHero from "@/components/shared/PageHero";
+import ContactForm from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock, Shield } from "lucide-react";
 import { createMetadata, SITE_CONFIG, generateJsonLd, generateBreadcrumbStructuredData } from "@/lib/metadata";
 
@@ -143,7 +144,6 @@ export default function ContactPage() {
                           royaldrivemotor@gmail.com
                         </a>
                       </p>
-                      <p className="text-sm text-gray-500">{`We'll respond within 24 hours`}</p>
                     </div>
                   </div>
 
@@ -164,92 +164,7 @@ export default function ContactPage() {
               </div>
 
               {/* Contact Form */}
-              <div className="bg-white rounded-2xl p-8 shadow-lg">
-                <h2 className="text-3xl font-bold mb-8 text-gray-900">Send us a Message</h2>
-
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        First Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        placeholder="John"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Last Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        placeholder="Doe"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      placeholder="(647) 123-4567"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      placeholder="john.doe@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Subject
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
-                      <option>General Inquiry</option>
-                      <option>Vehicle Information</option>
-                      <option>Financing Question</option>
-                      <option>Trade-in Valuation</option>
-                      <option>Service Question</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Message *
-                    </label>
-                    <textarea
-                      required
-                      rows={5}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
-                      placeholder="Tell us how we can help you..."
-                    ></textarea>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    Send Message
-                  </button>
-                </form>
-              </div>
+              <ContactForm />
             </div>
           </div>
         </section>
