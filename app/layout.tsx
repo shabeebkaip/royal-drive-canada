@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "../components/shared/Header";
 import Footer from "../components/shared/Footer";
 import { Toaster } from "sonner";
+import { defaultMetadata } from "@/lib/metadata";
 
 const kanit = Kanit({
   variable: "--font-kanit",
@@ -12,81 +13,7 @@ const kanit = Kanit({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Royal Drive Canada - Premium Used Cars Toronto | OMVIC Licensed Dealer",
-  description: "Discover quality pre-owned vehicles at Royal Drive Canada. OMVIC licensed dealer in Toronto offering safety-certified cars, financing options, and exceptional customer service. Browse our extensive inventory today.",
-  keywords: "used cars Toronto, pre-owned vehicles, car dealership Toronto, OMVIC licensed, safety certified cars, car financing Toronto, Royal Drive Canada, quality used cars, auto sales Toronto",
-  authors: [{ name: "Royal Drive Canada" }],
-  creator: "Royal Drive Canada",
-  publisher: "Royal Drive Canada",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://royaldrivecanada.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "Royal Drive Canada - Premium Used Cars Toronto",
-    description: "Discover quality pre-owned vehicles at Toronto's trusted OMVIC licensed dealer. Safety-certified cars with financing options available.",
-    url: 'https://royaldrivecanada.com',
-    siteName: 'Royal Drive Canada',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Royal Drive Canada - Premium Used Cars Toronto',
-      },
-    ],
-    locale: 'en_CA',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "Royal Drive Canada - Premium Used Cars Toronto",
-    description: "Discover quality pre-owned vehicles at Toronto's trusted OMVIC licensed dealer.",
-    images: ['/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-verification-code',
-  },
-  icons: {
-    icon: [
-      {
-        url: '/favicon.svg',
-        type: 'image/svg+xml',
-        sizes: '32x32',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-        sizes: '64x64',
-      }
-    ],
-    apple: [
-      {
-        url: '/favicon.svg',
-        type: 'image/svg+xml',
-        sizes: '180x180',
-      }
-    ],
-    shortcut: '/favicon.svg',
-  },
-};
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
   children,

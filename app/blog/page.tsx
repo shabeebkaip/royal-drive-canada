@@ -1,15 +1,13 @@
 import { Metadata } from "next";
+import { createMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Car Buying Tips & Auto News - Royal Drive Canada Blog",
   description: "Expert car buying advice, vehicle maintenance tips, and automotive news from Royal Drive Canada. Learn about financing, trade-ins, and finding the perfect pre-owned vehicle in Toronto.",
-  keywords: "car buying tips, auto news Toronto, vehicle maintenance, financing advice, trade-in tips, used car advice, automotive blog, Royal Drive Canada",
-  openGraph: {
-    title: "Car Buying Tips & Auto News - Royal Drive Canada Blog",
-    description: "Expert automotive advice and news from Toronto's trusted used car dealership.",
-    url: 'https://royaldrivecanada.com/blog',
-  },
-};
+  keywords: ["car buying tips", "auto news Toronto", "vehicle maintenance", "financing advice", "trade-in tips"],
+  path: "/blog",
+  type: "article",
+});
 
 export default function BlogPage() {
   const blogStructuredData = {

@@ -1,17 +1,14 @@
 import { Metadata } from "next";
 import PageHero from "@/components/shared/PageHero";
 import { MapPin, Phone, Mail, Clock, Shield } from "lucide-react";
+import { createMetadata, SITE_CONFIG, generateJsonLd, generateBreadcrumbStructuredData } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Contact Royal Drive Canada - Toronto Used Car Dealership | 751 Danforth Road",
   description: "Contact Royal Drive Canada for quality used cars in Toronto. Visit us at 751 Danforth Road, call (647) 622-2202, or email us. Open Mon-Sat. OMVIC licensed dealer serving the GTA.",
-  keywords: "contact Royal Drive Canada, Toronto car dealership contact, 751 Danforth Road, phone (647) 622-2202, used car dealer Toronto contact, hours location",
-  openGraph: {
-    title: "Contact Royal Drive Canada - Toronto Used Car Dealer",
-    description: "Get in touch with Toronto&apos;s trusted used car dealership. Visit, call, or email us today.",
-    url: 'https://royaldrivecanada.com/contact',
-  },
-};
+  keywords: ["dealership contact", "751 Danforth Road", "Toronto dealer hours"],
+  path: "/contact",
+});
 
 export default function ContactPage() {
   const contactStructuredData = {

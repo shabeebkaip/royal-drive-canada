@@ -3,17 +3,15 @@ import { Metadata } from "next";
 import CertificationsSection from "@/components/about/CertificationsSection";
 import HeroSection from "@/components/about/HeroSection";
 import OurStory from "@/components/about/OurStory";
+import { createMetadata, generateBusinessStructuredData, generateBreadcrumbStructuredData, generateJsonLd } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "About Royal Drive Canada - OMVIC Licensed Used Car Dealer Toronto",
   description: "Learn about Royal Drive Canada, Toronto's trusted OMVIC licensed used car dealership. Over 10 years of experience providing quality pre-owned vehicles, exceptional customer service, and reliable auto sales in the GTA.",
-  keywords: "Royal Drive Canada about, OMVIC licensed dealer, Toronto car dealership history, used car dealer experience, automotive expertise, customer service, car sales Toronto",
-  openGraph: {
-    title: "About Royal Drive Canada - Trusted Used Car Dealer",
-    description: "Discover the story behind Toronto's premier used car dealership. OMVIC licensed with over 10 years of automotive excellence.",
-    url: 'https://royaldrivecanada.com/about',
-  },
-};
+  keywords: ["dealer history", "automotive expertise", "customer service excellence"],
+  path: "/about",
+  type: "article",
+});
 
 const Page = () => {
   // Structured Data for About page

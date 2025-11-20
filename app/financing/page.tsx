@@ -1,17 +1,14 @@
 import { Metadata } from "next";
 import PageHero from "@/components/shared/PageHero";
 import { CreditCard, Shield, CheckCircle, DollarSign, Clock, Users } from "lucide-react";
+import { createMetadata, generateJsonLd, generateBreadcrumbStructuredData } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Car Financing Toronto - Auto Loans & Credit Solutions | Royal Drive Canada",
   description: "Get approved for car financing in Toronto with Royal Drive Canada. We offer flexible auto loans, bad credit financing, and competitive rates for all credit types. Apply online or visit our dealership.",
-  keywords: "car financing Toronto, auto loans, bad credit car financing, vehicle financing, car loans Toronto, auto financing, credit solutions, finance pre-owned cars, Royal Drive financing",
-  openGraph: {
-    title: "Car Financing Toronto - Auto Loans & Credit Solutions",
-    description: "Get approved for car financing with competitive rates and flexible terms. All credit types welcome at Royal Drive Canada.",
-    url: 'https://royaldrivecanada.com/financing',
-  },
-};
+  keywords: ["bad credit car financing", "auto loan approval", "competitive financing rates"],
+  path: "/financing",
+});
 
 export default function FinancingPage() {
   const financingStructuredData = {

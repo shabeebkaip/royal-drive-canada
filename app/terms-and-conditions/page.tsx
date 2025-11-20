@@ -1,14 +1,13 @@
 import React from 'react';
 import { Metadata } from 'next';
+import { createMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Terms and Conditions | Royal Drive Canada',
-  description: 'Terms and conditions for purchasing vehicles from Royal Drive Canada, an OMVIC licensed dealer in Toronto, Ontario.',
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export const metadata: Metadata = createMetadata({
+  title: 'Terms and Conditions',
+  description: 'Terms and conditions for purchasing vehicles from Royal Drive Canada, an OMVIC licensed dealer in Toronto, Ontario. Review our sales policies and conditions.',
+  path: '/terms-and-conditions',
+  keywords: ['OMVIC terms', 'vehicle purchase conditions', 'dealer terms'],
+});
 
 export default function TermsAndConditionsPage() {
   return (

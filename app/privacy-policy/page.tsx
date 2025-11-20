@@ -1,14 +1,13 @@
 import React from 'react';
 import { Metadata } from 'next';
+import { createMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | Royal Drive Canada',
-  description: 'Privacy policy and data protection practices at Royal Drive Canada. Learn how we collect, use, and protect your personal information in compliance with PIPEDA.',
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export const metadata: Metadata = createMetadata({
+  title: 'Privacy Policy',
+  description: 'Privacy policy and data protection practices at Royal Drive Canada. Learn how we collect, use, and protect your personal information in compliance with PIPEDA and Canadian privacy laws.',
+  path: '/privacy-policy',
+  keywords: ['PIPEDA compliance', 'data protection', 'privacy policy Canada'],
+});
 
 export default function PrivacyPolicyPage() {
   return (

@@ -22,6 +22,7 @@ import { VehicleDetail } from "@/types/vehicle";
 import "./vehicle-description.css";
 import Specifications from "@/components/vehicles/detailPage/Specifications";
 import VehicleHistory from "@/components/vehicles/detailPage/VehicleHistory";
+import { SITE_CONFIG, createMetadata, generateVehicleStructuredData, generateJsonLd } from "@/lib/metadata";
 
 // Helper function
 const formatMileage = (value: number) => {
@@ -38,56 +39,47 @@ export async function generateMetadata({
   const { slug } = await params;
 
   try {
-    // Align with backend cache: 5 minutes (300s)
-    // Backend uses: Cache-Control: public, max-age=300, s-maxage=600
     const response = await fetch(`${apiBaseUrl}/vehicles/${slug}`, {
       next: {
-        revalidate: 300, // 5 minutes - matches backend max-age
-        tags: [`vehicle-${slug}`], // For on-demand revalidation
+        revalidate: 300, // 5 minutes - matches backend cache
+        tags: [`vehicle-${slug}`],
       },
     });
     const data = await response.json();
 
     if (data.success && data.data) {
       const vehicle = data.data;
-      const title = `${vehicle.year} ${vehicle.make.name} ${
-        vehicle.model.name
-      }${vehicle.trim ? ` ${vehicle.trim}` : ""} - Royal Drive Canada`;
+      const vehicleName = `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}${vehicle.trim ? ` ${vehicle.trim}` : ""}`;
+      const title = `${vehicleName} for Sale in Toronto`;
       const description =
-        vehicle.marketing.description ||
-        `Shop this ${vehicle.year} ${vehicle.make.name} ${
-          vehicle.model.name
-        } at Royal Drive Canada. ${formatMileage(vehicle.odometer.value)} km, ${
-          vehicle.engine.fuelType.name
-        }, ${vehicle.transmission.type.name}.`;
+        vehicle.marketing.description?.replace(/<[^>]*>/g, '').substring(0, 160) ||
+        `Shop this ${vehicleName} at Royal Drive Canada. ${formatMileage(vehicle.odometer.value)} km, ${vehicle.engine.fuelType.name}, ${vehicle.transmission.type.name}. OMVIC licensed dealer in Toronto.`;
+      
+      const images = vehicle.media.images.length > 0 ? vehicle.media.images : [SITE_CONFIG.images.defaultVehicleImage];
+      const url = `${SITE_CONFIG.url}/vehicles/${slug}`;
 
-      return {
+      return createMetadata({
         title,
         description,
-        openGraph: {
-          title,
-          description,
-          images:
-            vehicle.media.images.length > 0 ? [vehicle.media.images[0]] : [],
-          type: "website",
-        },
-        twitter: {
-          card: "summary_large_image",
-          title,
-          description,
-          images:
-            vehicle.media.images.length > 0 ? [vehicle.media.images[0]] : [],
-        },
-      };
+        keywords: [
+          `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,
+          `${vehicle.make.name} for sale Toronto`,
+          vehicle.type.name,
+          vehicle.engine.fuelType.name,
+        ],
+        path: `/vehicles/${slug}`,
+        images: images.slice(0, 4), // Limit to 4 images for performance
+      });
     }
   } catch (error) {
     console.error("Failed to generate metadata:", error);
   }
 
-  return {
-    title: "Vehicle Details - Royal Drive Canada",
-    description: "View vehicle details at Royal Drive Canada",
-  };
+  return createMetadata({
+    title: "Vehicle Details",
+    description: "View vehicle details at Royal Drive Canada, Toronto's trusted OMVIC licensed used car dealer.",
+    path: "/vehicles",
+  });
 }
 
 // Fetch vehicle data on the server
