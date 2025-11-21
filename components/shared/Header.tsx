@@ -3,10 +3,12 @@ import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Logo from './Logo'
+import { getPublicSettingsClient } from '@/lib/api/settings'
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
+    const [phone, setPhone] = useState('(647) 622-2202')
     const pathname = usePathname()
 
     // Navigation items for consistency
@@ -24,6 +26,16 @@ const Header = () => {
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const settings = await getPublicSettingsClient()
+            if (settings?.contactInfo?.primaryPhone) {
+                setPhone(settings.contactInfo.primaryPhone)
+            }
+        }
+        fetchSettings()
     }, [])
 
     return (
@@ -72,15 +84,15 @@ const Header = () => {
                             {/* Contact Information */}
                             <div className="hidden xl:flex items-center space-x-4">
                                 <a
-                                    href="tel:6476222202"
-                                    aria-label="Call us at (647) 622-2202"
+                                    href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
+                                    aria-label={`Call us at ${phone}`}
                                     className="flex items-center space-x-2 text-gray-600 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/40 rounded-md"
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
-                                    <span className="font-semibold text-gray-900 text-sm">647-622-2202</span>
+                                    <span className="font-semibold text-gray-900 text-sm">{phone}</span>
                                 </a>
                                 <div className="w-px h-6 bg-gray-300"></div>
                             </div>
@@ -176,7 +188,7 @@ const Header = () => {
                             {/* Contact Section */}
                             <div className="p-4 bg-gray-50 rounded-lg mt-2">
                                 <a
-                                    href="tel:6476222202"
+                                    href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
                                     className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -184,7 +196,7 @@ const Header = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
-                                    Call (647) 622-2202
+                                    Call {phone}
                                 </a>
 
                                 <div className="text-center mt-3 text-gray-600">

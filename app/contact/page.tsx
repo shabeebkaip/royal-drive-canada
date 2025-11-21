@@ -3,6 +3,7 @@ import PageHero from "@/components/shared/PageHero";
 import ContactForm from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock, Shield } from "lucide-react";
 import { createMetadata, SITE_CONFIG, generateJsonLd, generateBreadcrumbStructuredData } from "@/lib/metadata";
+import { getPublicSettings } from "@/lib/api/settings";
 
 export const metadata: Metadata = createMetadata({
   title: "Contact Royal Drive Canada - Toronto Used Car Dealership | 751 Danforth Road",
@@ -11,42 +12,48 @@ export const metadata: Metadata = createMetadata({
   path: "/contact",
 });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Fetch business settings from API
+  const settings = await getPublicSettings({ revalidate: 300 });
+
+  // Extract data with fallbacks
+  const businessName = settings.businessName || "Royal Drive Canada";
+  const phone = settings.contactInfo?.primaryPhone || "(647) 622-2202";
+  const email = settings.contactInfo?.primaryEmail || "royaldrivemotor@gmail.com";
+  const street = settings.address?.street || "751 Danforth Road";
+  const city = settings.address?.city || "Toronto";
+  const province = settings.address?.province || "ON";
+  const postalCode = settings.address?.postalCode || "M1K 1N1";
+  const country = settings.address?.country || "Canada";
+
   const contactStructuredData = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     "mainEntity": {
       "@type": "AutoDealer",
-      "name": "Royal Drive Canada",
+      "name": businessName,
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "751 Danforth Road",
-        "addressLocality": "Toronto",
-        "addressRegion": "ON",
-        "postalCode": "M1K 1N1",
-        "addressCountry": "CA"
+        "streetAddress": street,
+        "addressLocality": city,
+        "addressRegion": province,
+        "postalCode": postalCode,
+        "addressCountry": country === "Canada" ? "CA" : country
       },
-      "telephone": "(647) 622-2202",
-      "email": "royaldrivemotor@gmail.com",
+      "telephone": phone,
+      "email": email,
       "url": "https://royaldrivecanada.com",
-      "openingHoursSpecification": [
+      "openingHoursSpecification": settings.businessHours?.filter(h => h.isOpen).map(hour => ({
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": hour.day,
+        "opens": hour.openTime,
+        "closes": hour.closeTime
+      })) || [
         {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
           "opens": "09:00",
           "closes": "19:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "09:00",
-          "closes": "18:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Sunday",
-          "opens": "11:00",
-          "closes": "17:00"
         }
       ],
       "geo": {
@@ -77,14 +84,9 @@ export default function ContactPage() {
               icon: <Shield className="w-4 h-4 text-blue-400" />
             }
           ]}
-          stats={[
-            { value: "5,000+", label: "Happy Customers" },
-            { value: "15+", label: "Years Experience" },
-            { value: "500+", label: "Vehicles Available" }
-          ]}
           cta={{
             primary: {
-              text: "Call Now: (647) 622-2202",
+              text: `Call Now: ${phone}`,
               action: "call"
             },
             secondary: {
@@ -111,9 +113,9 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-bold text-lg text-gray-900">Visit Our Showroom</h3>
                       <p className="text-gray-600">
-                        751 Danforth Road<br/>
-                        Toronto, ON M1K 1N1<br/>
-                        Canada
+                        {street}<br/>
+                        {city}, {province} {postalCode}<br/>
+                        {country}
                       </p>
                     </div>
                   </div>
@@ -125,8 +127,8 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-bold text-lg text-gray-900">Call or Text</h3>
                       <p className="text-gray-600">
-                        <a href="tel:6476222202" className="hover:text-blue-600 transition-colors">
-                          (647) 622-2202
+                        <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="hover:text-blue-600 transition-colors">
+                          {phone}
                         </a>
                       </p>
                       <p className="text-sm text-gray-500">Available 7 days a week</p>
@@ -140,8 +142,8 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-bold text-lg text-gray-900">Email Us</h3>
                       <p className="text-gray-600">
-                        <a href="mailto:royaldrivemotor@gmail.com" className="hover:text-blue-600 transition-colors">
-                          royaldrivemotor@gmail.com
+                        <a href={`mailto:${email}`} className="hover:text-blue-600 transition-colors">
+                          {email}
                         </a>
                       </p>
                     </div>
@@ -151,12 +153,40 @@ export default function ContactPage() {
                     <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
                       <Clock className="w-6 h-6 text-orange-600" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-900">Business Hours</h3>
-                      <div className="text-gray-600 space-y-1">
-                        <p>Monday - Friday: 9:00 AM - 7:00 PM</p>
-                        <p>Saturday: 9:00 AM - 6:00 PM</p>
-                        <p>Sunday: 11:00 AM - 5:00 PM</p>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg text-gray-900 mb-3">Business Hours</h3>
+                      <div className="space-y-2 text-gray-600">
+                        {settings.businessHours && settings.businessHours.length > 0 ? (
+                          settings.businessHours.map((day) => {
+                            const isToday = new Date().toLocaleDateString('en-US', { weekday: 'long' }) === day.day;
+                            
+                            return (
+                              <div key={day.day} className="flex justify-between items-center">
+                                <span className={isToday ? 'font-semibold text-gray-900' : ''}>
+                                  {day.day}
+                                </span>
+                                <span className={!day.isOpen ? 'text-red-500' : ''}>
+                                  {day.isOpen ? `${day.openTime} - ${day.closeTime}` : 'Closed'}
+                                </span>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <>
+                            <div className="flex justify-between">
+                              <span>Monday - Friday</span>
+                              <span>9:00 AM - 7:00 PM</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Saturday</span>
+                              <span>9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Sunday</span>
+                              <span className="text-red-500">Closed</span>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -181,7 +211,7 @@ export default function ContactPage() {
 
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2884.1234567890123!2d-79.38710000000001!3d43.64260000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cc5ee6e6c6e7%3A0x1234567890abcdef!2s751%20Danforth%20Rd%2C%20Toronto%2C%20ON%20M1K%201N1%2C%20Canada!5e0!3m2!1sen!2sca!4v1234567890123!5m2!1sen!2sca"
+                src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(`${street}, ${city}, ${province} ${postalCode}, ${country}`)}`}
                 width="100%"
                 height="400"
                 style={{ border: 0 }}
@@ -189,7 +219,7 @@ export default function ContactPage() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="w-full h-96"
-                title="Royal Drive Canada Location - 751 Danforth Road, Toronto"
+                title={`${businessName} Location - ${street}, ${city}`}
               />
             </div>
           </div>
