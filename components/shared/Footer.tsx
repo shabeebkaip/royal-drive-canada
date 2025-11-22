@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from './Logo';
-import { Phone, MapPin, Clock, Shield, Award, CheckCircle, Instagram, Twitter } from 'lucide-react';
+import { Phone, MapPin, Clock, Shield, Award, CheckCircle, Instagram, Twitter, Mail } from 'lucide-react';
 import { getPublicSettings } from '@/lib/api/settings';
 import { BusinessSettings } from '@/types/settings';
 
@@ -14,7 +14,7 @@ const Footer = async () => {
 
   // Extract commonly used values with fallbacks
   const phone = settings.contactInfo?.primaryPhone || '(647) 622-2202';
-  const email = settings.contactInfo?.primaryEmail || 'info@royaldrivecanada.com';
+  const email = settings.contactInfo?.primaryEmail || 'royaldrivemotor@gmail.com';
   const street = settings.address?.street || '751 Danforth Rd';
   const city = settings.address?.city || 'Toronto';
   const province = settings.address?.province || 'ON';
@@ -61,6 +61,16 @@ const Footer = async () => {
                     <p className="text-gray-500 text-sm">{city}, {province}</p>
                   </div>
                 </div>
+
+                <a href={`mailto:${email}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                  <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">{email}</p>
+                    <p className="text-gray-500 text-sm">Email us anytime</p>
+                  </div>
+                </a>
               </div>
             </div>
 

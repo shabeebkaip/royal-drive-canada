@@ -55,7 +55,7 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Clear previous errors and status
     setErrors({});
     setSubmitStatus({ type: null, message: "" });
@@ -136,7 +136,9 @@ export default function ContactForm() {
 
   return (
     <div className="bg-white rounded-2xl p-8 shadow-lg">
-      <h2 className="text-3xl font-bold mb-8 text-gray-900">Send us a Message</h2>
+      <h2 className="text-3xl font-bold mb-8 text-gray-900">
+        Send us a Message
+      </h2>
 
       {/* Success/Error Alert - Large and Prominent */}
       {submitStatus.type && (
@@ -161,21 +163,27 @@ export default function ContactForm() {
               <div>
                 <h3
                   className={`text-lg font-bold mb-1 ${
-                    submitStatus.type === "success" ? "text-green-900" : "text-red-900"
+                    submitStatus.type === "success"
+                      ? "text-green-900"
+                      : "text-red-900"
                   }`}
                 >
-                  {submitStatus.type === "success" ? "Message Sent Successfully!" : "Error Submitting Form"}
+                  {submitStatus.type === "success"
+                    ? "Message Sent Successfully!"
+                    : "Error Submitting Form"}
                 </h3>
                 <p
                   className={`text-base ${
-                    submitStatus.type === "success" ? "text-green-800" : "text-red-800"
+                    submitStatus.type === "success"
+                      ? "text-green-800"
+                      : "text-red-800"
                   }`}
                 >
                   {submitStatus.message}
                 </p>
                 {submitStatus.type === "success" && (
                   <p className="text-sm text-green-700 mt-2">
-                    We'll get back to you soon.
+                    {`We'll get back to you soon.`}
                   </p>
                 )}
               </div>

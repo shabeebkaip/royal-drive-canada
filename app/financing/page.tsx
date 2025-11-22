@@ -1,12 +1,25 @@
 import { Metadata } from "next";
 import PageHero from "@/components/shared/PageHero";
-import { CreditCard, Shield, CheckCircle, DollarSign, Clock, Users } from "lucide-react";
-import { createMetadata, generateJsonLd, generateBreadcrumbStructuredData } from "@/lib/metadata";
+import {
+  CreditCard,
+  Shield,
+  CheckCircle,
+  DollarSign,
+  Clock,
+  Users,
+} from "lucide-react";
+import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  title: "Car Financing Toronto - Auto Loans & Credit Solutions | Royal Drive Canada",
-  description: "Get approved for car financing in Toronto with Royal Drive Canada. We offer flexible auto loans, bad credit financing, and competitive rates for all credit types. Apply online or visit our dealership.",
-  keywords: ["bad credit car financing", "auto loan approval", "competitive financing rates"],
+  title:
+    "Car Financing Toronto - Auto Loans & Credit Solutions | Royal Drive Canada",
+  description:
+    "Get approved for car financing in Toronto with Royal Drive Canada. We offer flexible auto loans, bad credit financing, and competitive rates for all credit types. Apply online or visit our dealership.",
+  keywords: [
+    "bad credit car financing",
+    "auto loan approval",
+    "competitive financing rates",
+  ],
   path: "/financing",
 });
 
@@ -14,32 +27,36 @@ export default function FinancingPage() {
   const financingStructuredData = {
     "@context": "https://schema.org",
     "@type": "FinancialService",
-    "name": "Royal Drive Canada Auto Financing",
-    "description": "Car financing and auto loan services for all credit types in Toronto and GTA.",
-    "provider": {
+    name: "Royal Drive Canada Auto Financing",
+    description:
+      "Car financing and auto loan services for all credit types in Toronto and GTA.",
+    provider: {
       "@type": "AutoDealer",
-      "name": "Royal Drive Canada"
+      name: "Royal Drive Canada",
     },
-    "areaServed": "Greater Toronto Area",
-    "serviceType": [
+    areaServed: "Greater Toronto Area",
+    serviceType: [
       "Auto Financing",
-      "Car Loans", 
+      "Car Loans",
       "Bad Credit Financing",
-      "Vehicle Financing"
+      "Vehicle Financing",
     ],
-    "offers": {
+    offers: {
       "@type": "Offer",
-      "description": "Competitive auto financing rates and flexible terms for all credit types"
-    }
+      description:
+        "Competitive auto financing rates and flexible terms for all credit types",
+    },
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(financingStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(financingStructuredData),
+        }}
       />
-      
+
       <div className="min-h-screen bg-white">
         {/* Modern Hero Section */}
         <PageHero
@@ -49,31 +66,31 @@ export default function FinancingPage() {
           badges={[
             {
               text: "All Credit Types Welcome",
-              icon: <CreditCard className="w-4 h-4 text-green-400" />
+              icon: <CreditCard className="w-4 h-4 text-green-400" />,
             },
             {
               text: "Quick Approval Process",
-              icon: <Clock className="w-4 h-4 text-blue-400" />
+              icon: <Clock className="w-4 h-4 text-blue-400" />,
             },
             {
               text: "Competitive Rates",
-              icon: <DollarSign className="w-4 h-4 text-yellow-400" />
-            }
+              icon: <DollarSign className="w-4 h-4 text-yellow-400" />,
+            },
           ]}
           stats={[
             { value: "3.9%", label: "Starting APR" },
             { value: "96", label: "Max Months" },
-            { value: "24hrs", label: "Quick Approval" }
+            { value: "24hrs", label: "Quick Approval" },
           ]}
           cta={{
             primary: {
               text: "Apply Online Now",
-              action: "apply"
+              action: "apply",
             },
             secondary: {
               text: "Call (647) 622-2202",
-              action: "call"
-            }
+              action: "call",
+            },
           }}
         />
 
@@ -81,9 +98,12 @@ export default function FinancingPage() {
         <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Financing Solutions for Everyone</h2>
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">
+                Financing Solutions for Everyone
+              </h2>
               <p className="text-base text-gray-600">
-                We work with multiple lenders to find the best rates for your situation
+                We work with multiple lenders to find the best rates for your
+                situation
               </p>
             </div>
 
@@ -91,10 +111,13 @@ export default function FinancingPage() {
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
                   <CheckCircle className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-medium text-gray-900">Excellent Credit</h3>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Excellent Credit
+                  </h3>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">
-                  Enjoy the lowest rates and best terms available for qualified buyers.
+                  Enjoy the lowest rates and best terms available for qualified
+                  buyers.
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-center">
@@ -119,7 +142,9 @@ export default function FinancingPage() {
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
                   <Shield className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-medium text-gray-900">Fair Credit</h3>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Fair Credit
+                  </h3>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">
                   Rebuilding your credit? We have solutions that work for you.
@@ -147,7 +172,9 @@ export default function FinancingPage() {
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
                   <Users className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-medium text-gray-900">Challenged Credit</h3>
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Challenged Credit
+                  </h3>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">
                   {`Past credit challenges don't have to stop you from getting a quality vehicle.`}
@@ -179,7 +206,9 @@ export default function FinancingPage() {
         <section className="py-12 sm:py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Simple Application Process</h2>
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">
+                Simple Application Process
+              </h2>
               <p className="text-base text-gray-600">
                 Get pre-approved in minutes with our streamlined process
               </p>
@@ -190,27 +219,30 @@ export default function FinancingPage() {
                 {
                   step: "1",
                   title: "Apply Online",
-                  description: "Fill out our secure online application in just 5 minutes",
-                  icon: <CreditCard className="w-6 h-6" />
+                  description:
+                    "Fill out our secure online application in just 5 minutes",
+                  icon: <CreditCard className="w-6 h-6" />,
                 },
                 {
                   step: "2",
                   title: "Get Pre-Approved",
-                  description: "Receive instant pre-approval with terms and rates",
-                  icon: <CheckCircle className="w-6 h-6" />
+                  description:
+                    "Receive instant pre-approval with terms and rates",
+                  icon: <CheckCircle className="w-6 h-6" />,
                 },
                 {
                   step: "3",
                   title: "Choose Your Vehicle",
-                  description: "Browse our inventory and find your perfect match",
-                  icon: <Shield className="w-6 h-6" />
+                  description:
+                    "Browse our inventory and find your perfect match",
+                  icon: <Shield className="w-6 h-6" />,
                 },
                 {
                   step: "4",
                   title: "Drive Away Today",
                   description: "Complete the paperwork and drive off the lot",
-                  icon: <Users className="w-6 h-6" />
-                }
+                  icon: <Users className="w-6 h-6" />,
+                },
               ].map((item, index) => (
                 <div key={index} className="text-center">
                   <div className="w-12 h-12 bg-white border border-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
@@ -219,7 +251,9 @@ export default function FinancingPage() {
                   <div className="text-sm font-medium text-blue-600 mb-3">
                     Step {item.step}
                   </div>
-                  <h3 className="text-base font-medium text-gray-900 mb-2">{item.title}</h3>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">
+                    {item.title}
+                  </h3>
                   <p className="text-sm text-gray-600">{item.description}</p>
                 </div>
               ))}
@@ -232,7 +266,9 @@ export default function FinancingPage() {
           <div className="max-w-4xl mx-auto px-4">
             <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 sm:p-8">
               <div className="text-center mb-6">
-                <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Apply for Financing</h2>
+                <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">
+                  Apply for Financing
+                </h2>
                 <p className="text-base text-gray-600">
                   {`Get pre-approved in minutes - it won't affect your credit score`}
                 </p>
@@ -354,7 +390,8 @@ export default function FinancingPage() {
                 </button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  By submitting this form, you agree to our privacy policy. This will not affect your credit score.
+                  By submitting this form, you agree to our privacy policy. This
+                  will not affect your credit score.
                 </p>
               </form>
             </div>
@@ -365,7 +402,9 @@ export default function FinancingPage() {
         <section className="py-12 sm:py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">Why Choose Our Financing?</h2>
+              <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-3">
+                Why Choose Our Financing?
+              </h2>
               <p className="text-base text-gray-600">
                 We make car financing simple, transparent, and affordable
               </p>
@@ -376,29 +415,31 @@ export default function FinancingPage() {
                 {
                   icon: <CheckCircle className="w-6 h-6 text-blue-600" />,
                   title: "No Hidden Fees",
-                  description: "Transparent pricing with no surprise charges"
+                  description: "Transparent pricing with no surprise charges",
                 },
                 {
                   icon: <Clock className="w-6 h-6 text-blue-600" />,
                   title: "Quick Approval",
-                  description: "Get approved in as little as 24 hours"
+                  description: "Get approved in as little as 24 hours",
                 },
                 {
                   icon: <Shield className="w-6 h-6 text-blue-600" />,
                   title: "Secure Process",
-                  description: "Your information is protected and secure"
+                  description: "Your information is protected and secure",
                 },
                 {
                   icon: <Users className="w-6 h-6 text-blue-600" />,
                   title: "Expert Support",
-                  description: "Our financing experts guide you every step"
-                }
+                  description: "Our financing experts guide you every step",
+                },
               ].map((feature, index) => (
                 <div key={index} className="text-center">
                   <div className="w-12 h-12 bg-white border border-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
                     {feature.icon}
                   </div>
-                  <h3 className="text-base font-medium text-gray-900 mb-2">{feature.title}</h3>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
                   <p className="text-sm text-gray-600">{feature.description}</p>
                 </div>
               ))}
@@ -407,5 +448,5 @@ export default function FinancingPage() {
         </section>
       </div>
     </>
-  )
+  );
 }

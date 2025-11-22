@@ -22,7 +22,7 @@ import { VehicleDetail } from "@/types/vehicle";
 import "./vehicle-description.css";
 import Specifications from "@/components/vehicles/detailPage/Specifications";
 import VehicleHistory from "@/components/vehicles/detailPage/VehicleHistory";
-import { SITE_CONFIG, createMetadata, generateVehicleStructuredData, generateJsonLd } from "@/lib/metadata";
+import { SITE_CONFIG, createMetadata } from "@/lib/metadata";
 
 // Helper function
 const formatMileage = (value: number) => {
@@ -49,14 +49,24 @@ export async function generateMetadata({
 
     if (data.success && data.data) {
       const vehicle = data.data;
-      const vehicleName = `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}${vehicle.trim ? ` ${vehicle.trim}` : ""}`;
+      const vehicleName = `${vehicle.year} ${vehicle.make.name} ${
+        vehicle.model.name
+      }${vehicle.trim ? ` ${vehicle.trim}` : ""}`;
       const title = `${vehicleName} for Sale in Toronto`;
       const description =
-        vehicle.marketing.description?.replace(/<[^>]*>/g, '').substring(0, 160) ||
-        `Shop this ${vehicleName} at Royal Drive Canada. ${formatMileage(vehicle.odometer.value)} km, ${vehicle.engine.fuelType.name}, ${vehicle.transmission.type.name}. OMVIC licensed dealer in Toronto.`;
-      
-      const images = vehicle.media.images.length > 0 ? vehicle.media.images : [SITE_CONFIG.images.defaultVehicleImage];
-      const url = `${SITE_CONFIG.url}/vehicles/${slug}`;
+        vehicle.marketing.description
+          ?.replace(/<[^>]*>/g, "")
+          .substring(0, 160) ||
+        `Shop this ${vehicleName} at Royal Drive Canada. ${formatMileage(
+          vehicle.odometer.value
+        )} km, ${vehicle.engine.fuelType.name}, ${
+          vehicle.transmission.type.name
+        }. OMVIC licensed dealer in Toronto.`;
+
+      const images =
+        vehicle.media.images.length > 0
+          ? vehicle.media.images
+          : [SITE_CONFIG.images.defaultVehicleImage];
 
       return createMetadata({
         title,
@@ -77,15 +87,15 @@ export async function generateMetadata({
 
   return createMetadata({
     title: "Vehicle Details",
-    description: "View vehicle details at Royal Drive Canada, Toronto's trusted OMVIC licensed used car dealer.",
+    description:
+      "View vehicle details at Royal Drive Canada, Toronto's trusted OMVIC licensed used car dealer.",
     path: "/vehicles",
   });
 }
 
 // Fetch vehicle data on the server
 async function getVehicle(slug: string): Promise<VehicleDetail | null> {
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL ;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   try {
     // Optimized caching strategy aligned with backend
