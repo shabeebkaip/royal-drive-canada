@@ -2,8 +2,8 @@
 import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Logo from './Logo'
 import { getPublicSettingsClient } from '@/lib/api/settings'
+import Image from 'next/image'
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -51,7 +51,13 @@ const Header = () => {
                         {/* Professional Logo */}
                         <div className="flex-shrink-0 min-w-0">
                             <Link href="/" className="block">
-                                <Logo variant="dark" size="md"/>
+                                <Image
+                                    src="/logo/Colour.svg"
+                                    alt="Royal Drive Canada Logo"
+                                    width={100}
+                                    height={100}
+                                    priority
+                                />
                             </Link>
                         </div>
 

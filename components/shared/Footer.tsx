@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Logo from './Logo';
 import { Phone, MapPin, Clock, Shield, Award, CheckCircle, Instagram, Twitter, Mail } from 'lucide-react';
 import { getPublicSettings } from '@/lib/api/settings';
 import { BusinessSettings } from '@/types/settings';
@@ -32,7 +31,14 @@ const Footer = async () => {
             {/* Brand Section */}
             <div className="lg:col-span-4 space-y-6">
               <div>
-                <Logo variant="light" size="lg" />
+                <Image
+                  src="/logo/Colour.svg"
+                  alt="Royal Drive Canada Logo"
+                  width={150}
+                  height={150}
+                  priority
+                  className="brightness-0 invert"
+                />
                 <p className="text-base text-gray-400 mt-4">
                   {description}
                 </p>

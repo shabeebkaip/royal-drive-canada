@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import Logo from './Logo'
+import Image from 'next/image'
 import { Brand } from '@/types/api'
 import { BrandAPI } from '@/types/filters'
 
@@ -118,7 +118,13 @@ const HeaderWithMegaMenu = ({ showMegaMenu = false }: MegaMenuProps) => {
                         {/* Professional Logo */}
                         <div className="flex-shrink-0 min-w-0">
                             <Link href="/" className="block">
-                                <Logo variant="dark" size="md"/>
+                                <Image
+                                    src="/logo/Colour.svg"
+                                    alt="Royal Drive Canada Logo"
+                                    width={100}
+                                    height={100}
+                                    priority
+                                />
                             </Link>
                         </div>
 

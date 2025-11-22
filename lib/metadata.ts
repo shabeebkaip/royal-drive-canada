@@ -5,8 +5,8 @@ export const SITE_CONFIG = {
   name: "Royal Drive Canada",
   url: "https://royaldrivecanada.com",
   domain: "royaldrivecanada.com",
-  title: "Royal Drive Canada - Premium Used Cars in Toronto | OMVIC Licensed Dealer",
-  description: "Toronto's trusted OMVIC licensed used car dealership offering quality pre-owned vehicles, financing solutions, and exceptional service. Visit us at 751 Danforth Road.",
+  title: "Royal Drive Canada",
+  description: "Toronto's premier used car dealership offering premium pre-owned vehicles, flexible financing, and exceptional service. OMVIC licensed dealer at 751 Danforth Road.",
   
   // Business Information
   business: {
