@@ -10,7 +10,7 @@ const HeroSection = () => {
         const fetchVehicleCount = async () => {
             const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
             try {
-                const response = await fetch(`${apiBase}/vehicles?limit=1`);
+                const response = await fetch(`${apiBase}/vehicles?limit=1&excludeStatus=sold`);
                 const data = await response.json();
                 if (data.success && data.data?.pagination?.total) {
                     setVehicleCount(data.data.pagination.total);

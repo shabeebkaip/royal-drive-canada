@@ -163,6 +163,9 @@ const VehiclesPageContent = () => {
         const params = new URLSearchParams();
         params.append("page", page.toString());
         params.append("limit", "12");
+        
+        // ALWAYS exclude sold vehicles
+        params.append("excludeStatus", "sold");
 
         if (searchTerm) params.append("q", searchTerm);
         if (selectedBrand) params.append("make", selectedBrand);
@@ -191,7 +194,9 @@ const VehiclesPageContent = () => {
   const data = await response.json();
 
         if (data.success && data.data?.vehicles) {
-          const transformedVehicles = data.data.vehicles.map((vehicle: VehicleAPI) => ({
+          const transformedVehicles = data.data.vehicles
+            .filter((vehicle: VehicleAPI) => vehicle.status?.slug !== 'sold') // Safety filter for sold vehicles
+            .map((vehicle: VehicleAPI) => ({
             id: vehicle._id,
             name: `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,
             brand: vehicle.make.name,
