@@ -49,7 +49,7 @@ const FeaturedCarsSlider = ({ vehicles }: FeaturedCarsSliderProps) => {
         className="featured-cars-swiper rounded-2xl sm:rounded-3xl"
       >
         {vehicles.map((vehicle) => {
-          const carImage = vehicle.images?.[0] || '/orange-car.webp'
+          const carImage = vehicle.images?.[0] 
           const carPrice = vehicle.price 
             ? `$${vehicle.price.toLocaleString()}`
             : 'Contact for price'
