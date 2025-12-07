@@ -35,9 +35,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
     return (
       <div className={`bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-shadow ${className}`}>
         <div className="flex flex-col sm:flex-row">
-          {/* Image Section - Increased height for better mobile viewing */}
+          {/* Image Section - Optimized for Landscape Images */}
           <div className="relative sm:w-80 lg:w-96 xl:w-[28rem] flex-shrink-0">
-            <div className="relative h-64 sm:h-full overflow-hidden bg-gray-100">
+            <div className="relative aspect-[16/10] sm:aspect-auto sm:h-full overflow-hidden bg-gray-100">
               <ImageSlider
                 images={vehicleImages}
                 alt={vehicle.name}
@@ -210,38 +210,40 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
     );
   }
 
-  // Vertical Layout (Default)
+  // Vertical Layout (Default) - Optimized for Landscape Images
   return (
     <div className={`bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-shadow ${className}`}>
-      {/* Image Section - Increased height for better mobile viewing */}
+      {/* Image Section - Optimized 16:10 Aspect Ratio for Landscape */}
       <div className="relative overflow-hidden">
-        <ImageSlider
-          images={vehicleImages}
-          alt={vehicle.name}
-          className="h-64 sm:h-72 md:h-80 lg:h-96"
-        />
+        <div className="relative aspect-[16/10] w-full">
+          <ImageSlider
+            images={vehicleImages}
+            alt={vehicle.name}
+            className="w-full h-full"
+          />
 
-        {/* Featured Badge */}
-        {showFeaturedBadge && vehicle.featured && (
-          <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1 z-10">
-            <Star className="w-3 h-3 fill-current" />
-            Featured
-          </div>
-        )}
+          {/* Featured Badge */}
+          {showFeaturedBadge && vehicle.featured && (
+            <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1 z-10">
+              <Star className="w-3 h-3 fill-current" />
+              Featured
+            </div>
+          )}
 
-        {/* Coming Soon Badge */}
-        {vehicle.status?.slug === 'coming-soon' && (
-          <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
-            Coming Soon
-          </div>
-        )}
+          {/* Coming Soon Badge */}
+          {vehicle.status?.slug === 'coming-soon' && (
+            <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium z-10">
+              Coming Soon
+            </div>
+          )}
 
-        {/* Sold Badge */}
-        {vehicle.status?.name?.toLowerCase() === 'sold' && (
-          <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wide z-10 shadow-lg">
-            Sold
-          </div>
-        )}
+          {/* Sold Badge */}
+          {vehicle.status?.name?.toLowerCase() === 'sold' && (
+            <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wide z-10 shadow-lg">
+              Sold
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Content Section */}

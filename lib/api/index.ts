@@ -6,4 +6,5 @@
 export * from './services/vehicle-types';
 export * from './services/brands';
 export * from './services/vehicles';
+export * from './services/filters';
 export * from './contact';
