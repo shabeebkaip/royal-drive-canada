@@ -53,7 +53,7 @@ const WhyChooseUs = () => {
       borderColor: "border-blue-200",
     },
     {
-      logo: "/certifications/ucda.png",
+      logo: "/certifications/ucda.gif",
       title: "UCDA Certified",
       description:
         "Proud member of the Used Car Dealers Association with commitment to industry best practices",

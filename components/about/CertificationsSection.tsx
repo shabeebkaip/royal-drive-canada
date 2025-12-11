@@ -17,7 +17,7 @@ const CertificationsSection = () => {
         "Licensed and regulated by the Ontario Motor Vehicle Industry Council",
     },
     {
-      logo: "/certifications/ucda.png",
+      logo: "/certifications/ucda.gif",
       title: "UCDA Certified",
       description: "Proud member of the Used Car Dealers Association",
     },
