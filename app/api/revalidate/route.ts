@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Support vehicle slug revalidation (matches backend cache key format)
     if (slug) {
-      revalidateTag(`vehicle-${slug}`);
+      await revalidateTag(`vehicle-${slug}`, 'default');
       return NextResponse.json({ 
         revalidated: true, 
         type: 'vehicle',
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (tag) {
-      revalidateTag(tag);
+      await revalidateTag(tag, 'default');
       return NextResponse.json({ 
         revalidated: true, 
         tag,
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (tags && Array.isArray(tags)) {
-      tags.forEach((t: string) => revalidateTag(t));
+      await Promise.all(tags.map((t: string) => revalidateTag(t, 'default')));
       return NextResponse.json({ 
         revalidated: true, 
         tags,
