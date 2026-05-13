@@ -56,11 +56,15 @@ interface VehicleRaw {
   make: MakeReference;
   model: ModelReference;
   year: number;
+  trim?: string;
+  condition?: string;
+  type?: { _id: string; name: string; slug?: string };
+  drivetrain?: { _id: string; name: string; slug?: string };
   engine: {
     size: number;
     cylinders: number;
     fuelType: FuelTypeReference;
-    horsepower: number;
+    horsepower?: number;
   };
   transmission: TransmissionReference;
   odometer: {
@@ -68,54 +72,75 @@ interface VehicleRaw {
     unit: string;
     isAccurate: boolean;
   };
+  specifications?: {
+    exteriorColor?: string;
+    interiorColor?: string;
+    doors?: number;
+    seatingCapacity?: number;
+  };
   pricing: {
     listPrice: number;
     currency: string;
-    taxes: {
-      hst: number;
-      licensing: number;
-    };
-    financing: {
-      available: boolean;
-    };
+    taxes: { hst: number; licensing: number };
+    financing: { available: boolean };
   };
-  media: {
-    images: string[];
-    videos: string[];
-    documents: string[];
-  };
-  marketing: {
-    featured: boolean;
-    description: string;
-    keywords: string[];
-    slug: string;
-  };
-  status?: {
-    _id: string;
-    name: string;
-    color: string;
-    slug: string;
-    isDefault?: boolean;
-    active?: boolean;
-  };
-  ontario?: {
-    safetyStandard: {
-      passed: boolean;
-    };
-  };
-  carfax?: {
-    hasCleanHistory: boolean;
-    serviceRecords: number;
-    reportUrl?: string;
-  };
+  media: { images: string[]; videos: string[]; documents: string[] };
+  marketing: { featured: boolean; description: string; keywords: string[]; slug: string };
+  status?: { _id: string; name: string; color: string; slug: string; isDefault?: boolean; active?: boolean };
+  ontario?: { safetyStandard: { passed: boolean } };
+  carfax?: { hasCleanHistory: boolean; serviceRecords: number; reportUrl?: string };
   numberOfPreviousOwners?: number;
   accidentHistory?: boolean;
-  internal: {
-    stockNumber: string;
-    daysInInventory: number;
-  };
+  internal?: { stockNumber?: string; daysInInventory?: number };
   createdAt: string;
   updatedAt: string;
+}
+
+/** Shared transform: VehicleRaw → Vehicle */
+function toVehicle(vehicle: VehicleRaw): Vehicle {
+  const makeName = vehicle.make.name;
+  const modelName = vehicle.model.name;
+  const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
+  return {
+    id: vehicle._id,
+    name: vehicleName,
+    brand: makeName,
+    model: modelName,
+    year: vehicle.year,
+    trim: vehicle.trim,
+    condition: vehicle.condition,
+    bodyType: vehicle.type?.name,
+    drivetrain: vehicle.drivetrain?.name,
+    engineSize: vehicle.engine.size,
+    cylinders: vehicle.engine.cylinders,
+    horsepower: vehicle.engine.horsepower,
+    exteriorColor: vehicle.specifications?.exteriorColor,
+    interiorColor: vehicle.specifications?.interiorColor,
+    doors: vehicle.specifications?.doors,
+    seatingCapacity: vehicle.specifications?.seatingCapacity,
+    daysInInventory: vehicle.internal?.daysInInventory,
+    price: vehicle.pricing.listPrice,
+    discountPrice: undefined,
+    isOffer: false,
+    featured: vehicle.marketing.featured,
+    priceBadge: (vehicle.marketing as any).priceBadge ?? null,
+    mileage: vehicle.odometer.value,
+    fuelType: vehicle.engine.fuelType.name,
+    transmission: vehicle.transmission.type.name,
+    images: vehicle.media.images || [],
+    slug: vehicle.marketing.slug,
+    description: vehicle.marketing.description,
+    hstRequired: vehicle.pricing.taxes.hst > 0,
+    licensing: vehicle.pricing.taxes.licensing > 0,
+    safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
+    tradeInsWelcome: false,
+    carfax: vehicle.carfax,
+    numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
+    accidentHistory: vehicle.accidentHistory,
+    status: vehicle.status,
+    createdAt: vehicle.createdAt,
+    updatedAt: vehicle.updatedAt,
+  } as Vehicle & { status?: typeof vehicle.status };
 }
 
 /**
@@ -142,44 +167,9 @@ export async function getFeaturedVehicles(limit: number = 6): Promise<Vehicle[]>
     // Transform API response to match our Vehicle interface
     if (response.success && response.data?.vehicles) {
       return response.data.vehicles
-        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
-        .map((vehicle) => {
-        // Extract data from nested API structure
-        const makeName = vehicle.make.name;
-        const modelName = vehicle.model.name;
-        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
-        
-        return {
-          id: vehicle._id,
-          name: vehicleName,
-          brand: makeName,
-          model: modelName,
-          year: vehicle.year,
-          price: vehicle.pricing.listPrice,
-          discountPrice: undefined,
-          isOffer: false,
-          featured: vehicle.marketing.featured,
-          mileage: vehicle.odometer.value,
-          fuelType: vehicle.engine.fuelType.name,
-          transmission: vehicle.transmission.type.name,
-          images: vehicle.media.images || [],
-          slug: vehicle.marketing.slug,
-          description: vehicle.marketing.description,
-          hstRequired: vehicle.pricing.taxes.hst > 0,
-          licensing: vehicle.pricing.taxes.licensing > 0,
-          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-          tradeInsWelcome: false,
-          location: undefined,
-          phone: undefined,
-          carfax: vehicle.carfax,
-          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
-          accidentHistory: vehicle.accidentHistory,
-          createdAt: vehicle.createdAt,
-          updatedAt: vehicle.updatedAt,
-        };
-      });
+        .filter((vehicle) => vehicle.status?.slug !== 'sold')
+        .map(toVehicle);
     }
-
     return [];
   } catch (error) {
     console.error('Failed to fetch featured vehicles:', error);
@@ -206,44 +196,9 @@ export async function getLatestVehicles(limit: number = 8): Promise<Vehicle[]> {
 
     if (response.success && response.data?.vehicles) {
       return response.data.vehicles
-        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
-        .map((vehicle) => {
-        // Extract data from nested API structure
-        const makeName = vehicle.make.name;
-        const modelName = vehicle.model.name;
-        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
-        
-        return {
-          id: vehicle._id,
-          name: vehicleName,
-          brand: makeName,
-          model: modelName,
-          year: vehicle.year,
-          price: vehicle.pricing.listPrice,
-          discountPrice: undefined,
-          isOffer: false,
-          featured: vehicle.marketing.featured,
-          mileage: vehicle.odometer.value,
-          fuelType: vehicle.engine.fuelType.name,
-          transmission: vehicle.transmission.type.name,
-          images: vehicle.media.images || [],
-          slug: vehicle.marketing.slug,
-          description: vehicle.marketing.description,
-          hstRequired: vehicle.pricing.taxes.hst > 0,
-          licensing: vehicle.pricing.taxes.licensing > 0,
-          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-          tradeInsWelcome: false,
-          location: undefined,
-          phone: undefined,
-          carfax: vehicle.carfax,
-          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
-          accidentHistory: vehicle.accidentHistory,
-          createdAt: vehicle.createdAt,
-          updatedAt: vehicle.updatedAt,
-        };
-      });
+        .filter((vehicle) => vehicle.status?.slug !== 'sold')
+        .map(toVehicle);
     }
-
     return [];
   } catch (error) {
     console.error('Failed to fetch latest vehicles:', error);
@@ -265,44 +220,9 @@ export async function getVehicles(): Promise<Vehicle[]> {
 
     if (response.success && response.data?.vehicles) {
       return response.data.vehicles
-        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
-        .map((vehicle) => {
-        // Extract data from nested API structure
-        const makeName = vehicle.make.name;
-        const modelName = vehicle.model.name;
-        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
-        
-        return {
-          id: vehicle._id,
-          name: vehicleName,
-          brand: makeName,
-          model: modelName,
-          year: vehicle.year,
-          price: vehicle.pricing.listPrice,
-          discountPrice: undefined,
-          isOffer: false,
-          featured: vehicle.marketing.featured,
-          mileage: vehicle.odometer.value,
-          fuelType: vehicle.engine.fuelType.name,
-          transmission: vehicle.transmission.type.name,
-          images: vehicle.media.images || [],
-          slug: vehicle.marketing.slug,
-          description: vehicle.marketing.description,
-          hstRequired: vehicle.pricing.taxes.hst > 0,
-          licensing: vehicle.pricing.taxes.licensing > 0,
-          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-          tradeInsWelcome: false,
-          location: undefined,
-          phone: undefined,
-          carfax: vehicle.carfax,
-          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
-          accidentHistory: vehicle.accidentHistory,
-          createdAt: vehicle.createdAt,
-          updatedAt: vehicle.updatedAt,
-        };
-      });
+        .filter((vehicle) => vehicle.status?.slug !== 'sold')
+        .map(toVehicle);
     }
-
     return [];
   } catch (error) {
     console.error('Failed to fetch vehicles:', error);
@@ -382,41 +302,8 @@ export async function searchVehicles(params: VehicleSearchParams): Promise<{
 
     if (response.success && response.data) {
       const vehicles = (response.data.vehicles || [])
-        .filter((vehicle) => vehicle.status?.slug !== 'sold') // Filter out sold vehicles
-        .map((vehicle) => {
-        const makeName = vehicle.make.name;
-        const modelName = vehicle.model.name;
-        const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
-        
-        return {
-          id: vehicle._id,
-          name: vehicleName,
-          brand: makeName,
-          model: modelName,
-          year: vehicle.year,
-          price: vehicle.pricing.listPrice,
-          discountPrice: undefined,
-          isOffer: false,
-          featured: vehicle.marketing.featured,
-          mileage: vehicle.odometer.value,
-          fuelType: vehicle.engine.fuelType.name,
-          transmission: vehicle.transmission.type.name,
-          images: vehicle.media.images || [],
-          slug: vehicle.marketing.slug,
-          description: vehicle.marketing.description,
-          hstRequired: vehicle.pricing.taxes.hst > 0,
-          licensing: vehicle.pricing.taxes.licensing > 0,
-          safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-          tradeInsWelcome: false,
-          location: undefined,
-          phone: undefined,
-          carfax: vehicle.carfax,
-          numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
-          accidentHistory: vehicle.accidentHistory,
-          createdAt: vehicle.createdAt,
-          updatedAt: vehicle.updatedAt,
-        };
-      });
+        .filter((vehicle) => vehicle.status?.slug !== 'sold')
+        .map(toVehicle);
 
       return {
         vehicles,
@@ -466,39 +353,7 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
 
     if (response.success && response.data?.vehicles?.[0]) {
       const vehicle = response.data.vehicles[0];
-      // Extract data from nested API structure
-      const makeName = vehicle.make.name;
-      const modelName = vehicle.model.name;
-      const vehicleName = `${vehicle.year} ${makeName} ${modelName}`;
-      
-      return {
-        id: vehicle._id,
-        name: vehicleName,
-        brand: makeName,
-        model: modelName,
-        year: vehicle.year,
-        price: vehicle.pricing.listPrice,
-        discountPrice: undefined,
-        isOffer: false,
-        featured: vehicle.marketing.featured,
-        mileage: vehicle.odometer.value,
-        fuelType: vehicle.engine.fuelType.name,
-        transmission: vehicle.transmission.type.name,
-        images: vehicle.media.images || [],
-        slug: vehicle.marketing.slug,
-        description: vehicle.marketing.description,
-        hstRequired: vehicle.pricing.taxes.hst > 0,
-        licensing: vehicle.pricing.taxes.licensing > 0,
-        safetyCertified: vehicle.ontario?.safetyStandard.passed || false,
-        tradeInsWelcome: false,
-        location: undefined,
-        phone: undefined,
-        carfax: vehicle.carfax,
-        numberOfPreviousOwners: vehicle.numberOfPreviousOwners,
-        accidentHistory: vehicle.accidentHistory,
-        createdAt: vehicle.createdAt,
-        updatedAt: vehicle.updatedAt,
-      };
+      return toVehicle(vehicle);
     }
 
     return null;

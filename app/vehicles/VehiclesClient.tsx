@@ -165,13 +165,30 @@ const VehiclesPageContent = ({
 
         if (data.success && data.data?.vehicles) {
           const transformedVehicles = data.data.vehicles
-            .filter((vehicle: VehicleAPI) => vehicle.status?.slug !== 'sold') // Safety filter for sold vehicles
+            .filter((vehicle: VehicleAPI) => {
+              const name = vehicle.status?.name?.toLowerCase();
+              const slug = vehicle.status?.slug?.toLowerCase();
+              const HIDE = ['sold', 'draft'];
+              return !HIDE.includes(name ?? '') && !HIDE.includes(slug ?? '');
+            })
             .map((vehicle: VehicleAPI) => ({
             id: vehicle._id,
             name: `${vehicle.year} ${vehicle.make.name} ${vehicle.model.name}`,
             brand: vehicle.make.name,
             model: vehicle.model.name,
             year: vehicle.year,
+            trim: vehicle.trim,
+            condition: vehicle.condition,
+            bodyType: vehicle.type?.name,
+            drivetrain: vehicle.drivetrain?.name,
+            engineSize: vehicle.engine?.size,
+            cylinders: vehicle.engine?.cylinders,
+            horsepower: vehicle.engine?.horsepower,
+            exteriorColor: vehicle.specifications?.exteriorColor,
+            interiorColor: vehicle.specifications?.interiorColor,
+            doors: vehicle.specifications?.doors,
+            seatingCapacity: vehicle.specifications?.seatingCapacity,
+            daysInInventory: vehicle.internal?.daysInInventory,
             price: vehicle.pricing.listPrice,
             mileage: vehicle.odometer.value,
             fuelType: vehicle.engine.fuelType.name,
@@ -179,6 +196,7 @@ const VehiclesPageContent = ({
             images: vehicle.media.images || [],
             slug: vehicle.marketing.slug,
             featured: vehicle.marketing.featured,
+            priceBadge: (vehicle.marketing as any).priceBadge ?? null,
             status: vehicle.status,
             safetyCertified: vehicle.ontario?.safetyStandard?.passed,
             carfax: vehicle.carfax,

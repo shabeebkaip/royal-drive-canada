@@ -65,18 +65,30 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
 
   return (
     <>
-      <div 
-        className="relative w-full h-full group bg-white cursor-pointer"
+      <div
+        className="relative w-full h-full group cursor-pointer overflow-hidden bg-gray-100"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={() => setShowLightbox(true)}
       >
+        {/* Blurred background — same image, scaled up to fill edges */}
+        <Image
+          src={images[selectedImage]}
+          alt=""
+          fill
+          aria-hidden
+          className="object-cover scale-110 blur-2xl opacity-60 brightness-75 saturate-50 select-none pointer-events-none"
+          sizes="100vw"
+          priority={false}
+        />
+
+        {/* Main image — contained, sharp, on top */}
         <Image
           src={images[selectedImage]}
           alt={vehicleName}
           fill
-          className={`${isMobile ? 'object-cover' : 'object-contain'}`}
+          className="object-contain relative z-10"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
           priority={selectedImage === 0}
         />
@@ -105,7 +117,7 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
                 e.stopPropagation()
                 handlePrevious()
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/20 hover:bg-gray-800/30 backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -115,7 +127,7 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
                 e.stopPropagation()
                 handleNext()
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/20 hover:bg-gray-800/30 backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20"
               aria-label="Next image"
             >
               <ChevronRight className="w-6 h-6" />

@@ -69,6 +69,18 @@ export interface ModelAPI {
 export interface VehicleAPI {
   _id: string
   year: number
+  trim?: string
+  condition?: string
+  type?: { name: string; slug?: string }
+  drivetrain?: { name: string; slug?: string }
+  specifications?: {
+    exteriorColor?: string
+    interiorColor?: string
+    doors?: number
+    seatingCapacity?: number
+  }
+  engine: { size?: number; cylinders?: number; horsepower?: number; fuelType: { name: string } }
+  internal?: { daysInInventory?: number; stockNumber?: string }
   make: {
     name: string
   }
@@ -80,11 +92,6 @@ export interface VehicleAPI {
   }
   odometer: {
     value: number
-  }
-  engine: {
-    fuelType: {
-      name: string
-    }
   }
   transmission: {
     type: {

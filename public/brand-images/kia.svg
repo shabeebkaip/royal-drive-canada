@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" fill="none">
+  <rect width="200" height="80" fill="white"/>
+  <!-- Kia oval emblem -->
+  <ellipse cx="100" cy="40" rx="95" ry="35" fill="#05141F" stroke="#05141F" stroke-width="1"/>
+  <!-- KIA wordmark in white - stylized angular letters -->
+  <!-- K -->
+  <path d="M38 20 L38 60 L48 60 L48 44 L62 60 L74 60 L57 39 L72 20 L60 20 L48 35 L48 20 Z" fill="white"/>
+  <!-- I -->
+  <path d="M80 20 L80 60 L90 60 L90 20 Z" fill="white"/>
+  <!-- A -->
+  <path d="M98 20 L82 60 L93 60 L97 49 L119 49 L123 60 L134 60 L118 20 Z M101 41 L108 23 L115 41 Z" fill="white"/>
+</svg>

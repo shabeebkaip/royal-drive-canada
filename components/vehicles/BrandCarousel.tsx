@@ -5,6 +5,38 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { BrandAPI } from "@/types/filters";
 
+const BRAND_LOCAL_LOGOS: Record<string, string> = {
+  acura: "/brand-images/acura.png",
+  audi: "/brand-images/audi.webp",
+  bmw: "/brand-images/bmw.webp",
+  chevrolet: "/brand-images/chevrolet.webp",
+  chevy: "/brand-images/chevrolet.webp",
+  dodge: "/brand-images/dodge.svg",
+  ford: "/brand-images/ford.webp",
+  gmc: "/brand-images/gmc.webp",
+  honda: "/brand-images/honda.webp",
+  hyundai: "/brand-images/hyundai.webp",
+  infiniti: "/brand-images/infiniti.webp",
+  jeep: "/brand-images/jeep.webp",
+  kia: "/brand-images/kia.svg",
+  lexus: "/brand-images/lexus.webp",
+  mazda: "/brand-images/mazda.webp",
+  mercedes: "/brand-images/mercedes.webp",
+  "mercedes-benz": "/brand-images/mercedes.webp",
+  mg: "/brand-images/mg.webp",
+  mitsubishi: "/brand-images/mitsubishi.webp",
+  nissan: "/brand-images/nissan.webp",
+  porsche: "/brand-images/porsche.webp",
+  "range rover": "/brand-images/range-rover.webp",
+  "land rover": "/brand-images/range-rover.webp",
+  renault: "/brand-images/renault.webp",
+  suzuki: "/brand-images/suzuki.webp",
+  tesla: "/brand-images/tesla.webp",
+  toyota: "/brand-images/toyota.webp",
+  volkswagen: "/brand-images/volkswagen.webp",
+  vw: "/brand-images/volkswagen.webp",
+};
+
 interface BrandCarouselProps {
   brands: BrandAPI[] | null;
   selectedBrand: string;
@@ -36,95 +68,82 @@ export const BrandCarousel: React.FC<BrandCarouselProps> = ({
   }
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-200">
-      <div className="container mx-auto px-4 py-4 sm:py-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Title */}
-          <div className="text-center mb-4 sm:mb-5">
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
-              Quality Pre-Owned Vehicles in Toronto
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 py-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
+              Used Cars for Sale in Toronto
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Browse by popular brands
-            </p>
+            <p className="text-sm text-gray-500 mt-0.5">Filter by make to find your vehicle</p>
           </div>
-
-          {/* Brand Carousel */}
-          <div className="mb-3 sm:mb-4 relative group">
-            {/* Left Scroll Button */}
+          {selectedBrand && (
             <button
-              onClick={() => scrollBrands("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110"
-              aria-label="Scroll left"
+              onClick={() => onBrandSelect("")}
+              className="text-xs font-semibold text-red-600 hover:text-red-700 border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-700" />
+              Clear make
             </button>
+          )}
+        </div>
 
-            {/* Right Scroll Button */}
-            <button
-              onClick={() => scrollBrands("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-700" />
-            </button>
+        {/* Brand pills */}
+        <div className="relative group">
+          <button onClick={() => scrollBrands("left")}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md border border-gray-200 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Scroll left">
+            <ChevronLeft className="w-4 h-4 text-gray-600" />
+          </button>
+          <button onClick={() => scrollBrands("right")}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md border border-gray-200 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Scroll right">
+            <ChevronRight className="w-4 h-4 text-gray-600" />
+          </button>
 
-            {/* Brand Logos Container */}
-            <div
-              ref={brandScrollRef}
-              className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide sm:justify-center"
-              onWheel={(e) => {
-                const container = e.currentTarget;
-                if (container.scrollWidth > container.clientWidth) {
-                  e.preventDefault();
-                  container.scrollLeft += e.deltaY;
-                }
-              }}
-            >
-              {brands.map((brand) => (
+          <div ref={brandScrollRef}
+            className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1"
+            onWheel={(e) => {
+              const c = e.currentTarget;
+              if (c.scrollWidth > c.clientWidth) { e.preventDefault(); c.scrollLeft += e.deltaY; }
+            }}
+          >
+            {brands.map((brand) => {
+              const isActive = selectedBrand === String(brand._id);
+              const logoSrc = brand.logo || BRAND_LOCAL_LOGOS[brand.name.toLowerCase()];
+              return (
                 <button
                   key={brand._id}
                   onClick={() => {
                     onBrandSelect(String(brand._id));
                     window.scrollTo({ top: 400, behavior: "smooth" });
                   }}
-                  className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-lg border-2 transition-all duration-200 p-2 flex items-center justify-center group hover:shadow-lg ${
-                    selectedBrand === String(brand._id)
-                      ? "border-blue-500 shadow-md"
-                      : "border-gray-200 hover:border-blue-400"
-                  }`}
                   title={brand.name}
+                  className={`flex-shrink-0 flex flex-col items-center gap-1.5 px-3 py-2.5 rounded-xl border transition-all duration-150 ${
+                    isActive
+                      ? "bg-gray-900 border-gray-900 shadow-md"
+                      : "bg-white border-gray-200 hover:border-gray-400 hover:bg-gray-50"
+                  }`}
                 >
-                  {brand.logo ? (
+                  {logoSrc ? (
                     <Image
-                      src={brand.logo}
+                      src={logoSrc}
                       alt={brand.name}
-                      width={64}
-                      height={64}
-                      className={`object-contain transition-all duration-200 ${
-                        selectedBrand === brand._id
-                          ? ""
-                          : "grayscale group-hover:grayscale-0"
-                      }`}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
-                        const textNode = document.createElement("span");
-                        textNode.className = "text-xs font-bold text-gray-700";
-                        textNode.textContent = brand.name
-                          .substring(0, 3)
-                          .toUpperCase();
-                        target.parentElement?.appendChild(textNode);
-                      }}
+                      width={36}
+                      height={36}
+                      className={`object-contain w-9 h-9 ${isActive ? "brightness-0 invert" : ""}`}
                     />
                   ) : (
-                    <span className="text-xs font-bold text-gray-700">
-                      {brand.name.substring(0, 3).toUpperCase()}
-                    </span>
+                    <div className={`w-9 h-9 flex items-center justify-center rounded-full text-xs font-bold ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"}`}>
+                      {brand.name.slice(0, 2).toUpperCase()}
+                    </div>
                   )}
+                  <span className={`text-[11px] font-semibold leading-none ${isActive ? "text-white" : "text-gray-700"}`}>
+                    {brand.name}
+                  </span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

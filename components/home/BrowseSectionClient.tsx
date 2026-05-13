@@ -113,13 +113,19 @@ const BrowseSectionClient = ({ vehicleTypes, brands }: BrowseSectionClientProps)
                   className="group bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all duration-200 p-3 sm:p-4 flex flex-col items-center justify-center aspect-square"
                 >
                   <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-2">
-                    <Image
-                      src={brand.logo}
-                      alt={brand.name}
-                      width={56}
-                      height={56}
-                      className="object-contain w-full h-full grayscale group-hover:grayscale-0 transition-all duration-200"
-                    />
+                    {brand.logo ? (
+                      <Image
+                        src={brand.logo}
+                        alt={brand.name}
+                        width={56}
+                        height={56}
+                        className="object-contain w-full h-full grayscale group-hover:grayscale-0 transition-all duration-200"
+                      />
+                    ) : (
+                      <span className="text-lg font-bold text-gray-400 group-hover:text-blue-500 transition-colors">
+                        {brand.name.substring(0, 2).toUpperCase()}
+                      </span>
+                    )}
                   </div>
                   <span className="font-medium text-gray-900 text-xs text-center group-hover:text-blue-600 transition-colors line-clamp-1">
                     {brand.name}

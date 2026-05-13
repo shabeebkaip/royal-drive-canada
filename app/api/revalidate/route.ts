@@ -66,29 +66,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Example usage from backend when vehicle is updated:
-// 
-// // Revalidate specific vehicle (recommended)
-// fetch('https://royaldrivecanada.com/api/revalidate', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'Authorization': 'Bearer YOUR_SECRET_TOKEN'
-//   },
-//   body: JSON.stringify({ 
-//     slug: '2020-mercedes-benz-glc' 
-//   })
-// });
-//
-// // Revalidate by tag
-// fetch('https://royaldrivecanada.com/api/revalidate', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'Authorization': 'Bearer YOUR_SECRET_TOKEN'
-//   },
-//   body: JSON.stringify({ 
-//     tag: 'vehicle-types' 
-//     // or multiple tags: tags: ['vehicle-types', 'brands']
-//   })
-// });

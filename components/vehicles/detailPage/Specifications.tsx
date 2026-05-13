@@ -1,123 +1,85 @@
 import React from "react";
 import { VehicleDetail } from "@/types/vehicle";
-import { 
-  Calendar, 
-  Car, 
-  Palette, 
-  Users, 
-  Gauge, 
-  Zap,
-  Shield,
-} from "lucide-react";
+import { Gauge, Fingerprint } from "lucide-react";
 
 interface SpecificationsProps {
   vehicle: VehicleDetail;
 }
 
-interface SpecItem {
+interface SpecRow {
   label: string;
-  value: string | number;
-  icon?: React.ReactNode;
-  highlight?: boolean;
+  value: string | number | null | undefined;
 }
 
-const Specifications: React.FC<SpecificationsProps> = ({ vehicle }) => {
-
-
-  // Organize specifications into categories
-  const basicSpecs: SpecItem[] = [
-    { label: "Year", value: vehicle.year, icon: <Calendar className="w-4 h-4 text-blue-600" /> },
-    { label: "Make", value: vehicle.make.name, icon: <Car className="w-4 h-4 text-blue-600" /> },
-    { label: "Model", value: vehicle.model.name },
-    ...(vehicle.trim ? [{ label: "Trim", value: vehicle.trim }] : []),
-    { label: "Body Type", value: vehicle.type.name },
-    { label: "Condition", value: vehicle.condition, highlight: vehicle.condition === "certified" },
-  ];
-
-  const exteriorSpecs: SpecItem[] = [
-    { label: "Exterior Color", value: vehicle.specifications.exteriorColor, icon: <Palette className="w-4 h-4 text-purple-600" /> },
-    { label: "Interior Color", value: vehicle.specifications.interiorColor, icon: <Palette className="w-4 h-4 text-purple-600" /> },
-    { label: "Doors", value: vehicle.specifications.doors },
-    { label: "Seating", value: `${vehicle.specifications.seatingCapacity} passengers`, icon: <Users className="w-4 h-4 text-green-600" /> },
-  ];
-
-  const engineSpecs: SpecItem[] = [
-    { label: "Engine Size", value: `${vehicle.engine.size}L`, icon: <Zap className="w-4 h-4 text-orange-600" /> },
-    { label: "Cylinders", value: vehicle.engine.cylinders },
-    { label: "Horsepower", value: `${vehicle.engine.horsepower} HP`, highlight: true },
-  ];
-
-  const historySpecs: SpecItem[] = [
-    { 
-      label: "Previous Owners", 
-      value: vehicle.numberOfPreviousOwners,
-      icon: vehicle.numberOfPreviousOwners === 1 ? <Shield className="w-4 h-4 text-purple-600" /> : undefined,
-      highlight: vehicle.numberOfPreviousOwners === 1 
-    },
-  ];
-
-  const SpecRow: React.FC<SpecItem> = ({ label, value, icon, highlight }) => (
-    <div className={`flex justify-between items-center py-3 px-4 rounded-lg transition-colors ${
-      highlight ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50 hover:bg-gray-100'
-    }`}>
-      <div className="flex items-center gap-2">
-        {icon}
-        <span className={`text-sm ${highlight ? 'font-medium text-blue-900' : 'text-gray-600'}`}>
-          {label}
-        </span>
-      </div>
-      <span className={`text-sm font-semibold ${highlight ? 'text-blue-900' : 'text-gray-900'} capitalize`}>
-        {value}
-      </span>
-    </div>
+function SpecTable({ title, rows }: { title: string; rows: SpecRow[] }) {
+  const visible = rows.filter(
+    (r) => r.value !== null && r.value !== undefined && r.value !== "" && r.value !== 0
   );
-
-  const SpecCategory: React.FC<{ title: string; specs: SpecItem[]; icon: React.ReactNode }> = ({ title, specs, icon }) => (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2 mb-4">
-        {icon}
-        <h3 className="text-base font-bold text-gray-900">{title}</h3>
-      </div>
-      <div className="space-y-2">
-        {specs.map((spec, index) => (
-          <SpecRow key={`${title}-${index}`} {...spec} />
+  if (visible.length === 0) return null;
+  return (
+    <div>
+      <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 px-1">{title}</h3>
+      <div className="rounded-lg border border-gray-100 overflow-hidden">
+        {visible.map(({ label, value }, i) => (
+          <div
+            key={label}
+            className={`flex justify-between items-center px-4 py-3 text-sm ${
+              i % 2 === 0 ? "bg-white" : "bg-gray-50"
+            }`}
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-semibold text-gray-900 capitalize text-right max-w-[55%] break-words">
+              {String(value)}
+            </span>
+          </div>
         ))}
       </div>
     </div>
   );
+}
+
+const Specifications: React.FC<SpecificationsProps> = ({ vehicle }) => {
+  const formatMileage = (v: number) => new Intl.NumberFormat("en-CA").format(v);
+
+  const basicRows: SpecRow[] = [
+    { label: "Year", value: vehicle.year },
+    { label: "Make", value: vehicle.make?.name },
+    { label: "Model", value: vehicle.model?.name },
+    { label: "Trim", value: vehicle.trim },
+    { label: "Body Type", value: vehicle.type?.name },
+    { label: "Condition", value: vehicle.condition === "certified-pre-owned" ? "Certified Pre-Owned" : vehicle.condition === "new" ? "New" : "Used" },
+    { label: "VIN", value: vehicle.vin },
+    { label: "Stock #", value: vehicle.stockNumber },
+  ];
+
+  const exteriorRows: SpecRow[] = [
+    { label: "Exterior Color", value: vehicle.specifications?.exteriorColor },
+    { label: "Interior Color", value: vehicle.specifications?.interiorColor },
+    { label: "Doors", value: vehicle.specifications?.doors },
+    { label: "Seating Capacity", value: vehicle.specifications?.seatingCapacity ? `${vehicle.specifications.seatingCapacity} passengers` : undefined },
+  ];
+
+  const mechanicalRows: SpecRow[] = [
+    { label: "Engine Size", value: vehicle.engine?.size ? `${vehicle.engine.size}L` : undefined },
+    { label: "Cylinders", value: vehicle.engine?.cylinders },
+    { label: "Horsepower", value: vehicle.engine?.horsepower ? `${vehicle.engine.horsepower} HP` : undefined },
+    { label: "Fuel Type", value: vehicle.engine?.fuelType?.name },
+    { label: "Transmission", value: vehicle.transmission?.type?.name },
+    { label: "Drivetrain", value: vehicle.drivetrain?.name },
+    { label: "Mileage", value: vehicle.odometer?.value ? `${formatMileage(vehicle.odometer.value)} ${vehicle.odometer.unit ?? "km"}` : undefined },
+  ];
+
+  const historyRows: SpecRow[] = [
+    { label: "Previous Owners", value: vehicle.numberOfPreviousOwners },
+    { label: "Accident History", value: vehicle.accidentHistory ? "Reported" : "None Reported" },
+  ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
-      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <Gauge className="w-5 h-5 text-blue-600" />
-        Specifications
-      </h2>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SpecCategory 
-          title="Basic Information"
-          specs={basicSpecs}
-          icon={<Car className="w-4 h-4 text-blue-600" />}
-        />
-        
-        <SpecCategory 
-          title="Exterior & Interior"
-          specs={exteriorSpecs}
-          icon={<Palette className="w-4 h-4 text-purple-600" />}
-        />
-        
-        <SpecCategory 
-          title="Engine Performance"
-          specs={engineSpecs}
-          icon={<Zap className="w-4 h-4 text-orange-600" />}
-        />
-        
-        <SpecCategory 
-          title="Vehicle History"
-          specs={historySpecs}
-          icon={<Shield className="w-4 h-4 text-green-600" />}
-        />
-      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <SpecTable title="Basic Information" rows={basicRows} />
+      <SpecTable title="Exterior & Interior" rows={exteriorRows} />
+      <SpecTable title="Engine & Drivetrain" rows={mechanicalRows} />
+      <SpecTable title="Ownership History" rows={historyRows} />
     </div>
   );
 };
