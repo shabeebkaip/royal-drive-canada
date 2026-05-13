@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Heart, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { ImageLightbox } from './ImageLightbox'
@@ -11,18 +10,7 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
   const [selectedImage, setSelectedImage] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
   const [showLightbox, setShowLightbox] = useState(false)
-
-  // Detect mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   if (images.length === 0) {
     return null
@@ -93,9 +81,9 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
           priority={selectedImage === 0}
         />
         
-        {/* Instagram-style dots indicator (Mobile only) */}
-        {isMobile && images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+        {/* Dots indicator — visible on mobile only via CSS */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex md:hidden gap-1.5 z-20">
             {images.map((_, index) => (
               <div
                 key={index}
@@ -109,25 +97,19 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
           </div>
         )}
 
-        {/* Desktop: Show swipe navigation arrows on hover */}
-        {!isMobile && images.length > 1 && (
+        {/* Navigation arrows — visible on desktop only via CSS */}
+        {images.length > 1 && (
           <>
             <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handlePrevious()
-              }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20"
+              onClick={(e) => { e.stopPropagation(); handlePrevious() }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20 hidden md:flex"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleNext()
-              }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20"
+              onClick={(e) => { e.stopPropagation(); handleNext() }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 hover:bg-white backdrop-blur-sm text-gray-800 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-lg z-20 hidden md:flex"
               aria-label="Next image"
             >
               <ChevronRight className="w-6 h-6" />
@@ -135,10 +117,10 @@ export function ImageGallery({ images, vehicleName }: { images: string[], vehicl
           </>
         )}
       </div>
-      
-      {/* Thumbnails - Desktop only (hidden on mobile for cleaner Instagram look) */}
-      {!isMobile && images.length > 1 && (
-        <div className="p-4 bg-gray-50 border-t border-gray-200">
+
+      {/* Thumbnails — hidden on mobile via CSS */}
+      {images.length > 1 && (
+        <div className="hidden md:block p-4 bg-gray-50 border-t border-gray-200">
           <div className="grid grid-cols-5 gap-2">
             {images.map((image, index) => (
               <button
@@ -194,11 +176,9 @@ export function FavoriteButton() {
 }
 
 export function BackButton() {
-  const router = useRouter()
-
   return (
     <button
-      onClick={() => router.back()}
+      onClick={() => window.history.back()}
       className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
     >
       <ChevronLeft className="w-5 h-5" />

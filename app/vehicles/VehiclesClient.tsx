@@ -82,12 +82,11 @@ const VehiclesPageContent = ({
     page: 1,
     limit: 12,
     totalPages: 0,
+    hasNext: false,
   });
 
-  // Derived flag: do we have more items to load?
-  const hasMore = useMemo(() => {
-    return vehicles.length < (pagination?.total || 0);
-  }, [vehicles.length, pagination.total]);
+  // Use backend's hasNext flag — reliable regardless of client-side filtering
+  const hasMore = pagination.hasNext;
 
   // Filter options are now passed as props from server component - no need to fetch client-side!
 
@@ -135,7 +134,7 @@ const VehiclesPageContent = ({
         params.append("limit", "12");
         
         // ALWAYS exclude sold vehicles
-        params.append("excludeStatus", "sold");
+        params.append("excludeStatus", "sold,draft");
 
         if (searchTerm) params.append("q", searchTerm);
         if (selectedBrand) params.append("make", selectedBrand);
@@ -166,10 +165,11 @@ const VehiclesPageContent = ({
         if (data.success && data.data?.vehicles) {
           const transformedVehicles = data.data.vehicles
             .filter((vehicle: VehicleAPI) => {
-              const name = vehicle.status?.name?.toLowerCase();
-              const slug = vehicle.status?.slug?.toLowerCase();
-              const HIDE = ['sold', 'draft'];
-              return !HIDE.includes(name ?? '') && !HIDE.includes(slug ?? '');
+              // Backend already excludes sold & draft via excludeStatus param.
+              // This is a safety net only.
+              const name = vehicle.status?.name?.toLowerCase() ?? '';
+              const slug = vehicle.status?.slug?.toLowerCase() ?? '';
+              return name !== 'sold' && slug !== 'sold';
             })
             .map((vehicle: VehicleAPI) => ({
             id: vehicle._id,
@@ -211,22 +211,20 @@ const VehiclesPageContent = ({
             setVehicles(prevVehicles => [...prevVehicles, ...transformedVehicles]);
           }
 
-          // Normalize pagination from API (be robust to naming differences)
+          // Normalize pagination from API
           const apiPg = data.data.pagination || {};
-          const total = Number(
-            apiPg.total ?? data.data.total ?? data.total ?? 0
-          );
-          const limit = Number(
-            apiPg.limit ?? apiPg.perPage ?? data.data.limit ?? 12
-          );
-          const currentPage = Number(
-            apiPg.page ?? apiPg.current ?? data.data.page ?? page
-          );
+          const total = Number(apiPg.total ?? data.data.total ?? 0);
+          const limit = Number(apiPg.limit ?? apiPg.perPage ?? 12);
+          const currentPage = Number(apiPg.page ?? apiPg.current ?? page);
           const totalPages = Number(
             apiPg.totalPages ?? apiPg.pages ?? (limit ? Math.ceil(total / limit) : 1)
           );
+          // Use backend hasNext — avoids client-side count mismatch issues
+          const hasNext = apiPg.hasNext === true
+            ? true
+            : currentPage < totalPages;
 
-          setPagination({ total, page: currentPage, limit, totalPages });
+          setPagination({ total, page: currentPage, limit, totalPages, hasNext });
         }
       } catch (error) {
         console.error("Failed to fetch vehicles:", error);
@@ -554,7 +552,9 @@ const VehiclesPageContent = ({
                       <span className="ml-2 text-gray-600">
                         •{" "}
                         <span className="font-semibold text-green-600">
-          {Math.max(pagination.total - vehicles.length, 0)} more available
+          {Math.max(pagination.total - vehicles.length, 0) > 0
+            ? `${pagination.total - vehicles.length} more available`
+            : "Load more"}
                         </span>
                       </span>
                     )}

@@ -96,7 +96,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const isAvailable = vehicle.availability?.inStock;
 
   return (
-    <div className="min-h-screen bg-white pt-20">
+    <div className="min-h-screen bg-white pt-20" suppressHydrationWarning>
 
       {/* ── Breadcrumb ─────────────────────────────────────────────── */}
       <div className="border-b border-gray-200 bg-gray-50">
