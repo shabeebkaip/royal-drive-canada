@@ -152,8 +152,10 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         <div className="flex flex-col sm:flex-row">
 
           {/* Image */}
-          <Link href={href} className="relative sm:w-72 lg:w-80 xl:w-80 flex-shrink-0 block">
+          <div className="relative sm:w-72 lg:w-80 xl:w-80 flex-shrink-0">
             <div className="relative w-full overflow-hidden bg-gray-100" style={{ aspectRatio: "16/10", minHeight: "200px" }}>
+              {/* Link sits behind slider controls */}
+              <Link href={href} className="absolute inset-0 z-0" aria-label={vehicle.name} tabIndex={-1} />
               <ImageSlider images={vehicleImages} alt={vehicle.name} className="w-full h-full" />
               {showFeaturedBadge && vehicle.featured && (
                 <div className="absolute top-3 left-3 flex items-center gap-1 bg-amber-500 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide z-10 shadow">
@@ -169,7 +171,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
                 <div className="absolute top-3 right-3 bg-orange-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase z-10">Coming Soon</div>
               )}
             </div>
-          </Link>
+          </div>
 
           {/* Content */}
           <div className="flex-1 flex flex-col p-4 sm:p-5 min-w-0">
@@ -232,8 +234,10 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   return (
     <div className={`group bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-md transition-all duration-200 ${className}`}>
       {/* Image */}
-      <Link href={href} className="block relative">
+      <div className="relative">
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
+          {/* Link sits behind slider controls */}
+          <Link href={href} className="absolute inset-0 z-0" aria-label={vehicle.name} tabIndex={-1} />
           <ImageSlider images={vehicleImages} alt={vehicle.name} className="w-full h-full" />
           {showFeaturedBadge && vehicle.featured && (
             <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-amber-500 text-white px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide z-10 shadow">
@@ -249,7 +253,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             <div className="absolute top-2.5 right-2.5 bg-orange-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase z-10">Coming Soon</div>
           )}
         </div>
-      </Link>
+      </div>
 
       {/* Content */}
       <div className="p-4">

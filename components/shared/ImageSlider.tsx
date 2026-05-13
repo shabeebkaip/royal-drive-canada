@@ -39,7 +39,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, alt, className = "" }
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-gray-100 ${className}`}>
+    <div className={`relative overflow-hidden rounded-lg bg-gray-100 z-[1] ${className}`}>
       {/* Main Image - Optimized for Landscape */}
       <div className="relative w-full h-full">
         <Image
