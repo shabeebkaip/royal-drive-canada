@@ -35,38 +35,46 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   };
   const priceBadgeCfg = vehicle.priceBadge ? PRICE_BADGE_CONFIG[vehicle.priceBadge as keyof typeof PRICE_BADGE_CONFIG] : null;
 
-  // ── Trust badge row ──────────────────────────────────────────────────────────
-  const BadgeRow = () => (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {vehicle.carfax?.hasCleanHistory && (
-        vehicle.carfax.reportUrl ? (
-          <a href={vehicle.carfax.reportUrl} target="_blank" rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1 px-2 py-0.5 border border-green-400 rounded text-[10px] font-semibold text-green-700 bg-white hover:bg-green-50 transition-colors">
-            <Image src="/certifications/carfax.png" alt="CARFAX" width={40} height={12} className="object-contain" />
-            <CheckCircle className="w-3 h-3 text-green-600" />
-          </a>
-        ) : (
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 border border-green-400 rounded text-[10px] font-semibold text-green-700 bg-white">
-            <Image src="/certifications/carfax.png" alt="CARFAX" width={40} height={12} className="object-contain" />
-            <CheckCircle className="w-3 h-3 text-green-600" />
-          </div>
-        )
-      )}
-      {vehicle.numberOfPreviousOwners !== undefined && vehicle.numberOfPreviousOwners <= 1 && (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-blue-200 rounded text-[10px] font-semibold text-blue-700 bg-blue-50">
-          <User className="w-2.5 h-2.5" />
-          {vehicle.numberOfPreviousOwners === 0 ? "1st Owner" : "1 Owner"}
-        </span>
-      )}
-      {!vehicle.accidentHistory && (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-emerald-200 rounded text-[10px] font-semibold text-emerald-700 bg-emerald-50">
-          <Shield className="w-2.5 h-2.5" />
-          No Accidents
-        </span>
-      )}
-    </div>
-  );
+  // ── Trust badge row — only shown when data is explicitly available ───────────
+  const BadgeRow = () => {
+    const hasCafax = vehicle.carfax?.hasCleanHistory === true;
+    const hasOneOwner = typeof vehicle.numberOfPreviousOwners === "number" && vehicle.numberOfPreviousOwners <= 1;
+    const hasNoAccidents = vehicle.accidentHistory === false; // must be explicitly false, not undefined
+
+    if (!hasCafax && !hasOneOwner && !hasNoAccidents) return null;
+
+    return (
+      <div className="flex flex-wrap items-center gap-1.5">
+        {hasCafax && (
+          vehicle.carfax?.reportUrl ? (
+            <a href={vehicle.carfax.reportUrl} target="_blank" rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 px-2 py-0.5 border border-green-400 rounded text-[10px] font-semibold text-green-700 bg-white hover:bg-green-50 transition-colors">
+              <Image src="/certifications/carfax.png" alt="CARFAX" width={40} height={12} className="object-contain" />
+              <CheckCircle className="w-3 h-3 text-green-600" />
+            </a>
+          ) : (
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 border border-green-400 rounded text-[10px] font-semibold text-green-700 bg-white">
+              <Image src="/certifications/carfax.png" alt="CARFAX" width={40} height={12} className="object-contain" />
+              <CheckCircle className="w-3 h-3 text-green-600" />
+            </div>
+          )
+        )}
+        {hasOneOwner && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-blue-200 rounded text-[10px] font-semibold text-blue-700 bg-blue-50">
+            <User className="w-2.5 h-2.5" />
+            {vehicle.numberOfPreviousOwners === 0 ? "1st Owner" : "1 Owner"}
+          </span>
+        )}
+        {hasNoAccidents && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-emerald-200 rounded text-[10px] font-semibold text-emerald-700 bg-emerald-50">
+            <Shield className="w-2.5 h-2.5" />
+            No Accidents
+          </span>
+        )}
+      </div>
+    );
+  };
 
   // ── Key spec inline row ──────────────────────────────────────────────────────
   const SpecRow = ({ compact = false }: { compact?: boolean }) => {
