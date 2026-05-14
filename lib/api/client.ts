@@ -6,10 +6,10 @@
 const getApiBaseUrl = (): string => {
   // Server-side (Node.js environment)
   if (typeof window === 'undefined') {
-    return process.env.API_BASE_URL || 'http://localhost:3002/api/v1'; // production: 'https://api.royaldrivecanada.com/api/v1'
+    return process.env.API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
   }
   // Client-side (browser environment)
-  return process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3002/api/v1'; // production: 'https://api.royaldrivecanada.com/api/v1'
+  return process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.royaldrivecanada.com/api/v1';
 };
 
 const API_BASE_URL: string = getApiBaseUrl();
