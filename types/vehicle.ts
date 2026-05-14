@@ -102,20 +102,32 @@ export interface VehicleDetail {
   ontario: {
     safetyStandard: {
       passed: boolean
+      certificationDate?: string
+      expiryDate?: string
     }
     emissionTest: {
       required: boolean
+      passed?: boolean
+      expiryDate?: string
     }
     uvip: {
       required: boolean
-      cost: number
+      obtained?: boolean
+      cost?: number
     }
+  }
+  stockNumber?: string
+  vin?: string
+  internal?: {
+    daysInInventory?: number
+    acquisitionDate?: string
   }
   marketing: {
     featured: boolean
     description: string
     keywords: string[]
     slug: string
+    priceBadge?: string | null
   }
   createdAt: string
   updatedAt: string

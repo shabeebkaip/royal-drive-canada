@@ -167,7 +167,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                   )}
                   {(vehicle.internal?.daysInInventory ?? 0) > 0 && (
                     <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1">
-                      <Clock className="w-3 h-3" /> {vehicle.internal.daysInInventory} days listed
+                      <Clock className="w-3 h-3" /> {vehicle.internal?.daysInInventory} days listed
                     </span>
                   )}
                 </div>
